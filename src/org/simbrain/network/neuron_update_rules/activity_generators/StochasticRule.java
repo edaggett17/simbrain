@@ -34,13 +34,13 @@ public class StochasticRule extends SpikingNeuronUpdateRule implements
          ActivityGenerator {
 
     /** The default firing probability for the Neuron. */
-    private static final double DEFAULT_FIRING_PROBABILITY = .5;
+    private static final double DEFAULT_FIRING_PROBABILITY = .05;
 
     /** Probability the neuron will fire. */
     private double firingProbability = DEFAULT_FIRING_PROBABILITY;
 
     /** Lower value field. */
-    private double lowerValue = -1;
+    private double lowerValue = 0;
 
     /** Upper value field. */
     private double upperValue = 1;
@@ -73,12 +73,14 @@ public class StochasticRule extends SpikingNeuronUpdateRule implements
      */
     public void update(Neuron neuron) {
         double rand = Math.random();
-        if (rand > firingProbability) {
-            neuron.setBuffer(upperValue);
-            neuron.setSpike(true);
+        if (rand > 1-firingProbability) {
+            neuron.setSpkBuffer(true);
+            setHasSpiked(true, neuron);
+            neuron.setBuffer(1);
         } else {
-            neuron.setBuffer(lowerValue);
-            neuron.setSpike(false);
+            neuron.setSpkBuffer(false);
+            setHasSpiked(false, neuron);
+            neuron.setBuffer(0); // Make this a separate variable?
         }
     }
 

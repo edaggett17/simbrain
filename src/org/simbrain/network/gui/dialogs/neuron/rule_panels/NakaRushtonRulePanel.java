@@ -31,7 +31,7 @@ import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NeuronNoiseGenPanel;
+import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.NakaRushtonRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.SimbrainConstants;
@@ -73,7 +73,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel implements
     private LabelledItemPanel mainTab = new LabelledItemPanel();
 
     /** Random tab. */
-    private NeuronNoiseGenPanel randTab = new NeuronNoiseGenPanel();
+    private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
 
     /** A reference to the neuron update rule being edited. */
     private static final NakaRushtonRule prototypeRule = new NakaRushtonRule();

@@ -34,9 +34,9 @@ import org.simbrain.util.Utils;
 import org.simbrain.util.widgets.EditablePanel;
 
 /**
- * The basic neuron info panel and neuron update settings panel are frequently
- * used together and depend on each other. This panel combines the two and
- * handles changes to one being applied to the other.
+ * This panel combines the simple neuron properties panel (activation and label)
+ * and the specific panel (details of a rule) handles changes to one being
+ * applied to the other.
  *
  * @author Zach Tosi
  */
@@ -69,7 +69,7 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
     private NeuronPropertiesSimple neuronInfoPanel;
 
     /** The neuron update settings panel. */
-    private SpecificNeuronRulePanel updateInfoPanel;
+    private NeuronPropertiesSpecific updateInfoPanel;
 
     /**
      * Creates a combined neuron info panel, which includes the basic neuron
@@ -164,7 +164,7 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
         final Window parent, final boolean nuspExtendedDisplay) {
         neuronInfoPanel = NeuronPropertiesSimple.createBasicNeuronInfoPanel(
             neuronList, parent);
-        updateInfoPanel = new SpecificNeuronRulePanel(neuronList, parent,
+        updateInfoPanel = new NeuronPropertiesSpecific(neuronList, parent,
             nuspExtendedDisplay);
     }
 
@@ -187,7 +187,7 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
         final boolean displayIDInfo) {
         neuronInfoPanel = NeuronPropertiesSimple.createBasicNeuronInfoPanel(
             neuronList, parent, displayIDInfo);
-        updateInfoPanel = new SpecificNeuronRulePanel(neuronList, parent,
+        updateInfoPanel = new NeuronPropertiesSpecific(neuronList, parent,
             nuspExtendedDisplay);
     }
 
@@ -271,11 +271,11 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
         this.neuronInfoPanel = neuroninfoPanel;
     }
 
-    public SpecificNeuronRulePanel getUpdateInfoPanel() {
+    public NeuronPropertiesSpecific getUpdateInfoPanel() {
         return updateInfoPanel;
     }
 
-    public void setUpdateInfoPanel(SpecificNeuronRulePanel updateInfoPanel) {
+    public void setUpdateInfoPanel(NeuronPropertiesSpecific updateInfoPanel) {
         this.updateInfoPanel = updateInfoPanel;
     }
 

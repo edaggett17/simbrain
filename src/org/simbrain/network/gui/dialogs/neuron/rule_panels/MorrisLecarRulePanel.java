@@ -5,7 +5,7 @@ import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.ParameterGetter;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NeuronNoiseGenPanel;
+import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.FitzhughNagumo;
 import org.simbrain.network.neuron_update_rules.MorrisLecarRule;
 import org.simbrain.util.LabelledItemPanel;
@@ -73,7 +73,7 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel{
     private JTabbedPane tabbedPane = new JTabbedPane();
 
     /** Random tab. */
-    private NeuronNoiseGenPanel randTab = new NeuronNoiseGenPanel();
+    private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
     
     /** A reference to the neuron update rule being edited. */
     private static final MorrisLecarRule prototypeRule = new MorrisLecarRule();

@@ -35,7 +35,7 @@ import org.simbrain.util.randomizer.gui.RandomizerPanel;
  * @author Zach Tosi
  *
  */
-public class NeuronNoiseGenPanel extends RandomizerPanel {
+public class NoiseGeneratorPanel extends RandomizerPanel {
 
     /**
      * Commits the randomizer for the list of neurons being edited. Every neuron

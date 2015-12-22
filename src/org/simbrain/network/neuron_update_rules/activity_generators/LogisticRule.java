@@ -35,9 +35,9 @@ public class LogisticRule extends NeuronUpdateRule implements
     /** Growth rate. */
     private double growthRate = 3.9;
 
-    private double ceiling = 1.0;
+    private double ceiling = 10.0;
 
-    private double floor = -1.0;
+    private double floor = -10.0;
 
     public LogisticRule(LogisticRule lr, Neuron n) {
         super();

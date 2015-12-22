@@ -55,7 +55,7 @@ import org.simbrain.util.widgets.TristateDropDown;
  *
  */
 @SuppressWarnings("serial")
-public class NeuronPropertiesExtended extends JPanel implements EditablePanel {
+public class NeuronPropertiesGeneral extends JPanel implements EditablePanel {
 
     /** Upper bound field. */
     private final JTextField tfCeiling = new JTextField();
@@ -141,7 +141,7 @@ public class NeuronPropertiesExtended extends JPanel implements EditablePanel {
      * @param parent
      *            parent window so pack can be called
      */
-    public NeuronPropertiesExtended(final List<Neuron> neuronList,
+    public NeuronPropertiesGeneral(final List<Neuron> neuronList,
         final Window parent) {
         this.neuronList = neuronList;
         this.parent = parent;
@@ -400,7 +400,9 @@ public class NeuronPropertiesExtended extends JPanel implements EditablePanel {
         }
         setClippingVisible(clip);
         setBoundsEnabled(bounded);
-        inputType.setSelectedItem(rule.getInputType().toString());
+        if(rule != null) {
+            inputType.setSelectedItem(rule.getInputType().toString());            
+        }
     }
 
     /**

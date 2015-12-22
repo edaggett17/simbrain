@@ -29,7 +29,7 @@ import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NeuronNoiseGenPanel;
+import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.IntegrateAndFireRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.SimbrainConstants;
@@ -67,7 +67,7 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
     private JTextField tfBackgroundCurrent = new JTextField();
 
     /** Random tab. */
-    private NeuronNoiseGenPanel randTab = new NeuronNoiseGenPanel();
+    private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
 
     /** Add noise combo box. */
     private TristateDropDown isAddNoise = new TristateDropDown();

@@ -53,7 +53,7 @@ import org.simbrain.util.widgets.EditablePanel;
  * @author Jeff Yoshimi
  */
 @SuppressWarnings("serial")
-public class SpecificNeuronRulePanel extends JPanel implements EditablePanel {
+public class NeuronPropertiesSpecific extends JPanel implements EditablePanel {
 
     /** Null string. */
     public static final String NULL_STRING = "...";
@@ -102,7 +102,7 @@ public class SpecificNeuronRulePanel extends JPanel implements EditablePanel {
      * @param parent
      *            the parent window referenced for resizing purposes
      */
-    public SpecificNeuronRulePanel(List<Neuron> neuronList, Window parent) {
+    public NeuronPropertiesSpecific(List<Neuron> neuronList, Window parent) {
         this(neuronList, parent, DEFAULT_NP_DISPLAY_STATE);
     }
 
@@ -117,7 +117,7 @@ public class SpecificNeuronRulePanel extends JPanel implements EditablePanel {
      *            the starting state of whether or not details of the rule are
      *            initially visible
      */
-    public SpecificNeuronRulePanel(List<Neuron> neuronList, Window parent,
+    public NeuronPropertiesSpecific(List<Neuron> neuronList, Window parent,
             boolean startingState) {
         this.neuronList = neuronList;
         this.parent = parent;

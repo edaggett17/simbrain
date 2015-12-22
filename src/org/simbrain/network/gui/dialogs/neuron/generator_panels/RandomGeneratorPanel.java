@@ -18,12 +18,17 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.generator_panels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NeuronNoiseGenPanel;
+import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
+import org.simbrain.network.neuron_update_rules.activity_generators.LogisticRule;
+import org.simbrain.network.neuron_update_rules.activity_generators.RandomNeuronRule;
+import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
+import org.simbrain.util.randomizer.Randomizer;
 
 /**
  * <b>RandomNeuronPanel</b> Currently unimplemented pending decisions about
@@ -32,7 +37,11 @@ import org.simbrain.network.gui.dialogs.neuron.NeuronNoiseGenPanel;
 public class RandomGeneratorPanel extends AbstractNeuronRulePanel {
 
     /** Random panel. */
-    private NeuronNoiseGenPanel randPanel = new NeuronNoiseGenPanel();
+    private NoiseGeneratorPanel randPanel = new NoiseGeneratorPanel();
+
+    // TODO:Lists?
+    /** A reference to the neuron rule being edited. */
+    private RandomNeuronRule neuronRef = new RandomNeuronRule();
 
     /**
      * Creates an instance of this panel.
@@ -43,37 +52,25 @@ public class RandomGeneratorPanel extends AbstractNeuronRulePanel {
         this.add(randPanel);
     }
 
-    // /**
-    // * Populate fields with current data.
-    // */
-    // public void fillFieldValues() {
-    // ArrayList<Randomizer> randomPanels = new ArrayList<Randomizer>();
-    //
-    // for (int i = 0; i < ruleList.size(); i++) {
-    // randomPanels.add(((RandomNeuronRule) ruleList.get(i))
-    // .getRandomizer());
-    // }
-    //
-    // rp.fillFieldValues(randomPanels);
-    // }
+    /**
+     * Populate fields with current data.
+     */
+    public void fillFieldValues() {
+    }
 
     /**
      * Fill field values to default values for random neuron.
      */
     public void fillDefaultValues() {
-        // rp.fillDefaultValues();
+         randPanel.fillDefaultValues();
     }
 
-    // /**
-    // * Called externally when the dialog is closed, to commit any changes
-    // made.
-    // */
-    // public void commitChanges() {
-    // for (int i = 0; i < ruleList.size(); i++) {
-    // RandomNeuronRule neuronRef = (RandomNeuronRule) ruleList.get(i);
-    // rp.commitRandom(neuronRef.getRandomizer());
-    // }
-    // }
+     /**
+     * Called externally when the dialog is closed, to commit any changes
+     made.
+     */
+    public void commitChanges() {
+    }
 
     @Override
     public void commitChanges(Neuron neuron) {
@@ -82,15 +79,23 @@ public class RandomGeneratorPanel extends AbstractNeuronRulePanel {
     }
 
     @Override
-    public void commitChanges(List<Neuron> neuron) {
-        // TODO Auto-generated method stub
-
+    public void commitChanges(List<Neuron> ruleList) {
+        for (int i = 0; i < ruleList.size(); i++) {
+            RandomNeuronRule neuronRef = (RandomNeuronRule) ruleList.get(i).getUpdateRule();
+            randPanel.commitRandom(neuronRef.getRandomizer());
+        }
     }
 
     @Override
     public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-        // TODO Auto-generated method stub
+        ArrayList<Randomizer> randomPanels = new ArrayList<Randomizer>();
 
+        for (int i = 0; i < ruleList.size(); i++) {
+            randomPanels
+                    .add(((RandomNeuronRule) ruleList.get(i)).getRandomizer());
+        }
+
+        randPanel.fillFieldValues(randomPanels);
     }
 
     /**

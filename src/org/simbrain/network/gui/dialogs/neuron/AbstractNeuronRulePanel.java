@@ -24,6 +24,7 @@ import org.simbrain.network.gui.dialogs.neuron.generator_panels.LogisticGenerato
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.RandomGeneratorPanel;
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.SinusoidalGeneratorPanel;
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.StochasticGeneratorPanel;
+import org.simbrain.network.gui.dialogs.neuron.rule_panels.AdExIFRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.BinaryRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.ContinuousSigmoidalRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.DecayRulePanel;

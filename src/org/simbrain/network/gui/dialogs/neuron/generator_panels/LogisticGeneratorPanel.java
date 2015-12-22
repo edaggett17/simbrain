@@ -18,17 +18,17 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.generator_panels;
 
-import java.awt.GridLayout;
 import java.util.List;
 
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
+import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.activity_generators.LogisticRule;
 import org.simbrain.util.LabelledItemPanel;
+import org.simbrain.util.SimbrainConstants;
 
 /**
  * <b>LogisticNeuronPanel</b> TODO: Work into new Input Generator Framework,
@@ -38,10 +38,13 @@ public class LogisticGeneratorPanel extends AbstractNeuronRulePanel {
 
     /** Growth rate field. */
     private JTextField tfGrowthRate = new JTextField();
-    
+
     /** Main panel. */
     private LabelledItemPanel mainPanel = new LabelledItemPanel();
 
+    // TODO:Lists?
+    /** A reference to the neuron rule being edited. */
+    private LogisticRule neuronRef = new LogisticRule();
 
     /**
      * Creates an instance of this panel.
@@ -50,25 +53,20 @@ public class LogisticGeneratorPanel extends AbstractNeuronRulePanel {
         super();
         mainPanel.addItem("Growth Rate", tfGrowthRate);
         add(mainPanel);
-//        this.addBottomText("<html>Note 1: This is not a sigmoidal logistic function. <p>"
-//                + "For that, set update rule to sigmoidal.<p> "
-//                + " Note 2: for chaos, try growth rates between 3.6 and 4</html>");
+        // this.addBottomText("<html>Note 1: This is not a sigmoidal logistic
+        // function. <p>"
+        // + "For that, set update rule to sigmoidal.<p> "
+        // + " Note 2: for chaos, try growth rates between 3.6 and 4</html>");
     }
 
-    // /**
-    // * Populate fields with current data.
-    // */
-    // public void fillFieldValues() {
-    // LogisticRule neuronRef = (LogisticRule) ruleList.get(0);
-    //
-    // tfGrowthRate.setText(Double.toString(neuronRef.getGrowthRate()));
-    //
-    // // Handle consistency of multiple selections
-    // if (!NetworkUtils.isConsistent(ruleList, LogisticRule.class,
-    // "getGrowthRate")) {
-    // tfGrowthRate.setText(NULL_STRING);
-    // }
-    // }
+    /**
+     * Populate fields with current data.
+     */
+    public void fillFieldValues() {
+        tfGrowthRate.setText(Double.toString(neuronRef.getGrowthRate()));
+
+
+    }
 
     /**
      * Populate fields with default data.
@@ -78,37 +76,50 @@ public class LogisticGeneratorPanel extends AbstractNeuronRulePanel {
         tfGrowthRate.setText(Double.toString(neuronRef.getGrowthRate()));
     }
 
-    // /**
-    // * Called externally when the dialog is closed, to commit any changes
-    // made.
-    // */
-    // public void commitChanges() {
-    // for (int i = 0; i < ruleList.size(); i++) {
-    // LogisticRule neuronRef = (LogisticRule) ruleList.get(i);
-    //
-    // if (!tfGrowthRate.getText().equals(NULL_STRING)) {
-    // neuronRef.setGrowthRate(Double.parseDouble(tfGrowthRate
-    // .getText()));
-    // }
-    // }
-    // }
+    /**
+     * Called externally when the dialog is closed, to commit any changes made.
+     */
+    public void commitChanges() {
 
-    @Override
-    public void commitChanges(Neuron neuron) {
-        // TODO Auto-generated method stub
-
+        if (!tfGrowthRate.getText().equals(SimbrainConstants.NULL_STRING)) {
+            neuronRef.setGrowthRate(Double.parseDouble(tfGrowthRate.getText()));
+        }
     }
 
     @Override
-    public void commitChanges(List<Neuron> neuron) {
-        // TODO Auto-generated method stub
+    public void commitChanges(Neuron neuron) {
+        if (neuron.getUpdateRule() instanceof LogisticRule) {
+            neuronRef = (LogisticRule) neuron.getUpdateRule();
+        } else {
+            neuron.setUpdateRule(neuronRef);
+        }
+        if (!tfGrowthRate.getText().equals(SimbrainConstants.NULL_STRING)) {
+            neuronRef.setGrowthRate(Double.parseDouble(tfGrowthRate.getText()));
+        }
+    }
+
+    @Override
+    public void commitChanges(List<Neuron> neurons) {
+
+        // Firing Probability
+        if (!tfGrowthRate.getText()
+                .equals(SimbrainConstants.NULL_STRING))
+            neuronRef.setGrowthRate(Double
+                    .parseDouble(tfGrowthRate.getText()));
+
+        for (Neuron n : neurons) {
+            n.setUpdateRule(neuronRef);
+        }
 
     }
 
     @Override
     public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-        // TODO Auto-generated method stub
-
+        // Handle consistency of multiple selections
+        if (!NetworkUtils.isConsistent(ruleList, LogisticRule.class,
+                "getGrowthRate")) {
+            tfGrowthRate.setText(SimbrainConstants.NULL_STRING);
+        }
     }
 
     /**

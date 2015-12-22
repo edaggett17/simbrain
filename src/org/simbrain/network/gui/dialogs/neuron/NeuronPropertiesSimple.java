@@ -79,7 +79,7 @@ public class NeuronPropertiesSimple extends JPanel implements EditablePanel {
      * The extra data panel. Includes: increment, upper bound, lower bound, and
      * priority.
      */
-    private final NeuronPropertiesExtended extraDataPanel;
+    private final NeuronPropertiesGeneral extraDataPanel;
 
     /** The neurons being modified. */
     private final List<Neuron> neuronList;
@@ -157,7 +157,7 @@ public class NeuronPropertiesSimple extends JPanel implements EditablePanel {
         this.displayIDInfo = displayIDInfo;
         detailTriangle = new DropDownTriangle(UpDirection.LEFT,
                 DEFAULT_INIT_EXTENDED_DISPLAY, "More", "Less", parent);
-        extraDataPanel = new NeuronPropertiesExtended(this.neuronList, parent);
+        extraDataPanel = new NeuronPropertiesGeneral(this.neuronList, parent);
         initializeLayout();
         fillFieldValues();
     }
@@ -314,7 +314,7 @@ public class NeuronPropertiesSimple extends JPanel implements EditablePanel {
     /**
      * @return the extraDataPanel
      */
-    public NeuronPropertiesExtended getExtraDataPanel() {
+    public NeuronPropertiesGeneral getExtraDataPanel() {
         return extraDataPanel;
     }
 
