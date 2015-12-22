@@ -345,6 +345,7 @@ public class Neuron {
     public void setToBufferVals() {
         setActivation(getBuffer());
         setSpike(getSpkBuffer());
+        setInputValue(0);
     }
 
     /**

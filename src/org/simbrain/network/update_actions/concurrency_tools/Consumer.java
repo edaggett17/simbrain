@@ -72,9 +72,9 @@ public class Consumer implements Runnable {
      */
     @Override
     public void run() {
-        while (live) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
-                taskQueue.take().perform();
+                taskQueue.take().perform(idNo);
             } catch (InterruptedException | BrokenBarrierException e) {
                 e.printStackTrace();
             }

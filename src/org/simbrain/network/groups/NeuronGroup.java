@@ -21,6 +21,7 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -203,7 +204,7 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
         // Very slow to add to a copy on write array list so do it this way
         neuronList = new CopyOnWriteArrayList<Neuron>(neuronList);
         layout.setInitialLocation(initialPosition);
-        layout.layoutNeurons(this.getNeuronList());
+        layout.layoutNeurons(this.neuronList);
         updateRule = getNeuronType();
         resetSubsamplingIndices();
     }
@@ -550,8 +551,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      * Randomize fan-in for all neurons in group.
      */
     public void randomizeIncomingWeights() {
-        for (Neuron neuron : this.getNeuronList()) {
-            neuron.randomizeFanIn();
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).randomizeFanIn();
         }
         getParentNetwork().fireSynapsesUpdated(getIncomingWeights());
     }
@@ -560,8 +561,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      * Randomize fan-out for all neurons in group.
      */
     public void randomizeOutgoingWeights() {
-        for (Neuron neuron : this.getNeuronList()) {
-            neuron.randomizeFanOut();
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).randomizeFanOut();
         }
         getParentNetwork().fireSynapsesUpdated(getOutgoingWeights());
     }
@@ -573,8 +574,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      */
     public List<Synapse> getIncomingWeights() {
         List<Synapse> retList = new ArrayList<Synapse>();
-        for (Neuron neuron : this.getNeuronList()) {
-            retList.addAll(neuron.getFanIn());
+        for (int i = 0, n = size(); i < n; i++) {
+            retList.addAll(neuronList.get(i).getFanIn());
         }
         return retList;
     }
@@ -586,8 +587,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      */
     public List<Synapse> getOutgoingWeights() {
         List<Synapse> retList = new ArrayList<Synapse>();
-        for (Neuron neuron : this.getNeuronList()) {
-            retList.addAll(neuron.getFanOut().values());
+        for (int i = 0, n = size(); i < n; i++) {
+            retList.addAll(neuronList.get(i).getFanOut().values());
         }
         return retList;
     }
@@ -596,8 +597,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      * Randomize all neurons in group.
      */
     public void randomize() {
-        for (Neuron neuron : this.getNeuronList()) {
-            neuron.randomize();
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).randomize();
         }
     }
 
@@ -610,8 +611,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      *            upper bound for randomization.
      */
     public void randomizeBiases(double lower, double upper) {
-        for (Neuron neuron : this.getNeuronList()) {
-            neuron.randomizeBias(lower, upper);
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).randomizeBias(lower, upper);
         }
     }
 
@@ -678,7 +679,7 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
     public String toString() {
         String ret = new String();
         ret += ("Neuron Group [" + getLabel() + "]. Neuron group with "
-                + this.getNeuronList().size() + " neuron(s)" + ". Located at ("
+                + this.neuronList.size() + " neuron(s)" + ". Located at ("
                 + Utils.round(this.getPosition().x, 2) + ","
                 + Utils.round(this.getPosition().y, 2) + ").\n");
         ret += layout.toString();
@@ -1071,7 +1072,7 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      * Set all activations to 0.
      */
     public void clearActivations() {
-        for (Neuron n : this.getNeuronList()) {
+        for (Neuron n : neuronList) {
             n.clear();
         }
     }
@@ -1083,8 +1084,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      *            true to clamp them, false otherwise
      */
     public void setClamped(final boolean clamp) {
-        for (Neuron neuron : this.getNeuronList()) {
-            neuron.setClamped(clamp);
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).setClamped(clamp);
         }
     }
 
@@ -1095,8 +1096,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      *            the value to set the neurons to
      */
     public void setActivationLevels(final double value) {
-        for (Neuron n : getNeuronList()) {
-            n.setActivation(value);
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).setActivation(value);
         }
     }
 
@@ -1107,8 +1108,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      *            the value to set the neurons to
      */
     public void forceSetActivationLevels(final double value) {
-        for (Neuron n : getNeuronList()) {
-            n.forceSetActivation(value);
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).forceSetActivation(value);
         }
     }
 
@@ -1138,6 +1139,14 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
                 .getActivationVector(neuronList)));
     }
 
+    /**
+     * Print activations as a vector to an arbitrary print stream.
+     */
+    public void printActivations(PrintStream out) {
+        out.println(Utils.doubleArrayToString(Network
+                .getActivationVector(neuronList)));
+    }
+    
     @Override
     public String getUpdateMethodDesecription() {
         return "Update neurons";
@@ -1147,9 +1156,9 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      * Apply any input values to the activations of the neurons in this group.
      */
     public void applyInputs() {
-        for (Neuron neuron : getNeuronList()) {
-            neuron.setActivation(neuron.getActivation()
-                    + neuron.getInputValue());
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).setActivation(neuronList.get(i).getActivation()
+                    + neuronList.get(i).getInputValue());
         }
     }
 
@@ -1221,7 +1230,7 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      */
     public void applyLayout() {
         layout.setInitialLocation(getPosition());
-        layout.layoutNeurons(getNeuronList());
+        layout.layoutNeurons(neuronList);
     }
 
     /**
@@ -1233,7 +1242,7 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      */
     public void applyLayout(Point2D initialPosition) {
         layout.setInitialLocation(initialPosition);
-        layout.layoutNeurons(getNeuronList());
+        layout.layoutNeurons(neuronList);
     }
 
     public HashSet<SynapseGroup> getIncomingSgs() {
@@ -1275,8 +1284,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      */
     public boolean isAllClamped() {
         boolean ret = true;
-        for (Neuron n : getNeuronList()) {
-            if (!n.isClamped()) {
+        for (int i = 0, n = size(); i < n; i++) {
+            if (!neuronList.get(i).isClamped()) {
                 ret = false;
             }
         }
@@ -1290,8 +1299,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      */
     public boolean isAllUnclamped() {
         boolean ret = true;
-        for (Neuron n : getNeuronList()) {
-            if (n.isClamped()) {
+        for (int i = 0, n = size(); i < n; i++) {
+            if (neuronList.get(i).isClamped()) {
                 ret = false;
             }
         }
@@ -1305,8 +1314,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      *            the lower bound to set.
      */
     public void setLowerBound(double lb) {
-        for (Neuron neuron : this.getNeuronList()) {
-            neuron.setLowerBound(lb);
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).setLowerBound(lb);
         }
     }
 
@@ -1317,8 +1326,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      *            the upper bound to set.
      */
     public void setUpperBound(double ub) {
-        for (Neuron neuron : this.getNeuronList()) {
-            neuron.setUpperBound(ub);
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).setUpperBound(ub);
         }
     }
 
@@ -1329,8 +1338,8 @@ public class NeuronGroup extends Group implements CopyableGroup<NeuronGroup> {
      *            the increment to set.
      */
     public void setIncrement(double increment) {
-        for (Neuron neuron : this.getNeuronList()) {
-            neuron.setIncrement(increment);
+        for (int i = 0, n = size(); i < n; i++) {
+            neuronList.get(i).setIncrement(increment);
         }
     }
 

@@ -27,7 +27,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.simbrain.network.connections.ConnectNeurons;
 import org.simbrain.network.connections.Sparse;
@@ -38,6 +37,7 @@ import org.simbrain.network.groups.SynapseGroup;
 import org.simbrain.network.listeners.GroupListener;
 import org.simbrain.network.listeners.NetworkEvent;
 import org.simbrain.network.listeners.NetworkListener;
+import org.simbrain.network.listeners.NetworkRunListener;
 import org.simbrain.network.listeners.NeuronListener;
 import org.simbrain.network.listeners.SynapseListener;
 import org.simbrain.network.listeners.TextListener;
@@ -108,6 +108,25 @@ public class Network {
     /** Whether this is a discrete or continuous time network. */
     private TimeType timeType = TimeType.DISCRETE;
 
+    /** 
+     * A local variable for determining if the network is either running
+     * or in a runnable state. Must always have the same value as
+     *  {@link #isRunning} as it is used so that network class-internal checks
+     *   can be quicker.
+     */
+    private boolean isRunningLoc = false;
+    
+    /** 
+     * Whether or not the network is running or in a runnable state. Usually
+     * used in situations where there is a GUI dictating whether or not the 
+     * network is running, where there are large amounts of intervening time
+     * during which the network is not running. 
+     */
+    private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    
+    private final List<NetworkRunListener> runListeners =
+            new ArrayList<NetworkRunListener>();
+    
     /** List of objects registered to observe general network events. */
     private List<NetworkListener> networkListeners =
             new ArrayList<NetworkListener>();
@@ -182,6 +201,9 @@ public class Network {
      * function on each neuron, decays all the neurons, and checks their bounds.
      */
     public void update() {
+        if (!isRunningLoc) {
+            setRunning(true);
+        }
     	for (int i = 0, n = networkListeners.size(); i < n; i++) {
     		networkListeners.get(i).setUpdateComplete(false);
     	}
@@ -200,13 +222,36 @@ public class Network {
     	    }
     	}
 
-        // Clear input nodes
-        clearInputs();
         // Update Time
         updateTime();
         setUpdateCompleted(true);
     }
 
+    /**
+     * Sets whether or not the network is running or in the runnable state. 
+     * Alerts listeners that the network is in this state, otherwise does
+     * not prevent {@link #update()} from being called.
+     * @param running
+     */
+    public final void setRunning(boolean running) {
+        synchronized(isRunning) {
+            for (int i = 0, n = runListeners.size(); i < n; i++) {
+                runListeners.get(i).runStateChanged(running);
+            }
+            isRunningLoc = running;
+            isRunning.set(running);
+        }
+    }
+    
+    /**
+     * Whether or not the network is in the runnable state. Uses the atomic
+     * value.
+     * @return
+     */
+    public final boolean isRunning() {
+        return isRunning.get();
+    }
+    
     /**
      * Update all neuron groups and other groups.
      */
@@ -265,19 +310,19 @@ public class Network {
         }
     }
 
-    /**
-     * Clears out input values of network nodes, which otherwise linger and
-     * cause problems.
-     */
-    public void clearInputs() {
-
-        // TODO: Is there a more efficient way to handle this?
-        // i.e. a way to get a list of neurons that (1) are coupled or better,
-        // (2) have input values which consume.
-        for (Neuron neuron : this.getFlatNeuronList()) {
-            neuron.setInputValue(0);
-        }
-    }
+//    /**
+//     * Clears out input values of network nodes, which otherwise linger and
+//     * cause problems.
+//     */
+//    public void clearInputs() {
+//        
+//        // TODO: Is there a more efficient way to handle this?
+//        // i.e. a way to get a list of neurons that (1) are coupled or better,
+//        // (2) have input values which consume.
+//        for (Neuron neuron : this.getFlatNeuronList()) {
+//            neuron.setInputValue(0);
+//        }
+//    }
 
     /**
      * Return the list of synapses. These are "loose" neurons. For the full set
@@ -1556,6 +1601,14 @@ public class Network {
      */
     public SimpleId getSynapseIdGenerator() {
         return synapseIdGenerator;
+    }
+
+    public void addNetworkRunListener(final NetworkRunListener nrl) {
+        this.runListeners.add(nrl);
+    }
+
+    public boolean removeNetworkRunListener(final NetworkRunListener nrl) {
+        return runListeners.remove(nrl);
     }
 
     /**

@@ -63,6 +63,36 @@ public class Utils {
     }
 
     /**
+     * Tests if an int is a real integer power of 2. Returns true for 1. 
+     * @param val value to test if a real integer power of 2
+     * @return whether or not val is a real integer power of 2. Returns true for
+     * 1, false for all values less than or equal to zero. 
+     */
+    public static boolean isPower2(int val) {
+        return (val & (val - 1)) == 0;
+    }
+    
+    /**
+     * Gives the nearest real integer power of 2 to the given integer.
+     * @param val
+     * @return
+     */
+    public static int nearestPower2(int val) {
+        if (val <= 1) {
+            return 0;
+        } else {
+            int pL = 1;
+            int temp = val;
+            while(temp > 1) {
+                temp = temp >> 1;
+                pL = pL << 1;
+            }
+            int pH = pL << 1;
+            return (pH - val) >= (val - pL) ? pL : pH;
+        }
+    }
+    
+    /**
      * Read a csv (comma-separated-values) files.
      *
      * @param theFile the file to read in

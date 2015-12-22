@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -362,8 +363,9 @@ public class NetworkUpdateManagerPanel extends JPanel {
                     .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             availableActionJList.setModel(listModel);
             listModel.clear();
-            for (NetworkUpdateAction action : network.getUpdateManager()
-                    .getAvailableActionList()) {
+            List<NetworkUpdateAction> nual = network.getUpdateManager()
+                    .getAvailableActionList();
+            for (NetworkUpdateAction action : nual) {
                 listModel.addElement(action);
             }
             configureAvailableJList(availableActionJList);

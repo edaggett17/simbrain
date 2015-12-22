@@ -3020,6 +3020,7 @@ public class NetworkPanel extends JPanel {
      */
     public void setRunning(boolean isRunning) {
     	this.isRunning.set(isRunning);
+    	network.setRunning(isRunning);
     }
 
     /**

@@ -54,7 +54,7 @@ public class BufferedUpdateTask implements Task {
 	 * question.
 	 */
 	@Override
-	public void perform() {
+	public void perform(int id) {
 		for (int i = 0; i < hostSize; i++) {
 			if (hosts[i] == null) {
 				break;

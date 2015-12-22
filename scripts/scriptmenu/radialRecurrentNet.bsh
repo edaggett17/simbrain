@@ -181,7 +181,7 @@ import org.simbrain.workspace.*;
     sg.setUpperBound(0, Polarity.INHIBITORY);
     network.randomizeNeurons();
     network.fireSynapsesUpdated();
-    network.getUpdateManager().clear();
-    network.getUpdateManager().addAction(ConcurrentBufferedUpdate.createConcurrentBufferedUpdate(network));
+    //network.getUpdateManager().clear();
+    //network.getUpdateManager().addAction(ConcurrentBufferedUpdate.createConcurrentBufferedUpdate(network));
     network.updateTimeType();
 }

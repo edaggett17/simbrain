@@ -30,6 +30,6 @@ import java.util.concurrent.BrokenBarrierException;
  */
 public interface Task {
 
-	void perform() throws InterruptedException, BrokenBarrierException;
+	void perform(int id) throws InterruptedException, BrokenBarrierException;
 
 }

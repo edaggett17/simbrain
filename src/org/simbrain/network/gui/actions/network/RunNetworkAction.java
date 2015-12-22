@@ -61,16 +61,10 @@ public final class RunNetworkAction extends AbstractAction {
         networkPanel.setRunning(true);
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             public void run() {
-                //networkPanel.getNetwork().setFireUpdates(false);
-//                lock.lock();
                 while (networkPanel.isRunning()) {
-//                    lock.unlock();
                     networkPanel.getNetwork().setUpdateCompleted(false);
                     networkPanel.getNetwork().update();
-//                    lock.lock();
                 }
-//                lock.unlock();
-                //networkPanel.getNetwork().setFireUpdates(true);
             }
         });
     }
