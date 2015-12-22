@@ -18,7 +18,12 @@
  */
 package org.simbrain.network.gui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dialog;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Point2D;
@@ -120,6 +125,7 @@ import org.simbrain.network.listeners.NeuronListener;
 import org.simbrain.network.listeners.SynapseListener;
 import org.simbrain.network.listeners.TextListener;
 import org.simbrain.network.neuron_update_rules.LinearRule;
+import org.simbrain.network.neuron_update_rules.activity_generators.StochasticRule;
 import org.simbrain.network.subnetworks.BPTTNetwork;
 import org.simbrain.network.subnetworks.BackpropNetwork;
 import org.simbrain.network.subnetworks.CompetitiveGroup;
@@ -812,6 +818,22 @@ public class NetworkPanel extends JPanel {
         }
         timeLabel.update();
         updateComplete.decrementAndGet();
+    }
+    
+
+    //TODO: Share code with newNeuron
+    public void addActivityGenerator() {
+        final Neuron neuron = new Neuron(getNetwork(), new StochasticRule());
+        Point2D p = whereToAdd;
+        neuron.setX(p.getX());
+        neuron.setY(p.getY());
+        neuron.forceSetActivation(0);
+        getNetwork().addNeuron(neuron);
+        // New objects are added to the right of the last neuron added.
+        // Convenient for quickly making "lines" of neurons by repeatedly
+        // adding neurons.
+        whereToAdd.setLocation(neuron.getX() + DEFAULT_SPACING, neuron.getY());
+        repaint();
     }
 
     /**
@@ -3287,5 +3309,6 @@ public class NetworkPanel extends JPanel {
 		if (!updateComplete && this.updateComplete.get() != 0) { return; }
 		this.updateComplete.set(updateComplete ? 0 : 3);
 	}
+
 
 }

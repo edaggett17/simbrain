@@ -15,7 +15,9 @@ package org.simbrain.network.neuron_update_rules.interfaces;
 
 import org.simbrain.network.core.Neuron;
 
-// TODO: Document
+/**
+ * Marker interface?
+ */
 public interface ActivityGenerator {
 
     /**

@@ -253,7 +253,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @return the generator list
      */
     public static String[] getGeneratorlist() {
-        return GENERATOR_MAP.keySet().toArray(new String[RULE_MAP.size()]);
+        return GENERATOR_MAP.keySet().toArray(new String[GENERATOR_MAP.size()]);
     }
 
     /**

@@ -28,6 +28,7 @@ import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.activity_generators.LogisticRule;
+import org.simbrain.util.LabelledItemPanel;
 
 /**
  * <b>LogisticNeuronPanel</b> TODO: Work into new Input Generator Framework,
@@ -37,18 +38,21 @@ public class LogisticGeneratorPanel extends AbstractNeuronRulePanel {
 
     /** Growth rate field. */
     private JTextField tfGrowthRate = new JTextField();
+    
+    /** Main panel. */
+    private LabelledItemPanel mainPanel = new LabelledItemPanel();
+
 
     /**
      * Creates an instance of this panel.
      */
     public LogisticGeneratorPanel() {
         super();
-        setLayout(new GridLayout(1, 2));
-        add(new JLabel("Growth Rate: "));
-        add(tfGrowthRate);
-        this.addBottomText("<html>Note 1: This is not a sigmoidal logistic function. <p>"
-                + "For that, set update rule to sigmoidal.<p> "
-                + " Note 2: for chaos, try growth rates between 3.6 and 4</html>");
+        mainPanel.addItem("Growth Rate", tfGrowthRate);
+        add(mainPanel);
+//        this.addBottomText("<html>Note 1: This is not a sigmoidal logistic function. <p>"
+//                + "For that, set update rule to sigmoidal.<p> "
+//                + " Note 2: for chaos, try growth rates between 3.6 and 4</html>");
     }
 
     // /**

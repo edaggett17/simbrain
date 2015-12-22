@@ -29,6 +29,7 @@ import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.activity_generators.StochasticRule;
+import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.SimbrainConstants;
 
 /**
@@ -41,6 +42,10 @@ public class StochasticGeneratorPanel extends AbstractNeuronRulePanel {
 
     /** A reference to the neuron rule being edited. */
     private StochasticRule neuronRef = new StochasticRule();
+    
+    /** Main panel. */
+    private LabelledItemPanel mainPanel = new LabelledItemPanel();
+
 
     /**
      * Creates an instance of this panel.
@@ -48,11 +53,8 @@ public class StochasticGeneratorPanel extends AbstractNeuronRulePanel {
      */
     public StochasticGeneratorPanel() {
         super();
-        setLayout(new GridLayout(1, 2));
-        add(new JLabel("Firing Probability: "));
-        add(tfFiringProbability);
-        this.addBottomText("<html>\"Firing probability\" is the probability of <p> the neuron's"
-                + " state taking on the upper bound value.</html>");
+        mainPanel.addItem("Firing Probability", tfFiringProbability);
+        add(mainPanel);
     }
 
     /**

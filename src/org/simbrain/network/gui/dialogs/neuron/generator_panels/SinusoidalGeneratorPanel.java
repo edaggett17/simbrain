@@ -18,7 +18,6 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.generator_panels;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
@@ -28,11 +27,10 @@ import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
+import org.simbrain.network.gui.dialogs.neuron.NeuronNoiseGenPanel;
 import org.simbrain.network.neuron_update_rules.activity_generators.SinusoidalRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.SimbrainConstants;
-import org.simbrain.util.randomizer.Randomizer;
-import org.simbrain.util.randomizer.gui.RandomizerPanel;
 import org.simbrain.util.widgets.TristateDropDown;
 
 /**
@@ -53,7 +51,7 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
     private LabelledItemPanel mainPanel = new LabelledItemPanel();
 
     /** Random panel. */
-    private RandomizerPanel randPanel;// = new RandomizerPanel();
+    private NeuronNoiseGenPanel randPanel = new NeuronNoiseGenPanel();
 
     /** Tabbed panel. */
     private JTabbedPane tabbedPanel = new JTabbedPane();
@@ -186,7 +184,6 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
     @Override
     protected void writeValuesToRules(List<Neuron> neurons) {
         // TODO Auto-generated method stub
-
     }
 
 }

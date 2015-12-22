@@ -39,6 +39,7 @@ import javax.swing.border.TitledBorder;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
+import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.widgets.DropDownTriangle;
 import org.simbrain.util.widgets.DropDownTriangle.UpDirection;
@@ -120,8 +121,14 @@ public class SpecificNeuronRulePanel extends JPanel implements EditablePanel {
             boolean startingState) {
         this.neuronList = neuronList;
         this.parent = parent;
-        ruleMap = AbstractNeuronRulePanel.RULE_MAP;
-        cbNeuronType = new JComboBox<String>(AbstractNeuronRulePanel.getRulelist());
+        if(neuronList.get(0).getUpdateRule() instanceof ActivityGenerator) {
+            ruleMap = AbstractNeuronRulePanel.GENERATOR_MAP;
+            cbNeuronType = new JComboBox<String>(AbstractNeuronRulePanel.getGeneratorlist());
+        } else {
+            ruleMap = AbstractNeuronRulePanel.RULE_MAP;            
+            cbNeuronType = new JComboBox<String>(AbstractNeuronRulePanel.getRulelist());
+        }
+
         displayNPTriangle = new DropDownTriangle(UpDirection.LEFT,
                 startingState, "Settings", "Settings", parent);
         initNeuronType();
@@ -272,7 +279,6 @@ public class SpecificNeuronRulePanel extends JPanel implements EditablePanel {
             neuronPanel.setReplace(false);
             neuronPanel.fillFieldValues(Neuron.getRuleList(neuronList));
             cbNeuronType.setSelectedItem(neuronName);
-
         }
     }
 

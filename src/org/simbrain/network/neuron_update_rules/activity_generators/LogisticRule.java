@@ -28,13 +28,9 @@ import org.simbrain.network.neuron_update_rules.interfaces.ClippableUpdateRule;
 /**
  * <b>LogisticNeuron</b> updates using the logistic equation, which is chaotic
  * for the default growth rate. Does not use inputs from other neurons.
- *
- * TODO: This should be an input generator
  */
 public class LogisticRule extends NeuronUpdateRule implements
         BoundedUpdateRule, ClippableUpdateRule, ActivityGenerator {
-
-    public static final double DEFAULT_FLOOR = 0.0;
 
     /** Growth rate. */
     private double growthRate = 3.9;

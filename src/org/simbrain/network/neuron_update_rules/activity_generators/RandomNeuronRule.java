@@ -28,7 +28,7 @@ import org.simbrain.util.randomizer.Randomizer;
 /**
  * <b>RandomNeuron</b> produces random activations within specified parameters.
  *
- * TODO: This should be an input generator
+ * TODO: Rename?  Reuse libraries?
  */
 public class RandomNeuronRule extends NeuronUpdateRule implements
         BoundedUpdateRule, ActivityGenerator {
