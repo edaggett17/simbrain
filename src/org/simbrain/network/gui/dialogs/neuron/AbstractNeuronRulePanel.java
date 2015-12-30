@@ -71,7 +71,7 @@ import java.util.List;
 /**
  * <b>AbstractNeuronPanel</b> is the parent class for all panels used to set
  * parameters of specific neuron rule types.
- * <p/>
+ *
  * Optimization has been emphasized for methods intended for neuron creation
  * rather than editing on the assumption that the former will be far more common
  * for large numbers of neurons.

@@ -51,7 +51,6 @@ public class FitzhughNagumoRulePanel extends AbstractNeuronRulePanel {
     /** A reference to the neuron update rule being edited. */
     private static final FitzhughNagumo prototypeRule = new FitzhughNagumo();
 
-
     public FitzhughNagumoRulePanel() {
         super();
         this.add(tabbedPane);
@@ -64,8 +63,6 @@ public class FitzhughNagumoRulePanel extends AbstractNeuronRulePanel {
         tabbedPane.add(mainTab, "Properties");
         tabbedPane.add(randTab, "Noise");
     }
-
-
 
     @Override
     public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
