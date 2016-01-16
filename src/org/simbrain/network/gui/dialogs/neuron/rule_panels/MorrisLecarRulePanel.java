@@ -376,7 +376,7 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel{
 
     @Override
     public void commitChanges(List<Neuron> neurons) {
-        if (isReplace()) {
+        if (isReplacingUpdateRules()) {
             NeuronUpdateRule neuronRef = prototypeRule.deepCopy();
             for (Neuron n : neurons) {
                 n.setUpdateRule(neuronRef.deepCopy());
@@ -527,7 +527,7 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel{
             boolean addNoise = isAddNoise.getSelectedIndex() == TristateDropDown
                     .getTRUE();
             for (int i = 0; i < numNeurons; i++) {
-                ((FitzhughNagumo) neurons.get(i).getUpdateRule())
+                ((MorrisLecarRule) neurons.get(i).getUpdateRule())
                         .setAddNoise(addNoise);
             }
             if (addNoise) {

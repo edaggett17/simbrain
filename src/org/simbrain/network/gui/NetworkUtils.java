@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -30,22 +31,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.simbrain.network.core.NeuronUpdateRule;
+
 /**
  * <b>NetworkUtils</b> provides static utility methods for the Network class.
  */
 public class NetworkUtils {
 
     /**
-     * Checks to see if all the objects in a list return the same value for a
-     * method which the user provides by name. The method can have no arguments
-     * (typically a getter method).
+     * Reflection-based method to see if all the objects in a list return the
+     * same value for a method which the user provides by name. The method can
+     * have no arguments (typically a getter method).
      *
-     * @param toCheck
-     *            the list of objects to check for consistency
-     * @param methodName
-     *            the method to be invoked (uses reflection)
-     * @param theClass
-     *            the class method is in
+     * @param toCheck the list of objects to check for consistency
+     * @param methodName the method to be invoked (uses reflection)
+     * @param theClass the class method is in
      * @return true if the list of objects returns the same value for
      *         methodName, false otherwise
      */
@@ -132,19 +132,24 @@ public class NetworkUtils {
     }
     
     /**
-     * @param <T>
-     * @param <V>
-     * @param sources
-     * @param getter
-     * @return
+     * Checks whether all the objects in a list return the same value for a
+     * getter method. Not based on reflection and so it outperforms its
+     * counterpart of the same name.
+     * 
+     * @param <O> the type of the source objects
+     * @param <V> the value returned by the getter
+     * @param sources the source objects to check
+     * @param getter the getter on the source objects
+     * @return true if the set of objects have the same getter value
      */
-    public static <T, V> boolean isConsistent(Collection<T> sources,
-    		ParameterGetter<T,V> getter) {
+    public static <O, V> boolean isConsistent(Collection<O> sources,
+    		ParameterGetter<O,V> getter) {
     	if (sources.size() <= 0) {
     		throw new IllegalArgumentException("Source list is empty.");
     	}
-    	Iterator<T> sourceIter = sources.iterator();
-    	T sourceFirst = sourceIter.next();
+    	// TODO: Redo using stream
+    	Iterator<O> sourceIter = sources.iterator();
+    	O sourceFirst = sourceIter.next();
     	V val = getter.getParameter(sourceFirst);
     	while (sourceIter.hasNext()) {
     		if (!val.equals(getter.getParameter(sourceIter.next()))) {
@@ -155,4 +160,6 @@ public class NetworkUtils {
     	// No inconsistencies were found
     	return true;
     }
+
+
 }

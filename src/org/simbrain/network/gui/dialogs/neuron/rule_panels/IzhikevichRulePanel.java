@@ -174,7 +174,7 @@ public class IzhikevichRulePanel extends AbstractNeuronRulePanel {
     @Override
     public void commitChanges(List<Neuron> neurons) {
 
-        if (isReplace()) {
+        if (isReplacingUpdateRules()) {
             IzhikevichRule neuronRef = prototypeRule.deepCopy();
             for (Neuron n : neurons) {
                 n.setUpdateRule(neuronRef.deepCopy());

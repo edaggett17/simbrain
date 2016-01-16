@@ -53,10 +53,10 @@ public class LogisticGeneratorPanel extends AbstractNeuronRulePanel {
         super();
         mainPanel.addItem("Growth Rate", tfGrowthRate);
         add(mainPanel);
-        // this.addBottomText("<html>Note 1: This is not a sigmoidal logistic
-        // function. <p>"
-        // + "For that, set update rule to sigmoidal.<p> "
-        // + " Note 2: for chaos, try growth rates between 3.6 and 4</html>");
+        this.addBottomText(
+                "<html>Note 1: This is not a sigmoidal logistic function. <p>"
+                        + "For that, create a neuron and set its update rule to sigmoidal.<p> "
+                        + " Note 2: for chaos, try growth rates between 3.6 and 4</html>");
     }
 
     /**

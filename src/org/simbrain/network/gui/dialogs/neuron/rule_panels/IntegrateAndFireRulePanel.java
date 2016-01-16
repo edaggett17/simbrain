@@ -196,7 +196,7 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
     @Override
     public void commitChanges(List<Neuron> neurons) {
 
-        if (isReplace()) {
+        if (isReplacingUpdateRules()) {
             IntegrateAndFireRule neuronRef = prototypeRule.deepCopy();
             for (Neuron n : neurons) {
                 n.setUpdateRule(neuronRef.deepCopy());

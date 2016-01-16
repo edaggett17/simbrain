@@ -25,9 +25,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.groups.Group;
+import org.simbrain.network.gui.dialogs.neuron.rule_panels.PropertyEditor;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
 import org.simbrain.network.neuron_update_rules.interfaces.BiasedUpdateRule;
@@ -1033,6 +1035,7 @@ public class Neuron {
         }
     }
     
+    //TODO: Is this this best place for this? 
     /**
      * A method that returns a list of all the neuron update rules associated
      * with a list of neurons.
@@ -1043,12 +1046,8 @@ public class Neuron {
      *         neurons
      */
     public static List<NeuronUpdateRule> getRuleList(List<Neuron> neuronList) {
-        List<NeuronUpdateRule> ruleSet = new ArrayList<NeuronUpdateRule>();
-
-        for (Neuron n : neuronList) {
-            ruleSet.add(n.getUpdateRule());
-        }
-        return ruleSet;
+        return neuronList.stream().map(Neuron::getUpdateRule)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -1206,5 +1205,15 @@ public class Neuron {
     public void setSpkBuffer(boolean spkBuffer) {
         this.spkBuffer = spkBuffer;
     }
+    
+    //TODO: Document.
+    
+    public static PropertyEditor<Neuron, Double> activationEditor = new PropertyEditor<Neuron, Double>(Double.class, "activation",
+            (n) -> (((Neuron)n).getActivation()),
+            (n, val) -> ((Neuron) n).setActivation((double) val));
 
+    public static PropertyEditor<Neuron, String> labelEditor = new PropertyEditor<Neuron, String>(String.class, "label",
+            (n) -> (((Neuron)n).getLabel()),
+            (n, val) -> ((Neuron) n).setLabel((String) val));
+        
 }

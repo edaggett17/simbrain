@@ -140,7 +140,7 @@ public class IACRulePanel extends AbstractNeuronRulePanel {
     @Override
     public void commitChanges(List<Neuron> neurons) {
 
-        if (isReplace()) {
+        if (isReplacingUpdateRules()) {
             IACRule neuronRef = prototypeRule.deepCopy();
             for (Neuron n : neurons) {
                 n.setUpdateRule(neuronRef.deepCopy());

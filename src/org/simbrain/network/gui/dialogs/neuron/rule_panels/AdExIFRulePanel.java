@@ -13,7 +13,6 @@ import org.simbrain.network.gui.ParameterGetter;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.AdExIFRule;
-import org.simbrain.network.neuron_update_rules.IntegrateAndFireRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.Utils;
@@ -365,7 +364,7 @@ public class AdExIFRulePanel extends AbstractNeuronRulePanel {
 	@Override
 	public void commitChanges(List<Neuron> neurons) {
 		
-        if (isReplace()) {
+        if (isReplacingUpdateRules()) {
             AdExIFRule neuronRef = prototypeRule.deepCopy();
             for (Neuron n : neurons) {
                 n.setUpdateRule(neuronRef.deepCopy());

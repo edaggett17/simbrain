@@ -18,26 +18,15 @@
  */
 package org.simbrain.network.gui;
 
+
 /**
- * 
+ * TODO
  *
- * @param <O> the type parameter of the object from which a parameter will
- * be retrieved
- * @param <V> the type of the retrieved parameter
- *  
- * @author Zach Tosi
+ * @param <O>
+ * @param <V>
  */
-public interface ParameterGetter <O, V> {
+public interface ParameterSetter <O, V> {
 	
-	/**
-	 * A generic method set up with the intention of allowing programmers
-	 * to create a simple function which retrieves an arbitrary parameter
-	 * of an arbitrary type from an object (also of an arbitrary type).
-	 *
-	 * @param source the object from which it is intended that one of
-	 * its parameters will be returned
-	 * @return the value on the source object 
-	 */
-	V getParameter(O source);
-	
+	void setParameter(O source, V value);
+
 }

@@ -139,7 +139,7 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
     @Override
     public void commitChanges(final List<Neuron> neurons) {
 
-        if (isReplace()) {
+        if (isReplacingUpdateRules()) {
             AdditiveRule neuronRef = prototypeRule.deepCopy();
             for (Neuron n : neurons) {
                 n.setUpdateRule(neuronRef);

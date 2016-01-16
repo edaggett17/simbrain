@@ -172,7 +172,7 @@ public class SigmoidalRulePanel extends AbstractSigmoidalRulePanel {
     @Override
     public void commitChanges(List<Neuron> neurons) {
 
-        if (isReplace()) {
+        if (isReplacingUpdateRules()) {
             SigmoidalRule neuronRef = prototypeRule.deepCopy();
             for (Neuron n : neurons) {
                 n.setUpdateRule(neuronRef.deepCopy());

@@ -38,6 +38,7 @@ import org.piccolo2d.util.PBounds;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.gui.NetworkPanel;
 import org.simbrain.network.gui.dialogs.neuron.NeuronDialog;
+import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.Utils;
 
 /**
@@ -291,7 +292,7 @@ public class NeuronNode extends ScreenElement implements PropertyChangeListener 
         // Set label text
         if ((!neuron.getLabel().equalsIgnoreCase(""))
                 || (!neuron.getLabel().equalsIgnoreCase(
-                        NeuronDialog.NULL_STRING))) {
+                        SimbrainConstants.NULL_STRING))) {
             labelText.setFont(NEURON_FONT);
             labelText.setText("" + neuron.getLabel());
             labelText.setOffset(circle.getX() - labelText.getWidth() / 2

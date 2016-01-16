@@ -18,14 +18,19 @@
  */
 package org.simbrain.network.neuron_update_rules;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
+import org.simbrain.network.gui.dialogs.neuron.rule_panels.PropertyEditor;
 import org.simbrain.network.neuron_update_rules.interfaces.BiasedUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.BoundedUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ClippableUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.DifferentiableUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
+import org.simbrain.util.Property;
 import org.simbrain.util.randomizer.Randomizer;
 
 /**
@@ -45,10 +50,12 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
     private static final boolean DEFAULT_CLIPPING = true;
 
     /** Slope. */
-    private double slope = 1;
+    @Property (name = "Slope")
+    public double slope = 1;
 
     /** Bias. */
-    private double bias = 0;
+    @Property (name = "Bias")
+    public double bias = 0;
 
     /** Noise dialog. */
     private Randomizer noiseGenerator = new Randomizer();
@@ -184,6 +191,23 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
     public void setBias(final double bias) {
         this.bias = bias;
     }
+    
+    // TODO: Make this a superclass method that is overridden?
+    
+    /**
+     * List of property editors for use by neuron property dialogs.
+     * 
+     */
+    public static List<PropertyEditor> editorList = Arrays.asList(
+            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "slope",
+                    (r) -> ((LinearRule) r).getSlope(),
+                    (r, val) -> ((LinearRule) r).setSlope((double) val)),
+            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "bias",
+                    (r) -> ((LinearRule) r).getBias(),
+                    (r, val) -> ((LinearRule) r).setBias((double) val)),
+            new PropertyEditor<NeuronUpdateRule, Boolean>(Boolean.class, "addNoise",
+                    (r) -> ((LinearRule) r).getAddNoise(),
+                    (r, val) -> ((LinearRule) r).setAddNoise((boolean) val)));
 
     /**
      * @return Returns the slope.

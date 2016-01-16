@@ -18,55 +18,26 @@
  */
 package org.simbrain.network.gui.dialogs.neuron;
 
-import org.simbrain.network.core.Neuron;
-import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.dialogs.neuron.generator_panels.LogisticGeneratorPanel;
-import org.simbrain.network.gui.dialogs.neuron.generator_panels.RandomGeneratorPanel;
-import org.simbrain.network.gui.dialogs.neuron.generator_panels.SinusoidalGeneratorPanel;
-import org.simbrain.network.gui.dialogs.neuron.generator_panels.StochasticGeneratorPanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.AdExIFRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.BinaryRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.ContinuousSigmoidalRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.DecayRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.FitzhughNagumoRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.IACRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.IntegrateAndFireRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.IzhikevichRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.LinearRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.MorrisLecarRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.NakaRushtonRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.ProductRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.SigmoidalRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.SpikingThresholdRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.ThreeValueRulePanel;
-import org.simbrain.network.neuron_update_rules.AdExIFRule;
-import org.simbrain.network.neuron_update_rules.BinaryRule;
-import org.simbrain.network.neuron_update_rules.ContinuousSigmoidalRule;
-import org.simbrain.network.neuron_update_rules.DecayRule;
-import org.simbrain.network.neuron_update_rules.FitzhughNagumo;
-import org.simbrain.network.neuron_update_rules.IACRule;
-import org.simbrain.network.neuron_update_rules.IntegrateAndFireRule;
-import org.simbrain.network.neuron_update_rules.IzhikevichRule;
-import org.simbrain.network.neuron_update_rules.LinearRule;
-import org.simbrain.network.neuron_update_rules.MorrisLecarRule;
-import org.simbrain.network.neuron_update_rules.NakaRushtonRule;
-import org.simbrain.network.neuron_update_rules.ProductRule;
-import org.simbrain.network.neuron_update_rules.SigmoidalRule;
-import org.simbrain.network.neuron_update_rules.SpikingThresholdRule;
-import org.simbrain.network.neuron_update_rules.ThreeValueRule;
-import org.simbrain.network.neuron_update_rules.activity_generators.LogisticRule;
-import org.simbrain.network.neuron_update_rules.activity_generators.RandomNeuronRule;
-import org.simbrain.network.neuron_update_rules.activity_generators.SinusoidalRule;
-import org.simbrain.network.neuron_update_rules.activity_generators.StochasticRule;
-import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
-import org.simbrain.util.randomizer.Randomizer;
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import javax.swing.JTextField;
+
+import org.simbrain.network.core.Neuron;
+import org.simbrain.network.core.NeuronUpdateRule;
+import org.simbrain.network.gui.NetworkUtils;
+import org.simbrain.network.gui.dialogs.neuron.rule_panels.PropertyEditor;
+import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
+import org.simbrain.util.SimbrainConstants;
+import org.simbrain.util.Utils;
+import org.simbrain.util.randomizer.Randomizer;
+import org.simbrain.util.widgets.TristateDropDown;
 
 /**
  * <b>AbstractNeuronPanel</b> is the parent class for all panels used to set
@@ -79,90 +50,178 @@ import java.util.List;
 @SuppressWarnings("serial")
 public abstract class AbstractNeuronRulePanel extends JPanel {
 
-    /**
-     * Associations between names of rules and panels for editing them.
-     */
-    public static final LinkedHashMap<String, AbstractNeuronRulePanel> RULE_MAP =
-            new LinkedHashMap<String, AbstractNeuronRulePanel>();
-
-    // Populate the Rule Map.  Place items in alphabetical order so they appear that way in the GUI combo box.
-    static {
-        RULE_MAP.put(new AdExIFRule().getDescription(), new AdExIFRulePanel());
-        RULE_MAP.put(new BinaryRule().getDescription(), new BinaryRulePanel());
-        RULE_MAP.put(new DecayRule().getDescription(), new DecayRulePanel());
-        RULE_MAP.put(new FitzhughNagumo().getDescription(), new FitzhughNagumoRulePanel());
-        RULE_MAP.put(new IACRule().getDescription(), new IACRulePanel());
-        RULE_MAP.put(new IntegrateAndFireRule().getDescription(),
-                new IntegrateAndFireRulePanel());
-        RULE_MAP.put(new IzhikevichRule().getDescription(),
-                new IzhikevichRulePanel());
-        RULE_MAP.put(new LinearRule().getDescription(), new LinearRulePanel());
-        RULE_MAP.put(new MorrisLecarRule().getDescription(), new MorrisLecarRulePanel());
-        RULE_MAP.put(new NakaRushtonRule().getDescription(),
-                new NakaRushtonRulePanel());
-        RULE_MAP.put(new ProductRule().getDescription(), new ProductRulePanel());
-        RULE_MAP.put(new ContinuousSigmoidalRule().getDescription(),
-                ContinuousSigmoidalRulePanel.createContinuousSigmoidalRulePanel());
-        RULE_MAP.put(new SigmoidalRule().getDescription(),
-                SigmoidalRulePanel.createSigmoidalRulePanel());
-        RULE_MAP.put(new SpikingThresholdRule().getDescription(),
-                new SpikingThresholdRulePanel());
-        RULE_MAP.put(new ThreeValueRule().getDescription(),
-                new ThreeValueRulePanel());
-    }
+    /** List of editor objects associated with this type of neuron. */
+    protected List<PropertyEditor> editorList = new ArrayList<PropertyEditor>();
 
     /**
-     * Associations between names of activity generators and panels for editing
-     * them.
+     * Mapping from key strings to components associated with this rule panel.
+     * Populated on the basis of the editor list
      */
-    public static final LinkedHashMap<String, AbstractNeuronRulePanel> GENERATOR_MAP =
-            new LinkedHashMap<String, AbstractNeuronRulePanel>();
-
-    // Populate the Generator Map
-    static {
-        GENERATOR_MAP.put(new LogisticRule().getDescription(),
-                new LogisticGeneratorPanel());
-        GENERATOR_MAP.put(new RandomNeuronRule().getDescription(),
-                new RandomGeneratorPanel());
-        GENERATOR_MAP.put(new SinusoidalRule().getDescription(),
-                new SinusoidalGeneratorPanel());
-        GENERATOR_MAP.put(new StochasticRule().getDescription(),
-                new StochasticGeneratorPanel());
-    }
+    protected Map<String, JComponent> componentMap = new HashMap<String, JComponent>();
+    
+    /**
+     * Each neuron panel contains a static final subclass of NeuronUpdateRule
+     * variable called a prototype rule. The specific subclass of
+     * NeuronUpdateRule corresponds to the rule specified by the panel name.
+     * 
+     * Used so that other classes can query specific properties of the rule the
+     * panel edits. Also used internally to make deep copies.
+     *
+     * @return an instance of the neuron rule which corresponds to the panel.
+     */
+    protected abstract NeuronUpdateRule getPrototypeRule();
 
     /**
      * A flag used to indicate whether this panel will be replacing neuron
-     * update rules or simply writing to them. In cases where the panel
-     * represents the same rule as the rule (i.e. Linear panel &#38; linear neurons)
-     * the neurons' update rules are edited, not replaced. However, if the panel
-     * does not correspond to the currently used neuron update rule, new
-     * NeuronUpdateRule objects are created, and replace the old rule. This
-     * optimization prevents multiple "instanceof" checks.
+     * update rules or simply writing to them.
+     * 
+     *  If true, create new update rules
+     *  If false, edit existing update rules
+     *  
+     *  Set based on correspondence between neuron rule and the current rule panel.
+     * 
+     *  Optimization to prevent multiple "instanceof" checks.
      */
-    private boolean replacing = true;
+    private boolean replaceUpdateRules = true; 
 
     /**
      * This method is the default constructor.
      */
     public AbstractNeuronRulePanel() {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout()); // TODO: Needed?
+    }
+
+    //TODO
+    protected void init(List<PropertyEditor> editorList) {
+        
+        this.editorList = editorList;
+
+        // Initialize the component map
+        for (PropertyEditor<NeuronUpdateRule, ?> editor : editorList) {
+            if (editor.type == Double.class) {
+                componentMap.put(editor.key, new JTextField());
+            } else if (editor.type == Boolean.class) {
+                componentMap.put(editor.key, new TristateDropDown());
+            }
+        }
+        // TODO use Collectors.groupingBy above?
     }
 
     /**
-     * Populate fields with current data.
+     * Populate neuron panel fields based on the list of rules.  If there are
+     * inconsistencies use a "...".
      *
-     * @param ruleList the list of rules being used to determine which values should
-     *                 be used to fill the fields with data.
+     * @param ruleList the list of neuron update rules to use.
      */
-    public abstract void fillFieldValues(final List<NeuronUpdateRule> ruleList);
+    public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
+
+        // Go through each editable property and fill the corresponding field
+        // value.
+        editorList.stream().filter(editor -> editor.type == Double.class)
+                .forEach(editor -> fillDoubleField(editor, ruleList));
+        editorList.stream().filter(editor -> editor.type == Boolean.class)
+                .forEach(editor -> fillBooleanField(editor, ruleList));
+        // TODO: It may be possible to do the above using
+        // Collectors.groupingBy
+    }
 
     /**
-     * Populate fields with default data.
+     * Fills a double field. 
+     *
+     * @param editor the editor object to access the update rule
+     * @param ruleList rule list, used for the consistency check
+     */
+    public void fillDoubleField(PropertyEditor<NeuronUpdateRule, Double> editor, List<NeuronUpdateRule> ruleList) {
+        NeuronUpdateRule neuronRef = ruleList.get(0);
+        JTextField textField = (JTextField) componentMap.get(editor.key);
+        if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {
+            textField.setText(SimbrainConstants.NULL_STRING);
+        } else {
+            textField.setText(Double
+                    .toString(editor.getter.getParameter(neuronRef)));
+        }
+    }
+
+    /**
+     * Fills a boolean field. 
+     *
+     * @param editor the editor object to access the update rule
+     * @param ruleList rule list, used for the consistency check
+     */
+    public void fillBooleanField(PropertyEditor<NeuronUpdateRule, Boolean> editor,
+            List<NeuronUpdateRule> ruleList) {
+        NeuronUpdateRule neuronRef = ruleList.get(0);
+        TristateDropDown dropDown = (TristateDropDown) componentMap
+                .get(editor.key);
+        if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {
+            dropDown.setNull();
+        } else {
+            dropDown.setSelected(editor.getter.getParameter(neuronRef));
+        }
+    }
+
+    /**
+     * Write the values of the GUI fields to the neurons themselves.
+     *
+     * @param neurons the neurons to be written to
+     */
+    public void commitChanges(List<Neuron> neurons) {
+
+        // Change all neuron types to the indicated type
+        if (isReplacingUpdateRules()) {
+            NeuronUpdateRule neuronRef = getPrototypeRule().deepCopy();
+            neurons.forEach(n -> n.setUpdateRule(neuronRef.deepCopy()));
+        }
+
+        // Write parameter values in all fields 
+        editorList.stream().filter(editor -> editor.type == Double.class)
+                .forEach(editor -> commitDouble(editor, neurons));
+        editorList.stream().filter(editor -> editor.type == Boolean.class)
+                .forEach(editor -> commitBoolean(editor, neurons));
+        // TODO: It may be possible to do the above using Collectors.groupingBy
+    }
+
+    /**
+     * Write a double value to a neuron rule.
+     *
+     * @param editor the editor object
+     * @param neurons the neurons to be written to 
+     */
+    public void commitDouble(PropertyEditor<NeuronUpdateRule, Double> editor, List<Neuron> neurons) {
+        double value = Utils.doubleParsable(
+                (JTextField) (componentMap.get(editor.key)));
+        if (!Double.isNaN(value)) {
+            for (int i = 0; i < neurons.size(); i++) {
+                editor.setter.setParameter(
+                        ((NeuronUpdateRule) neurons.get(i).getUpdateRule()),
+                        value);
+            }
+        }
+    }
+
+    /**
+     * Write a boolean value to a neuron rule.
+     *
+     * @param editor the editor object
+     * @param neurons the neurons to be written to 
+     */
+    public void commitBoolean(PropertyEditor<NeuronUpdateRule, Boolean> editor, List<Neuron> neurons) {
+        boolean value = ((TristateDropDown) componentMap
+                .get(editor.key)).isSelected();
+        for (int i = 0; i < neurons.size(); i++) {
+            editor.setter.setParameter(
+                    ((NeuronUpdateRule) neurons.get(i).getUpdateRule()), value);
+        }
+    }
+    /**
+     * Populate fields with default data. TODO: Think.
      */
     public abstract void fillDefaultValues();
 
     /**
-     * Called to commit changes to a single neuron. Usually this is a template
+     * Called to commit changes to a single neuron.
+     * 
+     *  Usually this is a template
      * neuron intended to be copied for the purpose of creating many new
      * neurons. Using this method to commit changes to many neurons is not
      * recommended. Instead pass a list of the neurons to be changed into
@@ -172,23 +231,11 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      */
     public abstract void commitChanges(final Neuron neuron);
 
-    /**
-     * Called externally when the dialog is closed, to commit any changes made
-     * to many neurons simultaneously. This method by default overwrites the
-     * neurons' update rules. To change this behavior set {@link #replacing} to
-     * <b> false </b>, indicating to the panel that it is editing rather than
-     * changing/replacing existing neuron update rules.
-     *
-     * @param neurons the list of neurons which are being edited and to which
-     *                changes based on the values in the fields of this panel will
-     *                be committed
-     */
-    public abstract void commitChanges(final List<Neuron> neurons);
-
+    //TODO: Remove below when done with other changes.
     /**
      * Edits neuron update rules that already exist. This is the alternative to
      * replacing the rules and occurs when the neuron update rules being edited
-     * are the same type as the panel. {@link #replacing} is the flag for
+     * are the same type as the panel. {@link #replaceUpdateRules} is the flag for
      * whether this method is used for committing or the rules are deleted and
      * replaced entirely, in which case this method is not called.
      *
@@ -210,25 +257,14 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
-     * Each neuron panel contains a static final subclass of NeuronUpdateRule
-     * variable called a prototype rule. The specific subclass of
-     * NeuronUpdateRule corresponds to the rule specified by the panel name.
-     * Used so that other classes can query specific properties of the rule the
-     * panel edits. Also used internally to make deep copies.
-     *
-     * @return an instance of the neuron rule which corresponds to the panel.
-     */
-    protected abstract NeuronUpdateRule getPrototypeRule();
-
-    /**
      * Are we replacing rules or editing them? Replacing happens when
      * {@link #commitChanges(List)} is called on a neuron panel whose rule is
      * different from the rules of the neurons being edited.
      *
-     * @return replacing or editing
+     * @return true if replacing; false if editing
      */
-    protected boolean isReplace() {
-        return replacing;
+    protected boolean isReplacingUpdateRules() {
+        return replaceUpdateRules;
     }
 
     /**
@@ -236,27 +272,13 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * or creating new ones and replacing the update rule of each of the neurons
      * being edited.
      *
-     * @param replace used to tell the panel if it's being used to replace neuron
-     *                update rules.
+     * @param replace true if replacing; false if editing
      */
-    protected void setReplace(boolean replace) {
-        this.replacing = replace;
+    protected void setReplacingUpdateRules(boolean replace) {
+        this.replaceUpdateRules = replace;
     }
 
-    /**
-     * @return the rule list
-     */
-    public static String[] getRulelist() {
-        return RULE_MAP.keySet().toArray(new String[RULE_MAP.size()]);
-    }
-
-    /**
-     * @return the generator list
-     */
-    public static String[] getGeneratorlist() {
-        return GENERATOR_MAP.keySet().toArray(new String[GENERATOR_MAP.size()]);
-    }
-
+    //TODO: Think about how to handle this
     /**
      * @return List of randomizers.
      */

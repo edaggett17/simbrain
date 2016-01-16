@@ -220,7 +220,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel implements
     @Override
     public void commitChanges(List<Neuron> neurons) {
 
-        if (isReplace()) {
+        if (isReplacingUpdateRules()) {
             NakaRushtonRule neuronRef = prototypeRule.deepCopy();
             for (Neuron n : neurons) {
                 n.setUpdateRule(neuronRef.deepCopy());
