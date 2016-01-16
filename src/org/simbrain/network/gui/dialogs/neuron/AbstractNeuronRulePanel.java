@@ -88,10 +88,16 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * This method is the default constructor.
      */
     public AbstractNeuronRulePanel() {
-        this.setLayout(new BorderLayout()); // TODO: Needed?
     }
 
-    //TODO
+    /**
+     * Initialize the component map which associated with String keys with
+     * property editors, which contain the getters used in
+     * {@link #fillFieldValues(List)} and the setters used in
+     * {@link #commitChanges(List)}
+     *
+     * @param editorList list of editors.
+     */
     protected void init(List<PropertyEditor> editorList) {
         
         this.editorList = editorList;

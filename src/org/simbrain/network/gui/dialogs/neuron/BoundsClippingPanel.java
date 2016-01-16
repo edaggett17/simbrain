@@ -87,12 +87,7 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
      * the selected neurons.
      */
     private final TristateDropDown clipping = new TristateDropDown();
-
-    {
-        clipping.addActionListener(e -> setBoundsEnabled(
-                clipping.getSelectedIndex() == TristateDropDown.getTRUE()));
-    }
-
+    
     /** Parent reference so pack can be called. */
     private final Window parent;
 
@@ -106,6 +101,12 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
             final Window parent) {
         this.neuronList = neuronList;
         this.parent = parent;
+
+        // Clipping dropdown listener
+        clipping.addActionListener(e -> setBoundsEnabled(
+                clipping.getSelectedIndex() == TristateDropDown.getTRUE()));
+ 
+        // Layout panel
         boundsPanel.setLayout(new BoxLayout(boundsPanel, BoxLayout.Y_AXIS));
         GridLayout gl = new GridLayout(0, 2);
         gl.setVgap(2);

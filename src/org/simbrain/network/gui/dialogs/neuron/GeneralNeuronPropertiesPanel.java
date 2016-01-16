@@ -59,10 +59,14 @@ import org.simbrain.util.widgets.TristateDropDown;
  *
  */
 @SuppressWarnings("serial")
-public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePanel {
-    
+public class GeneralNeuronPropertiesPanel extends JPanel
+        implements EditablePanel {
+
     /** The neurons being modified. */
     private List<Neuron> neuronList;
+
+    /** The neuron Id. */
+    private final JLabel idLabel = new JLabel();
 
     /** Activation field. */
     private JTextField tfActivation = new JTextField();
@@ -70,15 +74,15 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
     /** Label Field. */
     private final JTextField tfNeuronLabel = new JTextField();
 
-    /** The neuron Id. */
-    private final JLabel idLabel = new JLabel();
-    
+    /** Panel containing fields for upper bound, lower bound, and clipping. */
+    private BoundsClippingPanel boundsClippingPanel;
+
     /**
      * A triangle that switches between an up (left) and a down state Used for
      * showing/hiding extra neuron data.
      */
     private final DropDownTriangle detailTriangle;
-    
+
     /**
      * The extra data panel. Includes: increment, upper bound, lower bound, and
      * priority.
@@ -91,10 +95,10 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
     /** Priority Field. */
     private final JTextField tfPriority = new JTextField();
 
-    //TODO;
+    /** Input type dropdown. */
     private final TristateDropDown inputType = new TristateDropDown(
-        InputType.WEIGHTED.toString(), InputType.SYNAPTIC.toString());
- 
+            InputType.WEIGHTED.toString(), InputType.SYNAPTIC.toString());
+
     /**
      * Whether or not the neuron is clamped (i.e. will not update/change its
      * activation once set).
@@ -105,24 +109,41 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
     private final Window parent;
 
     /**
-     * If true, displays ID info and other fields that would only make sense to show if
-     * only one neuron was being edited. This value is set automatically unless
-     * otherwise specified at construction. TODO
+     * If true, displays ID info and other fields that would only make sense to
+     * show if only one neuron was being edited. This value is set automatically
+     * unless otherwise specified at construction.
      */
     private boolean displayIDInfo;
 
-    //TODO
-    private BoundsClippingPanel boundsClippingPanel;
+    /**
+     * Creates a basic neuron info panel. Here the whether or not ID info is
+     * displayed is manually set. This is the case when the number of neurons
+     * (such as when adding multiple neurons) is unknown at the time of display.
+     * In fact this is probably the only reason to use this factory method over
+     * {@link #createBasicNeuronInfoPanel(List, Window)}.
+     *
+     * @param neuronList the neurons whose information is being displayed/made
+     *            available to edit on this panel
+     * @param parent the parent window for dynamic resizing
+     * @param displayIDInfo whether or not to display ID info
+     * @return A basic neuron info panel with the specified parameters
+     */
+    public static GeneralNeuronPropertiesPanel createPanel(
+            final List<Neuron> neuronList, final Window parent,
+            final boolean displayIDInfo) {
+        GeneralNeuronPropertiesPanel bnip = new GeneralNeuronPropertiesPanel(
+                neuronList, parent, displayIDInfo);
+        bnip.addListeners();
+        return bnip;
+    }
 
     /**
      * Creates a basic neuron info panel. Here whether or not to display ID info
      * is automatically set based on the state of the neuron list.
      *
-     * @param neuronList
-     *            the neurons whose information is being displayed/made
+     * @param neuronList the neurons whose information is being displayed/made
      *            available to edit on this panel
-     * @param parent
-     *            the parent window for dynamic resizing.
+     * @param parent the parent window for dynamic resizing.
      * @return A basic neuron info panel with the specified parameters
      */
     public static GeneralNeuronPropertiesPanel createPanel(
@@ -132,59 +153,22 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
     }
 
     /**
-     * Creates a basic neuron info panel. Here the whether or not ID info is
-     * displayed is manually set. This is the case when the number of neurons
-     * (such as when adding multiple neurons) is unknown at the time of display.
-     * In fact this is probably the only reason to use this factory method over
-     * {@link #createBasicNeuronInfoPanel(List, Window)}.
+     * Construct the panel.
      *
-     * @param neuronList
-     *            the neurons whose information is being displayed/made
-     *            available to edit on this panel
-     * @param parent
-     *            the parent window for dynamic resizing
-     * @param displayIDInfo
-     *            whether or not to display ID info
-     * @return A basic neuron info panel with the specified parameters
+     * @param neuronList list of neurons
+     * @param parent parent window
+     * @param displayIDInfo whether to display the id window
      */
-    public static GeneralNeuronPropertiesPanel createPanel(
-            final List<Neuron> neuronList, final Window parent,
-            final boolean displayIDInfo) {
-        GeneralNeuronPropertiesPanel bnip = new GeneralNeuronPropertiesPanel(neuronList,
-                parent, displayIDInfo);
-        bnip.addListeners();
-        return bnip;
-    }
-    
-    /**
-    * TODO
-    * @param neuronList
-    * @param parent
-    * @param displayIDInfo
-    */
-   private GeneralNeuronPropertiesPanel(final List<Neuron> neuronList,
-           final Window parent, final boolean displayIDInfo) {
-       this.neuronList = neuronList;
-       this.parent = parent;
-       this.displayIDInfo = displayIDInfo;
-       detailTriangle = new DropDownTriangle(UpDirection.LEFT,
-               displayIDInfo, "More", "Less", parent);
-       boundsClippingPanel  = new BoundsClippingPanel(neuronList, parent);
-       initializeLayout();
-       fillFieldValues();
-   }
-    
-    /**
-     * Construct the panel using default .. TODO
-     *
-     * @param neuronList
-     *            list of neurons to represent.
-     * @param parent
-     *            parent window so pack can be called
-     */
-    public GeneralNeuronPropertiesPanel(final List<Neuron> neuronList,
-        final Window parent) {
-        this(neuronList, parent, true); // TODO: Last true should be a field.
+    private GeneralNeuronPropertiesPanel(final List<Neuron> neuronList,
+            final Window parent, final boolean displayIDInfo) {
+        this.neuronList = neuronList;
+        this.parent = parent;
+        this.displayIDInfo = displayIDInfo;
+        detailTriangle = new DropDownTriangle(UpDirection.LEFT, false,
+                "More", "Less", parent);
+        boundsClippingPanel = new BoundsClippingPanel(neuronList, parent);
+        initializeLayout();
+        fillFieldValues();
     }
 
     /**
@@ -205,17 +189,14 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
         }
         basicStatsPanel.add(new JLabel("Activation:"));
         basicStatsPanel.add(tfActivation);
-        // if (!multiFlag) {
-        // TODO: Visible or not if multiple or no neurons are being edited?
         basicStatsPanel.add(new JLabel("Label:"));
         basicStatsPanel.add(tfNeuronLabel);
-        // }
 
         JPanel trianglePanel = new JPanel();
         trianglePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
         trianglePanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
         trianglePanel.add(detailTriangle);
-       
+
         BoxLayout layout = new BoxLayout(detailPanel, BoxLayout.Y_AXIS);
         detailPanel.setLayout(layout);
 
@@ -231,7 +212,6 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
         detailPanel.add(Box.createVerticalStrut(5));
 
         detailPanel.add(boundsClippingPanel);
-        
 
         JPanel subP = new JPanel(gl);
         subP.add(new JLabel("Increment: "));
@@ -242,7 +222,7 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
         subP.add(inputType);
         subP.setAlignmentX(CENTER_ALIGNMENT);
         detailPanel.add(subP);
-        
+
         this.add(basicStatsPanel, BorderLayout.NORTH);
         this.add(trianglePanel, BorderLayout.CENTER);
         detailPanel.setVisible(detailTriangle.isDown());
@@ -250,9 +230,9 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
 
         TitledBorder tb = BorderFactory.createTitledBorder("Neuron Properties");
         this.setBorder(tb);
- 
+
     }
-    
+
     /**
      * Add listeners.
      */
@@ -271,17 +251,16 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
             }
         });
     }
-    
+
     /**
      * Update field visibility based on whether rule is bounded and/or clipped.
      *
-     * @param rule
-     *            the current rule
+     * @param rule the current rule
      */
     public void updateFieldVisibility(NeuronUpdateRule rule) {
         boundsClippingPanel.updateFieldVisibility(rule);
-        if(rule != null) {
-            inputType.setSelectedItem(rule.getInputType().toString());            
+        if (rule != null) {
+            inputType.setSelectedItem(rule.getInputType().toString());
         }
     }
 
@@ -295,10 +274,16 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
             return;
         }
         
-        //TODO:In Neuron, may not need editor but just a getter
+        // Handle ID
+        if(displayIDInfo == true) {
+            idLabel.setText(neuronRef.getId());
+        }
+
+        // TODO:In Neuron, may not need editor but just a getter
 
         // Handle Activation
-        if (!NetworkUtils.isConsistent(neuronList, Neuron.activationEditor.getter)) {
+        if (!NetworkUtils.isConsistent(neuronList,
+                Neuron.activationEditor.getter)) {
             tfActivation.setText(SimbrainConstants.NULL_STRING);
         } else {
             tfActivation.setText(Double.toString(neuronRef.getActivation()));
@@ -310,25 +295,25 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
         } else {
             tfNeuronLabel.setText(neuronRef.getLabel());
         }
-       
+
         // Handle bounds and clipping
         boundsClippingPanel.fillFieldValues();
 
-        //TODO: Finish below
+        // TODO: Finish below
         List<NeuronUpdateRule> ruleList = Neuron.getRuleList(neuronList);
 
         // Handle Increment
-        if (!NetworkUtils.isConsistent(ruleList,
-            NeuronUpdateRule.class, "getIncrement")) {
+        if (!NetworkUtils.isConsistent(ruleList, NeuronUpdateRule.class,
+                "getIncrement")) {
             tfIncrement.setText(SimbrainConstants.NULL_STRING);
         } else {
-            tfIncrement.setText(Double.toString(neuronRef.getUpdateRule()
-                .getIncrement()));
+            tfIncrement.setText(
+                    Double.toString(neuronRef.getUpdateRule().getIncrement()));
         }
 
         // Handle Priority
         if (!NetworkUtils.isConsistent(neuronList, Neuron.class,
-            "getUpdatePriority")) {
+                "getUpdatePriority")) {
             tfPriority.setText(SimbrainConstants.NULL_STRING);
         } else {
             tfPriority.setText(Integer.toString(neuronRef.getUpdatePriority()));
@@ -342,11 +327,11 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
 
         // Handle input type
         if (!NetworkUtils.isConsistent(ruleList, NeuronUpdateRule.class,
-            "getInputType")) {
+                "getInputType")) {
             inputType.setNull();
         } else {
-            inputType.setSelectedItem(ruleList.get(0).getInputType()
-                .toString());
+            inputType
+                    .setSelectedItem(ruleList.get(0).getInputType().toString());
         }
     }
 
@@ -359,7 +344,7 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
     @Override
     public boolean commitChanges() {
         boolean success = true;
-        
+
         // Commit activations
         double act = Utils.doubleParsable(tfActivation);
         if (!Double.isNaN(act)) {
@@ -368,20 +353,22 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
         } else {
             // Only successful if the field can't be parsed because
             // it is a NULL_STRING standing in for multiple values
-            success &= tfActivation.getText().matches(SimbrainConstants.NULL_STRING);
+            success &= tfActivation.getText()
+                    .matches(SimbrainConstants.NULL_STRING);
         }
-        
+
         // Label
         if (!tfNeuronLabel.getText().equals(SimbrainConstants.NULL_STRING)) {
-            neuronList.stream().forEach(n -> n.setLabel(tfNeuronLabel.getText()));
+            neuronList.stream()
+                    .forEach(n -> n.setLabel(tfNeuronLabel.getText()));
         }
-        
+
         // Todo: Tosi can this move down?
-        // Update neurons 
+        // Update neurons
         if (!neuronList.isEmpty()) {
             neuronList.get(0).getNetwork().fireNeuronsUpdated(neuronList);
         }
-        
+
         // Clamped
         if (!clamped.isNull()) {
             neuronList.stream()
@@ -390,7 +377,7 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
 
         // Bounds and clipping
         success &= boundsClippingPanel.commitChanges();
-        
+
         // Increment
         double increment = Utils.doubleParsable(tfIncrement);
         if (!Double.isNaN(increment)) {
@@ -398,8 +385,8 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
         } else {
             // Only successful if the field can't be parsed because
             // it is a NULL_STRING standing in for multiple values
-            success &= tfIncrement.getText().matches(
-                SimbrainConstants.NULL_STRING);
+            success &= tfIncrement.getText()
+                    .matches(SimbrainConstants.NULL_STRING);
         }
 
         // Priority
@@ -410,24 +397,24 @@ public class GeneralNeuronPropertiesPanel extends JPanel implements EditablePane
         } else {
             // Only successful if the field can't be parsed because
             // it is a NULL_STRING standing in for multiple values
-            success &= tfPriority.getText().matches(
-                SimbrainConstants.NULL_STRING);
+            success &= tfPriority.getText()
+                    .matches(SimbrainConstants.NULL_STRING);
         }
 
         // Input type
         if (((String) inputType.getSelectedItem())
-            .matches(InputType.WEIGHTED.toString())) {
+                .matches(InputType.WEIGHTED.toString())) {
             neuronList.stream().forEach(
                     n -> n.getUpdateRule().setInputType(InputType.WEIGHTED));
 
         } else if (((String) inputType.getSelectedItem())
-            .matches(InputType.SYNAPTIC.toString())) {
+                .matches(InputType.SYNAPTIC.toString())) {
             neuronList.stream().forEach(
                     n -> n.getUpdateRule().setInputType(InputType.SYNAPTIC));
         }
         return success;
     }
-    
+
     @Override
     public JPanel getPanel() {
         return this;

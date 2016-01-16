@@ -30,7 +30,6 @@ import javax.swing.SwingUtilities;
 
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.Neuron;
-import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.util.StandardDialog;
 import org.simbrain.util.Utils;
@@ -60,9 +59,6 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
      * neuron update settings panel.
      */
     private static final int DEFAULT_VGAP = 10;
-
-    /** Whether to initially display the general properties panel. */ 
-    private static boolean DEFAULT_DISPLAY_GENERAL_PANEL;
     
     /** Whether to initially display the update rule panel. */ 
     private static boolean DEFAULT_DISPLAY_UPDATE_RULE_PANEL = false;
@@ -71,7 +67,7 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
     static {
         Properties properties = Utils.getSimbrainProperties();
         if (properties.containsKey("useNativeFileChooser")) {
-            DEFAULT_DISPLAY_GENERAL_PANEL = Boolean.parseBoolean(properties
+            DEFAULT_DISPLAY_UPDATE_RULE_PANEL = Boolean.parseBoolean(properties
                 .getProperty("initializeNeuronDialogToExpandedState"));
         }
     }
@@ -89,12 +85,13 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
     public static NeuronPropertiesPanel createNeuronPropertiesPanel(
         final List<Neuron> neuronList, final Window parent) {
         return createNeuronPropertiesPanel(neuronList, parent,
-                DEFAULT_DISPLAY_UPDATE_RULE_PANEL, DEFAULT_DISPLAY_GENERAL_PANEL);
+                DEFAULT_DISPLAY_UPDATE_RULE_PANEL);
     }
 
     /**
-     *  Creates a neuron property panel with a specified display states.
-     * 
+     * Create the panel without specifying whether to display id (that is done
+     * automatically).
+     *
      * @param neuronList
      *            the list of neurons either being edited (editing) or being
      *            used to fill the panel with default values (creation).
@@ -102,15 +99,13 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
      *            the parent window, made available for easy resizing.
      * @param displayUpdateRuleProperties
      *            whether or not to display the neuron update rule properties
-     * @param displayGeneralProperties
-     *            whether or not to display neuron's general properties
      * @return the property panel
      */
     public static NeuronPropertiesPanel createNeuronPropertiesPanel(
-        final List<Neuron> neuronList, final Window parent,
-        final boolean displayUpdateRuleProperties, final boolean displayGeneralProperties) {
+            final List<Neuron> neuronList, final Window parent,
+            final boolean displayUpdateRuleProperties) {
         NeuronPropertiesPanel cnip = new NeuronPropertiesPanel(neuronList,
-            parent, displayUpdateRuleProperties, displayGeneralProperties);
+                parent, displayUpdateRuleProperties);
         cnip.initializeLayout();
         return cnip;
     }
@@ -120,11 +115,30 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
      */
     private NeuronPropertiesPanel(final List<Neuron> neuronList,
         final Window parent, final boolean displayUpdateRuleProperties,
-        final boolean displayGeneralProperties) {
+        final boolean displayID) {
         generalNeuronPropertiesPanel = GeneralNeuronPropertiesPanel.createPanel(
-            neuronList, parent, displayGeneralProperties);
+            neuronList, parent, displayID);
         updateRulePanel = new UpdateRulePanel(neuronList, parent,
                 displayUpdateRuleProperties);
+    }
+    
+    /**
+     * Construct the panel without specifying whether to display id (that is done
+     * automatically).
+     */
+    private NeuronPropertiesPanel(final List<Neuron> neuronList,
+        final Window parent, final boolean displayUpdateRuleProperties) {
+        generalNeuronPropertiesPanel = GeneralNeuronPropertiesPanel.createPanel(
+            neuronList, parent);
+        updateRulePanel = new UpdateRulePanel(neuronList, parent,
+                displayUpdateRuleProperties);
+    }
+
+    /**
+     * Lays out the panel.
+     */
+    private void initializeLayout() {
+
         // Respond to update panel combo box changes here, so that general panel can be updated too
         updateRulePanel.getCbNeuronType().addActionListener(
                 e -> SwingUtilities.invokeLater(() -> {
@@ -132,12 +146,7 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
                             .updateFieldVisibility(updateRulePanel.getNeuronRulePanel().getPrototypeRule());
                         repaint();
                 }));
-    }
 
-    /**
-     * Lays out the panel.
-     */
-    private void initializeLayout() {
         BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         this.setLayout(layout);
         this.add(generalNeuronPropertiesPanel);

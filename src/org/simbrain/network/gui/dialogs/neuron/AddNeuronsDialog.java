@@ -125,7 +125,7 @@ public class AddNeuronsDialog extends StandardDialog {
         addND.combinedNeuronInfoPanel = NeuronPropertiesPanel
                 .createNeuronPropertiesPanel(
                         Collections.singletonList(addND.baseNeuron), addND,
-                        false, false);
+                        false);
         addND.init();
         addND.combinedNeuronInfoPanel.getUpdateRulePanel().getCbNeuronType()
                 .addActionListener(e -> SwingUtilities

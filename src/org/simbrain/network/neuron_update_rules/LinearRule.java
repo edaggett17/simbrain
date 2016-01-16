@@ -188,23 +188,6 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
     public void setBias(final double bias) {
         this.bias = bias;
     }
-    
-    // TODO: Make this a superclass method that is overridden?
-    
-    /**
-     * List of property editors for use by neuron property dialogs.
-     * 
-     */
-    public static List<PropertyEditor> editorList = Arrays.asList(
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "slope",
-                    (r) -> ((LinearRule) r).getSlope(),
-                    (r, val) -> ((LinearRule) r).setSlope((double) val)),
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "bias",
-                    (r) -> ((LinearRule) r).getBias(),
-                    (r, val) -> ((LinearRule) r).setBias((double) val)),
-            new PropertyEditor<NeuronUpdateRule, Boolean>(Boolean.class, "addNoise",
-                    (r) -> ((LinearRule) r).getAddNoise(),
-                    (r, val) -> ((LinearRule) r).setAddNoise((boolean) val)));
 
     /**
      * @return Returns the slope.
@@ -282,5 +265,19 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
     public void setClipped(boolean clipping) {
         this.clipping = clipping;
     }
+    
+    /**
+     * List of property editors for use by neuron property dialogs.
+     */
+    public static List<PropertyEditor> editorList = Arrays.asList(
+            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "slope",
+                    (r) -> ((LinearRule) r).getSlope(),
+                    (r, val) -> ((LinearRule) r).setSlope((double) val)),
+            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "bias",
+                    (r) -> ((LinearRule) r).getBias(),
+                    (r, val) -> ((LinearRule) r).setBias((double) val)),
+            new PropertyEditor<NeuronUpdateRule, Boolean>(Boolean.class, "addNoise",
+                    (r) -> ((LinearRule) r).getAddNoise(),
+                    (r, val) -> ((LinearRule) r).setAddNoise((boolean) val)));
 
 }
