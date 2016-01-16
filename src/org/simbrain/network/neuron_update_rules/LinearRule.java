@@ -30,7 +30,6 @@ import org.simbrain.network.neuron_update_rules.interfaces.BoundedUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ClippableUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.DifferentiableUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
-import org.simbrain.util.Property;
 import org.simbrain.util.randomizer.Randomizer;
 
 /**
@@ -50,11 +49,9 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
     private static final boolean DEFAULT_CLIPPING = true;
 
     /** Slope. */
-    @Property (name = "Slope")
     public double slope = 1;
 
     /** Bias. */
-    @Property (name = "Bias")
     public double bias = 0;
 
     /** Noise dialog. */
