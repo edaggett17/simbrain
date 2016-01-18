@@ -18,9 +18,12 @@
  */
 package org.simbrain.network.neuron_update_rules;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import org.simbrain.network.core.Network.TimeType;
+import org.simbrain.network.gui.dialogs.neuron.rule_panels.PropertyEditor;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 
@@ -116,9 +119,16 @@ public class BinaryRule extends NeuronUpdateRule {
     public String getDescription() {
         return "Binary";
     }
+    
+    // TODO: Get rid of redundant wording.   Have not cleaned it up yet
+    // for fear of xstream problems.
 
     public double getUpperBound() {
         return ceiling;
+    }
+    
+    public void setUpperBound(double ub) {
+        this.ceiling = ub;
     }
 
     public void setCeiling(double ceiling) {
@@ -127,6 +137,10 @@ public class BinaryRule extends NeuronUpdateRule {
 
     public double getLowerBound() {
         return floor;
+    }
+    
+    public void setLowerBound(double lb) {
+        this.floor = lb;
     }
 
     public void setFloor(double floor) {
@@ -154,5 +168,23 @@ public class BinaryRule extends NeuronUpdateRule {
     public double getGraphicalUpperBound() {
         return ceiling + 1;
     }
+    
+    /**
+     * List of property editors for use by neuron property dialogs.
+     */
+    public static List<PropertyEditor> editorList = Arrays.asList(
+            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "bias",
+                    (r) -> ((BinaryRule) r).getBias(),
+                    (r, val) -> ((BinaryRule) r).setBias((double) val)),
+            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "lower",
+                    (r) -> ((BinaryRule) r).getLowerBound(),
+                    (r, val) -> ((BinaryRule) r).setLowerBound((double) val)),
+            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "upper",
+                    (r) -> ((BinaryRule) r).getUpperBound(),
+                    (r, val) -> ((BinaryRule) r).setUpperBound((double) val)),
+            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "threshold",
+                    (r) -> ((BinaryRule) r).getThreshold(),
+                    (r, val) -> ((BinaryRule) r).setThreshold((double) val))
+            );
 
 }
