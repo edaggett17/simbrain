@@ -16,28 +16,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.simbrain.network.gui;
+package org.simbrain.util;
+
 
 /**
- * Functional interface for lambdas used primarily in checking consistency 
- * of an objects parameter via {@linkplain NetworkUtils}.
+ * Functional interface for lambdas used to set values.
  *
  * @param <O> the type parameter of the object from which a parameter will
  * be retrieved
- * @param <V> the type of the retrieved parameter
- *  
- * @author Zach Tosi
+ * @param <V> the type of the set parameter
+ *
  */
-public interface ParameterGetter <O, V> {
+public interface ParameterSetter <O, V> {
 	
-	/**
-	 * A generic method set up with the intention of allowing programmers
-	 * to create a simple function which retrieves an arbitrary parameter
-	 * of an arbitrary type of object.
-	 *
-	 * @param source the object returning a value
-	 * @return the value on the source object 
-	 */
-	V getParameter(O source);
-	
+    /**
+     * Set an arbitrary parameter on an arbitrary type of object.
+     *
+     * @param source the object from which it is intended that one of
+     * its parameters will be returned
+     * @param value the value on the source object 
+     */
+	void setParameter(O source, V value);
+
 }

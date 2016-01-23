@@ -37,7 +37,6 @@ import javax.swing.border.TitledBorder;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
-import org.simbrain.network.gui.ParameterGetter;
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.LogisticGeneratorPanel;
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.RandomGeneratorPanel;
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.SinusoidalGeneratorPanel;
@@ -78,6 +77,7 @@ import org.simbrain.network.neuron_update_rules.activity_generators.SinusoidalRu
 import org.simbrain.network.neuron_update_rules.activity_generators.StochasticRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
 import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
+import org.simbrain.util.ParameterGetter;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.widgets.DropDownTriangle;
 import org.simbrain.util.widgets.DropDownTriangle.UpDirection;

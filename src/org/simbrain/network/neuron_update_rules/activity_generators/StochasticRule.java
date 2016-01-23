@@ -25,8 +25,8 @@ import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.core.SpikingNeuronUpdateRule;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.PropertyEditor;
 import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
+import org.simbrain.util.ParameterEditor;
 
 /**
  * <b>StochasticNeuron</b> is a simple type of random neuron which takes the
@@ -131,14 +131,14 @@ public class StochasticRule extends SpikingNeuronUpdateRule implements
     /**
      * List of property editors for use by neuron property dialogs.
      */
-    public static List<PropertyEditor> editorList = Arrays.asList(
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "firingProb",
+    public static List<ParameterEditor> editorList = Arrays.asList(
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "firingProb",
                     (r) -> ((StochasticRule) r).getFiringProbability(),
                     (r, val) -> ((StochasticRule) r).setFiringProbability((double) val)),
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "lower",
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "lower",
                     (r) -> ((StochasticRule) r).getLowerValue(),
                     (r, val) -> ((StochasticRule) r).setLowerValue((double) val)),
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "upper",
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "upper",
                     (r) -> ((StochasticRule) r).getUpperValue(),
                     (r, val) -> ((StochasticRule) r).setUpperValue((double) val)));
 

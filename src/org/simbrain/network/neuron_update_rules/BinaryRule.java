@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.simbrain.network.core.Network.TimeType;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.PropertyEditor;
+import org.simbrain.util.ParameterEditor;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 
@@ -172,17 +172,17 @@ public class BinaryRule extends NeuronUpdateRule {
     /**
      * List of property editors for use by neuron property dialogs.
      */
-    public static List<PropertyEditor> editorList = Arrays.asList(
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "bias",
+    public static List<ParameterEditor> editorList = Arrays.asList(
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "bias",
                     (r) -> ((BinaryRule) r).getBias(),
                     (r, val) -> ((BinaryRule) r).setBias((double) val)),
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "lower",
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "lower",
                     (r) -> ((BinaryRule) r).getLowerBound(),
                     (r, val) -> ((BinaryRule) r).setLowerBound((double) val)),
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "upper",
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "upper",
                     (r) -> ((BinaryRule) r).getUpperBound(),
                     (r, val) -> ((BinaryRule) r).setUpperBound((double) val)),
-            new PropertyEditor<NeuronUpdateRule, Double>(Double.class, "threshold",
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "threshold",
                     (r) -> ((BinaryRule) r).getThreshold(),
                     (r, val) -> ((BinaryRule) r).setThreshold((double) val))
             );

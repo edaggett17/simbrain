@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.simbrain.network.core.NeuronUpdateRule;
+import org.simbrain.util.ParameterGetter;
 
 /**
  * <b>NetworkUtils</b> provides static utility methods for the Network class.

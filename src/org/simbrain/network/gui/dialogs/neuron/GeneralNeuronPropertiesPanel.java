@@ -38,7 +38,7 @@ import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.core.NeuronUpdateRule.InputType;
 import org.simbrain.network.gui.NetworkUtils;
-import org.simbrain.network.gui.ParameterGetter;
+import org.simbrain.util.ParameterGetter;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.Utils;
 import org.simbrain.util.widgets.DropDownTriangle;
