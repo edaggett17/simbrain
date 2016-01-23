@@ -20,9 +20,11 @@ package org.simbrain.network.gui.dialogs.neuron;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -50,6 +52,9 @@ import org.simbrain.util.widgets.TristateDropDown;
 @SuppressWarnings("serial")
 public abstract class AbstractNeuronRulePanel extends JPanel {
 
+    /** Noise panel if any, null otherwise. */
+    protected NoiseGeneratorPanel noisePanel;
+    
     /** List of editor objects associated with this type of neuron. */
     protected List<PropertyEditor> editorList = new ArrayList<PropertyEditor>();
 
@@ -110,7 +115,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
                 componentMap.put(editor.key, new TristateDropDown());
             }
         }
-        // TODO use Collectors.groupingBy above?
+
     }
 
     /**
@@ -127,8 +132,11 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
                 .forEach(editor -> fillDoubleField(editor, ruleList));
         editorList.stream().filter(editor -> editor.type == Boolean.class)
                 .forEach(editor -> fillBooleanField(editor, ruleList));
-        // TODO: It may be possible to do the above using
-        // Collectors.groupingBy
+        
+        if (noisePanel != null) {
+            noisePanel.fillFieldValues(getRandomizers(ruleList));
+        }
+
     }
 
     /**
@@ -162,6 +170,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {
             dropDown.setNull();
         } else {
+            dropDown.removeNull();
             dropDown.setSelected(editor.getter.getParameter(neuronRef));
         }
     }
@@ -176,7 +185,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         // Change all neuron types to the indicated type
         if (isReplacingUpdateRules()) {
             NeuronUpdateRule neuronRef = getPrototypeRule().deepCopy();
-            neurons.forEach(n -> n.setUpdateRule(neuronRef.deepCopy()));
+                neurons.forEach(n -> n.setUpdateRule(neuronRef.deepCopy()));
         }
 
         // Write parameter values in all fields 
@@ -184,7 +193,10 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
                 .forEach(editor -> commitDouble(editor, neurons));
         editorList.stream().filter(editor -> editor.type == Boolean.class)
                 .forEach(editor -> commitBoolean(editor, neurons));
-        // TODO: It may be possible to do the above using Collectors.groupingBy
+
+        if (noisePanel != null) {
+            noisePanel.commitRandom(neurons);
+        }
     }
 
     /**
@@ -197,11 +209,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         double value = Utils.doubleParsable(
                 (JTextField) (componentMap.get(editor.key)));
         if (!Double.isNaN(value)) {
-            for (int i = 0; i < neurons.size(); i++) {
-                editor.setter.setParameter(
-                        ((NeuronUpdateRule) neurons.get(i).getUpdateRule()),
-                        value);
-            }
+            neurons.stream().forEach(r -> editor.setter
+                    .setParameter(r.getUpdateRule(), value));
         }
     }
 
@@ -212,17 +221,31 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param neurons the neurons to be written to 
      */
     public void commitBoolean(PropertyEditor<NeuronUpdateRule, Boolean> editor, List<Neuron> neurons) {
-        boolean value = ((TristateDropDown) componentMap
-                .get(editor.key)).isSelected();
-        for (int i = 0; i < neurons.size(); i++) {
-            editor.setter.setParameter(
-                    ((NeuronUpdateRule) neurons.get(i).getUpdateRule()), value);
+        TristateDropDown tdd = (TristateDropDown) componentMap
+                .get(editor.key);
+        if (!tdd.isNull()) {
+            boolean value = tdd.isSelected();
+            neurons.stream().forEach(r -> editor.setter
+                    .setParameter(r.getUpdateRule(), value));
         }
     }
     /**
-     * Populate fields with default data. TODO: Think.
+     * Populate fields with default data. TODO: Replace with below when done.
      */
     public abstract void fillDefaultValues();
+    public void fillDefault() {
+        editorList.stream().filter(editor -> editor.type == Double.class)
+                .forEach(editor -> fillDoubleField(editor,
+                        Collections.singletonList(getPrototypeRule())));
+        editorList.stream().filter(editor -> editor.type == Boolean.class)
+                .forEach(editor -> fillBooleanField(editor,
+                        Collections.singletonList(getPrototypeRule())));
+        
+        if (noisePanel != null) {
+            noisePanel.fillFieldValues(getRandomizers(
+                    Collections.singletonList(getPrototypeRule())));
+        }
+    }
 
     /**
      * Called to commit changes to a single neuron.
@@ -284,17 +307,14 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         this.replaceUpdateRules = replace;
     }
 
-    //TODO: Think about how to handle this
     /**
      * @return List of randomizers.
      */
     public static ArrayList<Randomizer> getRandomizers(
             List<NeuronUpdateRule> ruleList) throws ClassCastException {
-        ArrayList<Randomizer> ret = new ArrayList<Randomizer>();
-        for (int i = 0; i < ruleList.size(); i++) {
-            ret.add(((NoisyUpdateRule) ruleList.get(i)).getNoiseGenerator());
-        }
-        return ret;
+        return (ArrayList<Randomizer>) ruleList.stream().map(r -> ((NoisyUpdateRule)r).getNoiseGenerator())
+                .collect(Collectors.toList());
+
     }
 
 }

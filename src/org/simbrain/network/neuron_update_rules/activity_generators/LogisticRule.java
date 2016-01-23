@@ -39,16 +39,15 @@ public class LogisticRule extends NeuronUpdateRule implements
 
     private double floor = -10.0;
 
+    public LogisticRule() {
+        super();
+    }
+
     public LogisticRule(LogisticRule lr, Neuron n) {
         super();
         this.ceiling = lr.getUpperBound();
         this.floor = lr.getLowerBound();
         this.growthRate = lr.getGrowthRate();
-        init(n);
-    }
-
-    public LogisticRule() {
-        super();
     }
 
     /**
@@ -58,15 +57,6 @@ public class LogisticRule extends NeuronUpdateRule implements
     public TimeType getTimeType() {
         return TimeType.DISCRETE;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void init(Neuron neuron) {
-        neuron.setGenerator(true);
-    }
-
     /**
      * {@inheritDoc} <b>Unsafe for activity generators</b>. If copied across a
      *              set of neurons, {@link #init(Neuron) init} must be called to

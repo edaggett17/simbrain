@@ -37,6 +37,7 @@ import javax.swing.border.TitledBorder;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
+import org.simbrain.network.gui.ParameterGetter;
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.LogisticGeneratorPanel;
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.RandomGeneratorPanel;
 import org.simbrain.network.gui.dialogs.neuron.generator_panels.SinusoidalGeneratorPanel;
@@ -76,6 +77,7 @@ import org.simbrain.network.neuron_update_rules.activity_generators.RandomNeuron
 import org.simbrain.network.neuron_update_rules.activity_generators.SinusoidalRule;
 import org.simbrain.network.neuron_update_rules.activity_generators.StochasticRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
+import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.widgets.DropDownTriangle;
 import org.simbrain.util.widgets.DropDownTriangle.UpDirection;
@@ -230,6 +232,8 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
         startingPanel = neuronRulePanel;
         initializeLayout();
         addListeners();
+        
+        setRandomizerPanelParent();
     }
     
     /**
@@ -238,8 +242,13 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
      */
     private void checkNeuronConsistency() {
 
-        // TODO: Ask Tosi about this.  Can it be done without strings? 
-        if (!NetworkUtils.isConsistent(neuronList, Neuron.class, "getType")) {
+        //TODO: Better handling of mixed case with activity generators.   Warn against it
+        // or if allowing it, change the shape of the neuron to match.
+        
+        ParameterGetter<Neuron, Class<?>> typeGetter = (n) -> ((Neuron) n)
+                .getUpdateRule().getClass();
+        
+        if (!NetworkUtils.isConsistent(neuronList, typeGetter)) {
             cbNeuronType.addItem(SimbrainConstants.NULL_STRING);
             cbNeuronType.setSelectedIndex(cbNeuronType.getItemCount() - 1);
             neuronRulePanel = new EmptyRulePanel();
@@ -302,13 +311,16 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
                 neuronRulePanel.setVisible(neuronRulePanelTriangle.isDown());
                 repaint();
                 parent.pack();
+                parent.setLocationRelativeTo(null);
             }
 
         });
 
+        // Change neuron type
         cbNeuronType.addActionListener(e -> {
 
             neuronRulePanel = ruleMap.get(cbNeuronType.getSelectedItem());
+            setRandomizerPanelParent();
 
             // Is the current panel different from the starting panel?
             boolean replaceUpdateRules = neuronRulePanel != startingPanel;
@@ -329,8 +341,20 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
             repaintPanel();
             repaint();
             parent.pack();
+            parent.setLocationRelativeTo(null);
         });
 
+    }
+
+    /**
+     * Set window on randomizer panels.
+     */
+    private void setRandomizerPanelParent() {
+        if(neuronRulePanel.getPrototypeRule() instanceof NoisyUpdateRule) {
+            if (neuronRulePanel.noisePanel != null) {
+                neuronRulePanel.noisePanel.setParent(parent);
+            }
+        }
     }
 
     @Override

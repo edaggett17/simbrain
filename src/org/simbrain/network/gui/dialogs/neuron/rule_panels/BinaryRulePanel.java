@@ -73,14 +73,9 @@ public class BinaryRulePanel extends AbstractNeuronRulePanel {
         this.add(mainTab);
     }
 
-    /**
-     * Fill field values to default values for binary neuron.
-     */
+   // TODO: Remove when done
     public void fillDefaultValues() {
-        tfThreshold.setText(Double.toString(prototypeRule.getThreshold()));
-        tfUpbound.setText(Double.toString(prototypeRule.getUpperBound()));
-        tfLowbound.setText(Double.toString(prototypeRule.getLowerBound()));
-        tfBias.setText(Double.toString(prototypeRule.getBias()));
+        fillDefault();
     }
 
     /**

@@ -72,9 +72,6 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel implements
     /** Main tab. */
     private LabelledItemPanel mainTab = new LabelledItemPanel();
 
-    /** Random tab. */
-    private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
-
     /** A reference to the neuron update rule being edited. */
     private static final NakaRushtonRule prototypeRule = new NakaRushtonRule();
 
@@ -86,6 +83,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel implements
         tsUseAdaptation.addActionListener(this);
 
         this.add(tabbedPane);
+        noisePanel = new NoiseGeneratorPanel();
         mainTab.addItem("Steepness", tfSteepness);
         mainTab.addItem("Semi-saturation constant", tfSemiSaturation);
         mainTab.addItem("Time constant", tfTimeConstant);
@@ -94,7 +92,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel implements
         mainTab.addItem("Adaptation parameter", tfAdaptationParam);
         mainTab.addItem("Adaptation time constant", tfAdaptationTime);
         tabbedPane.add(mainTab, "Main");
-        tabbedPane.add(randTab, "Noise");
+        tabbedPane.add(noisePanel, "Noise");
     }
 
     /**
@@ -177,7 +175,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel implements
         // Use Adaptation
         checkUsingAdaptation();
 
-        randTab.fillFieldValues(getRandomizers(ruleList));
+//        randTab.fillFieldValues(getRandomizers(ruleList));
 
     }
 
@@ -197,7 +195,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel implements
                 .getAdaptationTimeConstant()));
         tfAdaptationParam.setText(Double.toString(prototypeRule
                 .getAdaptationParameter()));
-        randTab.fillDefaultValues();
+//        randTab.fillDefaultValues();
     }
 
     /**
@@ -307,7 +305,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel implements
                         .setAddNoise(addNoise);
             }
             if (addNoise) {
-                randTab.commitRandom(neurons);
+//                randTab.commitRandom(neurons);
             }
         }
     }

@@ -62,13 +62,6 @@ public class SinusoidalRule extends NeuronUpdateRule implements
     /**
      * {@inheritDoc}
      */
-    public void init(Neuron neuron) {
-        neuron.setGenerator(true);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public SinusoidalRule deepCopy() {
         SinusoidalRule sn = new SinusoidalRule();
         sn.setPhase(getPhase());

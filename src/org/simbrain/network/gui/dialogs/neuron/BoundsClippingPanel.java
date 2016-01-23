@@ -86,7 +86,7 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
      * A drop down box to display whether clipping is used, unused or both among
      * the selected neurons.
      */
-    private final TristateDropDown clipping = new TristateDropDown();
+    private final TristateDropDown clippingDropDown = new TristateDropDown();
     
     /** Parent reference so pack can be called. */
     private final Window parent;
@@ -103,8 +103,8 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
         this.parent = parent;
 
         // Clipping dropdown listener
-        clipping.addActionListener(e -> setBoundsEnabled(
-                clipping.getSelectedIndex() == TristateDropDown.getTRUE()));
+        clippingDropDown.addActionListener(e -> setBoundsEnabled(
+                clippingDropDown.getSelectedIndex() == TristateDropDown.getTRUE()));
  
         // Layout panel
         boundsPanel.setLayout(new BoxLayout(boundsPanel, BoxLayout.Y_AXIS));
@@ -112,7 +112,7 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
         gl.setVgap(2);
         clippingPanel.setLayout(gl);
         clippingPanel.add(new JLabel("Clipping: "));
-        clippingPanel.add(clipping);
+        clippingPanel.add(clippingDropDown);
         clippingPanel.setAlignmentX(CENTER_ALIGNMENT);
         boundsPanel.add(clippingPanel);
         boundsPanel.add(Box.createVerticalStrut(5));
@@ -137,12 +137,11 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
 
         if (boundsVisible) {
             // Clipping?
-            if (!clipping.isNull() && clippingVisible) {
+            if (!clippingDropDown.isNull() && clippingVisible) {
                 neuronList.stream()
                         .forEach(n -> ((ClippableUpdateRule) n.getUpdateRule())
-                                .setClipped(clipping.isSelected()));
+                                .setClipped(clippingDropDown.isSelected()));
             }
-            // TODO: Below was "boundsVisible && boundsEnabled." Tosi check.
             if (boundsEnabled) {
                 // Upper Bound
                 double ceiling = Utils.doubleParsable(tfCeiling);
@@ -265,10 +264,10 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
         boolean discrepancy = ruleList.stream().anyMatch(
                 rule -> clipped != ((ClippableUpdateRule) rule).isClipped());
         if (discrepancy) {
-            clipping.setSelectedIndex(TristateDropDown.getNULL());
+            clippingDropDown.setNull();
             setBoundsEnabled(false);
         } else {
-            clipping.setSelected(clipped);
+            clippingDropDown.setSelected(clipped);
             setBoundsEnabled(clipped);
         }
         setClippingPanelVisible(true);
@@ -287,22 +286,20 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
         setBoundsPanelVisible(bounded);
         if (bounded) {
             clip = rule instanceof ClippableUpdateRule;
-            clipping.setSelected(clip);
+            clippingDropDown.setSelected(clip);
         }
         setClippingPanelVisible(clip);
         setBoundsEnabled(bounded);
     }
 
     /**
-     * If bounds are enabled then the text fields should be enabled and clipping
-     * should be turned on. If not then the text fields should be disabled and
-     * clipping should be turned off.
+     * If bounds are enabled then the text fields should be enabled, and
+     * if not then text fields should be disabled.
      *
      * @param enabled are upper and lower bounds fields enabled?
      */
     private void setBoundsEnabled(boolean enabled) {
         boundsEnabled = enabled;
-        clipping.setSelected(boundsEnabled);
         tfCeiling.setEnabled(enabled);
         tfFloor.setEnabled(enabled);
         repaint();
@@ -318,6 +315,7 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
         boundsPanel.setVisible(visible);
         repaint();
         parent.pack();
+        parent.setLocationRelativeTo(null);
     }
 
     /**
@@ -330,6 +328,7 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
         clippingPanel.setVisible(visible);
         repaint();
         parent.pack();
+        parent.setLocationRelativeTo(null);
     }
 
     @Override

@@ -148,6 +148,7 @@ public class NetworkUtils {
     		throw new IllegalArgumentException("Source list is empty.");
     	}
     	// TODO: Redo using stream
+    	// TODO: Deal with mixed activity generator / neuron case
     	Iterator<O> sourceIter = sources.iterator();
     	O sourceFirst = sourceIter.next();
     	V val = getter.getParameter(sourceFirst);

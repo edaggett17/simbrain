@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.groups.Group;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.PropertyEditor;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
 import org.simbrain.network.neuron_update_rules.interfaces.BiasedUpdateRule;
@@ -109,9 +108,6 @@ public class Neuron {
     /** List of synapses attaching to this neuron. */
     private ArrayList<Synapse> fanIn = new ArrayList<Synapse>(
             PRE_ALLOCATED_NUM_SYNAPSES);
-
-    /** A marker for whether or not the update rule is an input generator. */
-    private boolean generator;
 
     /** x-coordinate of this neuron in 2-space. */
     private double x;
@@ -308,7 +304,6 @@ public class Neuron {
             getNetwork().updateTimeType();
             getNetwork().fireNeuronTypeChanged(oldRule, updateRule);
         }
-        setGenerator(updateRule instanceof ActivityGenerator);
     }
 
     /**
@@ -1034,8 +1029,7 @@ public class Neuron {
             synapse.randomize();
         }
     }
-    
-    //TODO: Is this this best place for this? 
+
     /**
      * A method that returns a list of all the neuron update rules associated
      * with a list of neurons.
@@ -1065,27 +1059,6 @@ public class Neuron {
      */
     public void setParentGroup(Group parentGroup) {
         this.parentGroup = parentGroup;
-    }
-
-    /**
-     * @return Whether or not this is an input generator.
-     */
-    public boolean isGenerator() {
-        return generator;
-    }
-
-    /**
-     * Mark this neuron as an input generator. Automatically sets the
-     * {@link #fanIn fan-in list} to null if true.
-     *
-     * @param generator
-     *            Whether or not this is being set as an input generator.
-     */
-    public void setGenerator(boolean generator) {
-        this.generator = generator;
-        if (generator) {
-            fanIn = null;
-        }
     }
 
     /**
@@ -1205,15 +1178,5 @@ public class Neuron {
     public void setSpkBuffer(boolean spkBuffer) {
         this.spkBuffer = spkBuffer;
     }
-    
-    //TODO: Document.
-    
-    public static PropertyEditor<Neuron, Double> activationEditor = new PropertyEditor<Neuron, Double>(Double.class, "activation",
-            (n) -> (((Neuron)n).getActivation()),
-            (n, val) -> ((Neuron) n).setActivation((double) val));
 
-    public static PropertyEditor<Neuron, String> labelEditor = new PropertyEditor<Neuron, String>(String.class, "label",
-            (n) -> (((Neuron)n).getLabel()),
-            (n, val) -> ((Neuron) n).setLabel((String) val));
-        
 }

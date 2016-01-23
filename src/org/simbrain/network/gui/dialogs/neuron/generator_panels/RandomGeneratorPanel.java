@@ -18,17 +18,13 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.generator_panels;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
-import org.simbrain.network.neuron_update_rules.activity_generators.LogisticRule;
 import org.simbrain.network.neuron_update_rules.activity_generators.RandomNeuronRule;
-import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
-import org.simbrain.util.randomizer.Randomizer;
 
 /**
  * <b>RandomNeuronPanel</b> Currently unimplemented pending decisions about
@@ -36,12 +32,8 @@ import org.simbrain.util.randomizer.Randomizer;
  */
 public class RandomGeneratorPanel extends AbstractNeuronRulePanel {
 
-    /** Random panel. */
-    private NoiseGeneratorPanel randPanel = new NoiseGeneratorPanel();
-
-    // TODO:Lists?
-    /** A reference to the neuron rule being edited. */
-    private RandomNeuronRule neuronRef = new RandomNeuronRule();
+    /** A reference to the neuron update rule being edited. */
+    private static final RandomNeuronRule prototypeRule = new RandomNeuronRule();
 
     /**
      * Creates an instance of this panel.
@@ -49,67 +41,25 @@ public class RandomGeneratorPanel extends AbstractNeuronRulePanel {
      */
     public RandomGeneratorPanel() {
         super();
-        this.add(randPanel);
+        noisePanel = new NoiseGeneratorPanel();
+        this.add(noisePanel);
     }
 
-    /**
-     * Populate fields with current data.
-     */
-    public void fillFieldValues() {
+    @Override
+    protected NeuronUpdateRule getPrototypeRule() {
+        return prototypeRule;
     }
 
-    /**
-     * Fill field values to default values for random neuron.
-     */
-    public void fillDefaultValues() {
-         randPanel.fillDefaultValues();
-    }
-
-     /**
-     * Called externally when the dialog is closed, to commit any changes
-     made.
-     */
-    public void commitChanges() {
+    @Override
+    public void fillDefaultValues() {        
     }
 
     @Override
     public void commitChanges(Neuron neuron) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void commitChanges(List<Neuron> ruleList) {
-        for (int i = 0; i < ruleList.size(); i++) {
-            RandomNeuronRule neuronRef = (RandomNeuronRule) ruleList.get(i).getUpdateRule();
-            randPanel.commitRandom(neuronRef.getRandomizer());
-        }
-    }
-
-    @Override
-    public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-        ArrayList<Randomizer> randomPanels = new ArrayList<Randomizer>();
-
-        for (int i = 0; i < ruleList.size(); i++) {
-            randomPanels
-                    .add(((RandomNeuronRule) ruleList.get(i)).getRandomizer());
-        }
-
-        randPanel.fillFieldValues(randomPanels);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public NeuronUpdateRule getPrototypeRule() {
-        // TODO Auto-generated method stub
-        return null;
+        
     }
 
     @Override
     protected void writeValuesToRules(List<Neuron> neurons) {
-        // TODO Auto-generated method stub
-
     }
 }

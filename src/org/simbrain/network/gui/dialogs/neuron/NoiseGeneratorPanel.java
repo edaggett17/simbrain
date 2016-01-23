@@ -18,6 +18,7 @@
  */
 package org.simbrain.network.gui.dialogs.neuron;
 
+import java.awt.Window;
 import java.util.List;
 
 import org.simbrain.network.core.Neuron;
@@ -46,19 +47,21 @@ public class NoiseGeneratorPanel extends RandomizerPanel {
      * randomizers, since any time any neurons are singled out, they will
      * receive a brand new randomizer.
      *
-     * @param noiseyNeurons
+     * @param noisyNeurons
      *            the neurons
      * @exception ClassCastException
      */
     public void commitRandom(List<Neuron> noiseyNeurons)
         throws ClassCastException {
-        if (!getCbDistribution().getSelectedItem()
+         if (!getCbDistribution().getSelectedItem().toString()
             .equals(SimbrainConstants.NULL_STRING)) {
             Randomizer rand = new Randomizer();
             super.commitRandom(rand);
             for (Neuron n : noiseyNeurons) {
                 ((NoisyUpdateRule) n.getUpdateRule()).setNoiseGenerator(rand);
             }
+            //TODO: The above does not work for an inconsistent set of rules.  Any 
+            // "..." is ignored.
         }
     }
 

@@ -178,7 +178,7 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
      */
     @Override
     public NeuronUpdateRule getPrototypeRule() {
-        return neuronRef;
+        return neuronRef.deepCopy();
     }
 
     @Override

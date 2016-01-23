@@ -571,12 +571,18 @@ public class NetworkPanel extends JPanel {
             @Override
             public void
                 neuronTypeChanged(final NetworkEvent<NeuronUpdateRule> e) {
+                // Can use this to allow activity generators to become neurons or vice
+                // versa.  Must add a method that changes the shape object on the neuron node
+                // and then removes and adds the appropriate pnode to the NeuronNode
+                //NeuronNode node = (NeuronNode) objectNodeMap.get(e.getObject());
+                //if  (node != null) {
+                //    node.updateShape();                    
+                //}
             }
 
             @Override
             public void neuronMoved(final NetworkEvent<Neuron> e) {
                 NeuronNode node = (NeuronNode) objectNodeMap.get(e.getSource());
-
                 // In previous versions checked NeuronNode.isMoving == false.
                 // See NeuronNode isMoving comments
                 if (node != null) {
@@ -819,29 +825,15 @@ public class NetworkPanel extends JPanel {
         timeLabel.update();
         updateComplete.decrementAndGet();
     }
-    
-
-    //TODO: Share code with newNeuron
-    public void addActivityGenerator() {
-        final Neuron neuron = new Neuron(getNetwork(), new StochasticRule());
-        Point2D p = whereToAdd;
-        neuron.setX(p.getX());
-        neuron.setY(p.getY());
-        neuron.forceSetActivation(0);
-        getNetwork().addNeuron(neuron);
-        // New objects are added to the right of the last neuron added.
-        // Convenient for quickly making "lines" of neurons by repeatedly
-        // adding neurons.
-        whereToAdd.setLocation(neuron.getX() + DEFAULT_SPACING, neuron.getY());
-        repaint();
-    }
 
     /**
      * Use the GUI to add a new neuron to the underlying network model.
+     * 
+     * @param baseRule the neuron update rule to use for the new neuron
      */
-    public void addNeuron() {
+    public void addNeuron(final NeuronUpdateRule baseRule) {
 
-        final Neuron neuron = new Neuron(getNetwork(), new LinearRule());
+        final Neuron neuron = new Neuron(getNetwork(), baseRule);
         Point2D p = whereToAdd;
         neuron.setX(p.getX());
         neuron.setY(p.getY());

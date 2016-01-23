@@ -22,6 +22,8 @@ import java.awt.Dimension;
 
 import javax.swing.JComboBox;
 
+import org.simbrain.util.SimbrainConstants;
+
 /**
  * <b>TristateDropDown</b> ceates a combo box that has three states; True, false
  * and null. It is used where it needs to be determined if multiple items have
@@ -69,10 +71,19 @@ public class TristateDropDown extends JComboBox<String> {
      */
     public void setNull() {
         if (this.getItemCount() == 2) {
-            addItem("...");
+            addItem(SimbrainConstants.NULL_STRING);
         }
-
         setSelectedIndex(NULL);
+    }
+    
+
+    /**
+     * Remove the null item.
+     */
+    public void removeNull() {
+        if (this.getItemCount() == 3) {
+            removeItem(SimbrainConstants.NULL_STRING);
+        }
     }
 
     /**
@@ -134,4 +145,5 @@ public class TristateDropDown extends JComboBox<String> {
     public static int getTRUE() {
         return TRUE;
     }
+
 }

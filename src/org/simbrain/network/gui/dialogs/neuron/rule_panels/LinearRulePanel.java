@@ -21,7 +21,6 @@ package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
@@ -29,7 +28,6 @@ import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.TristateDropDown;
 
 /**
  * <b>LinearNeuronPanel</b>.
@@ -42,9 +40,6 @@ public class LinearRulePanel extends AbstractNeuronRulePanel {
     /** Main tab. */
     private LabelledItemPanel mainTab = new LabelledItemPanel();
 
-    /** Random tab. */
-    private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
-
     /** A reference to the neuron update rule being edited. */
     private static final LinearRule prototypeRule = new LinearRule();
 
@@ -53,13 +48,15 @@ public class LinearRulePanel extends AbstractNeuronRulePanel {
      */
     public LinearRulePanel() {
         this.add(tabbedPane);
+
         init(LinearRule.editorList);
         mainTab.addItem("Slope", componentMap.get("slope"));
         mainTab.addItem("Bias", componentMap.get("bias"));
         mainTab.addItem("Add noise", componentMap.get("addNoise"));
         tabbedPane.add(mainTab, "Main");
-        tabbedPane.add(randTab, "Noise");
 
+        noisePanel = new NoiseGeneratorPanel();
+        tabbedPane.add(noisePanel, "Noise");
     }
     
     @Override

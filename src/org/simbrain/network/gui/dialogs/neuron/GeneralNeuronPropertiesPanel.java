@@ -38,6 +38,7 @@ import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.core.NeuronUpdateRule.InputType;
 import org.simbrain.network.gui.NetworkUtils;
+import org.simbrain.network.gui.ParameterGetter;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.Utils;
 import org.simbrain.util.widgets.DropDownTriangle;
@@ -245,9 +246,8 @@ public class GeneralNeuronPropertiesPanel extends JPanel
                 // Repaint to show/hide extra data
                 detailPanel.setVisible(detailTriangle.isDown());
                 detailPanel.repaint();
-                // Alert the panel/dialog/frame this is embedded in to
-                // resize itself accordingly
                 parent.pack();
+                parent.setLocationRelativeTo(null);
             }
         });
     }
@@ -279,18 +279,17 @@ public class GeneralNeuronPropertiesPanel extends JPanel
             idLabel.setText(neuronRef.getId());
         }
 
-        // TODO:In Neuron, may not need editor but just a getter
-
         // Handle Activation
-        if (!NetworkUtils.isConsistent(neuronList,
-                Neuron.activationEditor.getter)) {
+        ParameterGetter<Neuron, Double> actGetter = (n) -> ((Neuron)n).getActivation();
+        if (!NetworkUtils.isConsistent(neuronList, actGetter)) {
             tfActivation.setText(SimbrainConstants.NULL_STRING);
         } else {
             tfActivation.setText(Double.toString(neuronRef.getActivation()));
         }
 
         // Handle Label
-        if (!NetworkUtils.isConsistent(neuronList, Neuron.labelEditor.getter)) {
+        ParameterGetter<Neuron, String> lblGetter = (n) -> ((Neuron)n).getLabel();
+        if (!NetworkUtils.isConsistent(neuronList, lblGetter)) {
             tfNeuronLabel.setText(SimbrainConstants.NULL_STRING);
         } else {
             tfNeuronLabel.setText(neuronRef.getLabel());
@@ -299,35 +298,41 @@ public class GeneralNeuronPropertiesPanel extends JPanel
         // Handle bounds and clipping
         boundsClippingPanel.fillFieldValues();
 
-        // TODO: Finish below
+        // Handle Priority
+        ParameterGetter<Neuron, Integer> priorityGetter = (n) -> ((Neuron) n)
+                .getUpdatePriority();
+        if (!NetworkUtils.isConsistent(neuronList, priorityGetter)) {
+            tfPriority.setText(SimbrainConstants.NULL_STRING);
+        } else {
+            tfPriority.setText(Integer.toString(neuronRef.getUpdatePriority()));
+        }
+
+        // Handle Clamped
+        ParameterGetter<Neuron, Boolean> clampedGetter = (n) -> ((Neuron) n)
+                .isClamped();
+        if (!NetworkUtils.isConsistent(neuronList, clampedGetter)) {
+            clamped.setNull();
+        } else {
+            clamped.setSelected(neuronList.get(0).isClamped());
+        }
+
+        // Get list of rules to fill field vales on 
         List<NeuronUpdateRule> ruleList = Neuron.getRuleList(neuronList);
 
         // Handle Increment
-        if (!NetworkUtils.isConsistent(ruleList, NeuronUpdateRule.class,
-                "getIncrement")) {
+        ParameterGetter<NeuronUpdateRule, Double> incGeter = (
+                n) -> ((NeuronUpdateRule) n).getIncrement();
+        if (!NetworkUtils.isConsistent(ruleList, incGeter)) {
             tfIncrement.setText(SimbrainConstants.NULL_STRING);
         } else {
             tfIncrement.setText(
                     Double.toString(neuronRef.getUpdateRule().getIncrement()));
         }
 
-        // Handle Priority
-        if (!NetworkUtils.isConsistent(neuronList, Neuron.class,
-                "getUpdatePriority")) {
-            tfPriority.setText(SimbrainConstants.NULL_STRING);
-        } else {
-            tfPriority.setText(Integer.toString(neuronRef.getUpdatePriority()));
-        }
-        // Handle Clamped
-        if (!NetworkUtils.isConsistent(neuronList, Neuron.class, "isClamped")) {
-            clamped.setNull();
-        } else {
-            clamped.setSelected(neuronList.get(0).isClamped());
-        }
-
         // Handle input type
-        if (!NetworkUtils.isConsistent(ruleList, NeuronUpdateRule.class,
-                "getInputType")) {
+        ParameterGetter<NeuronUpdateRule, InputType> itGeter = (
+                n) -> ((NeuronUpdateRule) n).getInputType();
+        if (!NetworkUtils.isConsistent(ruleList, itGeter)) {
             inputType.setNull();
         } else {
             inputType
@@ -361,12 +366,6 @@ public class GeneralNeuronPropertiesPanel extends JPanel
         if (!tfNeuronLabel.getText().equals(SimbrainConstants.NULL_STRING)) {
             neuronList.stream()
                     .forEach(n -> n.setLabel(tfNeuronLabel.getText()));
-        }
-
-        // Todo: Tosi can this move down?
-        // Update neurons
-        if (!neuronList.isEmpty()) {
-            neuronList.get(0).getNetwork().fireNeuronsUpdated(neuronList);
         }
 
         // Clamped
@@ -412,6 +411,12 @@ public class GeneralNeuronPropertiesPanel extends JPanel
             neuronList.stream().forEach(
                     n -> n.getUpdateRule().setInputType(InputType.SYNAPTIC));
         }
+        
+        // Update neurons
+        if (!neuronList.isEmpty()) {
+            neuronList.get(0).getNetwork().fireNeuronsUpdated(neuronList);
+        }
+
         return success;
     }
 

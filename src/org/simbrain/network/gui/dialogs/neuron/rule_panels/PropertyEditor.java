@@ -12,16 +12,20 @@ import org.simbrain.network.gui.ParameterSetter;
  */
 public class PropertyEditor<O,V> {
     
-    public Class<V> type;
-    public String key;
-    public ParameterGetter<O,V> getter;
-    public ParameterSetter<O,V> setter;
+    /** The type being edited. */
+    public final Class<V> type;
+    
+    /** A string key for this editor. */
+    public final String key;
+    
+    /** The getter. */
+    public final ParameterGetter<O,V> getter;
+    
+    /** The setter. */
+    public final ParameterSetter<O,V> setter;
     
     /**
-     * @param type
-     * @param description
-     * @param parameterGetter
-     * @param parameterSetter
+     * Construct the editor.
      */
     public PropertyEditor(Class<V> type, String description, ParameterGetter<O,V> parameterGetter,
             ParameterSetter<O,V> parameterSetter) {
