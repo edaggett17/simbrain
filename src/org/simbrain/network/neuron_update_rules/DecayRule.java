@@ -19,11 +19,16 @@
 package org.simbrain.network.neuron_update_rules;
 
 import org.simbrain.network.core.Network.TimeType;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.BoundedUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ClippableUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
+import org.simbrain.util.ParameterEditor;
 import org.simbrain.util.randomizer.Randomizer;
 
 /**
@@ -308,5 +313,22 @@ public class DecayRule extends NeuronUpdateRule implements BoundedUpdateRule,
     public void setClipped(boolean clipping) {
         this.clipping = clipping;
     }
+    
+    /**
+     * List of property editors for use by neuron property dialogs.
+     */
+    public static List<ParameterEditor> editorList = Arrays.asList(
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "baseLine",
+                    (r) -> ((DecayRule) r).getBaseLine(),
+                    (r, val) -> ((DecayRule) r).setBaseLine((double) val)),
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "decayAmount",
+                    (r) -> ((DecayRule) r).getDecayAmount(),
+                    (r, val) -> ((DecayRule) r).setDecayAmount((double) val)),
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "decayFraction",
+                    (r) -> ((DecayRule) r).getDecayFraction(),
+                    (r, val) -> ((DecayRule) r).setDecayFraction((double) val))
+            
+            );
+
 
 }
