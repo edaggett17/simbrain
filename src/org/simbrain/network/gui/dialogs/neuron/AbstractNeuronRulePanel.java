@@ -39,6 +39,7 @@ import org.simbrain.util.ParameterEditor;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.Utils;
 import org.simbrain.util.randomizer.Randomizer;
+import org.simbrain.util.widgets.NStateDropDown;
 import org.simbrain.util.widgets.TristateDropDown;
 
 /**
@@ -52,9 +53,6 @@ import org.simbrain.util.widgets.TristateDropDown;
 @SuppressWarnings("serial")
 public abstract class AbstractNeuronRulePanel extends JPanel {
 
-    /** Noise panel if any, null otherwise. */
-    protected NoiseGeneratorPanel noisePanel;
-    
     /** List of editor objects associated with this type of neuron. */
     protected List<ParameterEditor> editorList = new ArrayList<ParameterEditor>();
 
@@ -63,7 +61,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * Populated on the basis of the editor list
      */
     protected Map<String, JComponent> componentMap = new HashMap<String, JComponent>();
-    
+
     /**
      * Each neuron panel contains a static final subclass of NeuronUpdateRule
      * variable called a prototype rule. The specific subclass of
@@ -75,19 +73,38 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @return an instance of the neuron rule which corresponds to the panel.
      */
     protected abstract NeuronUpdateRule getPrototypeRule();
+    
+    /** Noise panel if any, null otherwise. */
+    protected NoiseGeneratorPanel noisePanel;
+    
+    /**
+     * Parameter editor object for the "add noise" parameter. Used in
+     * consistency checks.
+     */
+    ParameterEditor<NeuronUpdateRule, Boolean> addNoiseEditor = new ParameterEditor<NeuronUpdateRule, Boolean>(
+            Boolean.class, "addNoise",
+            (r) -> ((NoisyUpdateRule) r).getAddNoise(),
+            (r, val) -> ((NoisyUpdateRule) r).setAddNoise((boolean) val));
+
+
+    /**
+     * Should noise be added to this neuron? (Only used for update rules that
+     * implement {@link NoisyUpdateRule}).
+     */
+    private TristateDropDown isAddNoise;
 
     /**
      * A flag used to indicate whether this panel will be replacing neuron
      * update rules or simply writing to them.
      * 
-     *  If true, create new update rules
-     *  If false, edit existing update rules
-     *  
-     *  Set based on correspondence between neuron rule and the current rule panel.
+     * If true, create new update rules If false, edit existing update rules
      * 
-     *  Optimization to prevent multiple "instanceof" checks.
+     * Set based on correspondence between neuron rule and the current rule
+     * panel.
+     * 
+     * Optimization to prevent multiple "instanceof" checks.
      */
-    private boolean replaceUpdateRules = true; 
+    private boolean replaceUpdateRules = true;
 
     /**
      * This method is the default constructor.
@@ -104,7 +121,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param editorList list of editors.
      */
     protected void init(List<ParameterEditor> editorList) {
-        
+
         this.editorList = editorList;
 
         // Initialize the component map
@@ -113,39 +130,49 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
                 componentMap.put(editor.getKey(), new JTextField());
             } else if (editor.getType() == Boolean.class) {
                 componentMap.put(editor.getKey(), new TristateDropDown());
+            } else if (editor.getType() == Integer.class) {
+                componentMap.put(editor.getKey(), new NStateDropDown());
             }
         }
 
+        if (isNoisePanel()) {
+            isAddNoise = new TristateDropDown();
+            componentMap.put("addNoise", isAddNoise);
+        }
     }
 
     /**
-     * Populate neuron panel fields based on the list of rules.  If there are
+     * Populate neuron panel fields based on the list of rules. If there are
      * inconsistencies use a "...".
      *
      * @param ruleList the list of neuron update rules to use.
      */
     public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
 
-        // Go through each editable property and fill the corresponding field
-        // value.
+        // Iterate through editable properties of the update rule
+        // and fill corresponding field values.
         editorList.stream().filter(editor -> editor.getType() == Double.class)
                 .forEach(editor -> fillDoubleField(editor, ruleList));
         editorList.stream().filter(editor -> editor.getType() == Boolean.class)
                 .forEach(editor -> fillBooleanField(editor, ruleList));
-        
-        if (noisePanel != null) {
+        editorList.stream().filter(editor -> editor.getType() == Integer.class)
+                .forEach(editor -> fillIntegerField(editor, ruleList));
+
+        if (isNoisePanel()) {
+            fillBooleanField(addNoiseEditor, ruleList);
             noisePanel.fillFieldValues(getRandomizers(ruleList));
         }
-
     }
 
     /**
-     * Fills a double field. 
+     * Fills text field with a double value.
      *
      * @param editor the editor object to access the update rule
      * @param ruleList rule list, used for the consistency check
      */
-    public void fillDoubleField(ParameterEditor<NeuronUpdateRule, Double> editor, List<NeuronUpdateRule> ruleList) {
+    public void fillDoubleField(
+            ParameterEditor<NeuronUpdateRule, Double> editor,
+            List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
         JTextField textField = (JTextField) componentMap.get(editor.getKey());
         if (!NetworkUtils.isConsistent(ruleList, editor.getGetter())) {
@@ -157,12 +184,13 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
-     * Fills a boolean field. 
+     * Fills a boolean field to a dropdown with anull.
      *
      * @param editor the editor object to access the update rule
      * @param ruleList rule list, used for the consistency check
      */
-    public void fillBooleanField(ParameterEditor<NeuronUpdateRule, Boolean> editor,
+    public void fillBooleanField(
+            ParameterEditor<NeuronUpdateRule, Boolean> editor,
             List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
         TristateDropDown dropDown = (TristateDropDown) componentMap
@@ -176,6 +204,28 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
+     * Sets state of a combo box using an integer index (we do assume all neuron
+     * update rule integer fields can be thought of as indices of an enum).
+     *
+     * @param editor the editor object to access the update rule
+     * @param ruleList rule list, used for the consistency check
+     */
+    public void fillIntegerField(
+            ParameterEditor<NeuronUpdateRule, Integer> editor,
+            List<NeuronUpdateRule> ruleList) {
+        NeuronUpdateRule neuronRef = ruleList.get(0);
+        NStateDropDown dropDown = (NStateDropDown) componentMap
+                .get(editor.getKey());
+        if (!NetworkUtils.isConsistent(ruleList, editor.getGetter())) {
+            dropDown.setNull();
+        } else {
+            dropDown.removeNull();
+            int index = editor.getGetter().getParameter(neuronRef);
+            dropDown.setSelectedIndex(index);
+        }
+    }
+
+    /**
      * Write the values of the GUI fields to the neurons themselves.
      *
      * @param neurons the neurons to be written to
@@ -185,16 +235,19 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         // Change all neuron types to the indicated type
         if (isReplacingUpdateRules()) {
             NeuronUpdateRule neuronRef = getPrototypeRule().deepCopy();
-                neurons.forEach(n -> n.setUpdateRule(neuronRef.deepCopy()));
+            neurons.forEach(n -> n.setUpdateRule(neuronRef.deepCopy()));
         }
 
-        // Write parameter values in all fields 
+        // Write parameter values in all fields
         editorList.stream().filter(editor -> editor.getType() == Double.class)
                 .forEach(editor -> commitDouble(editor, neurons));
         editorList.stream().filter(editor -> editor.getType() == Boolean.class)
                 .forEach(editor -> commitBoolean(editor, neurons));
+        editorList.stream().filter(editor -> editor.getType() == Integer.class)
+                .forEach(editor -> commitInteger(editor, neurons));
 
-        if (noisePanel != null) {
+        if (isNoisePanel()) {
+            commitBoolean(addNoiseEditor, neurons);
             noisePanel.commitRandom(neurons);
         }
     }
@@ -203,9 +256,10 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * Write a double value to a neuron rule.
      *
      * @param editor the editor object
-     * @param neurons the neurons to be written to 
+     * @param neurons the neurons to be written to
      */
-    public void commitDouble(ParameterEditor<NeuronUpdateRule, Double> editor, List<Neuron> neurons) {
+    public void commitDouble(ParameterEditor<NeuronUpdateRule, Double> editor,
+            List<Neuron> neurons) {
         double value = Utils.doubleParsable(
                 (JTextField) (componentMap.get(editor.getKey())));
         if (!Double.isNaN(value)) {
@@ -218,9 +272,10 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * Write a boolean value to a neuron rule.
      *
      * @param editor the editor object
-     * @param neurons the neurons to be written to 
+     * @param neurons the neurons to be written to
      */
-    public void commitBoolean(ParameterEditor<NeuronUpdateRule, Boolean> editor, List<Neuron> neurons) {
+    public void commitBoolean(ParameterEditor<NeuronUpdateRule, Boolean> editor,
+            List<Neuron> neurons) {
         TristateDropDown tdd = (TristateDropDown) componentMap
                 .get(editor.getKey());
         if (!tdd.isNull()) {
@@ -229,10 +284,28 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
                     .setParameter(r.getUpdateRule(), value));
         }
     }
+
+    /**
+     * Write an integer value to a neuron rule, from a combo box.
+     *
+     * @param editor the editor object
+     * @param neurons the neurons to be written to
+     */
+    public void commitInteger(ParameterEditor<NeuronUpdateRule, Integer> editor,
+            List<Neuron> neurons) {
+        NStateDropDown cb = (NStateDropDown) componentMap.get(editor.getKey());
+        if (!cb.isNull()) {
+            int index = cb.getSelectedIndex();
+            neurons.stream().forEach(r -> editor.getSetter()
+                    .setParameter(r.getUpdateRule(), index));
+        }
+    }
+
     /**
      * Populate fields with default data. TODO: Replace with below when done.
      */
     public abstract void fillDefaultValues();
+
     public void fillDefault() {
         editorList.stream().filter(editor -> editor.getType() == Double.class)
                 .forEach(editor -> fillDoubleField(editor,
@@ -240,8 +313,13 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         editorList.stream().filter(editor -> editor.getType() == Boolean.class)
                 .forEach(editor -> fillBooleanField(editor,
                         Collections.singletonList(getPrototypeRule())));
-        
-        if (noisePanel != null) {
+        editorList.stream().filter(editor -> editor.getType() == Integer.class)
+                .forEach(editor -> fillIntegerField(editor,
+                        Collections.singletonList(getPrototypeRule())));
+
+        if (isNoisePanel()) {
+            fillBooleanField(addNoiseEditor,
+                    Collections.singletonList(getPrototypeRule()));
             noisePanel.fillFieldValues(getRandomizers(
                     Collections.singletonList(getPrototypeRule())));
         }
@@ -250,25 +328,25 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     /**
      * Called to commit changes to a single neuron.
      * 
-     *  Usually this is a template
-     * neuron intended to be copied for the purpose of creating many new
-     * neurons. Using this method to commit changes to many neurons is not
-     * recommended. Instead pass a list of the neurons to be changed into
-     * {@link #commitChanges(List) commitChanges}.
+     * Usually this is a template neuron intended to be copied for the purpose
+     * of creating many new neurons. Using this method to commit changes to many
+     * neurons is not recommended. Instead pass a list of the neurons to be
+     * changed into {@link #commitChanges(List) commitChanges}.
      *
      * @param neuron the neuron to which changes are being committed to.
      */
     public abstract void commitChanges(final Neuron neuron);
 
-    //TODO: Remove below when done with other changes.
+    // TODO: Remove below when done with other changes.
     /**
      * Edits neuron update rules that already exist. This is the alternative to
      * replacing the rules and occurs when the neuron update rules being edited
-     * are the same type as the panel. {@link #replaceUpdateRules} is the flag for
-     * whether this method is used for committing or the rules are deleted and
-     * replaced entirely, in which case this method is not called.
+     * are the same type as the panel. {@link #replaceUpdateRules} is the flag
+     * for whether this method is used for committing or the rules are deleted
+     * and replaced entirely, in which case this method is not called.
      *
-     * @param neurons the neurons whose rules are being <b>edited</b>, not replaced.
+     * @param neurons the neurons whose rules are being <b>edited</b>, not
+     *            replaced.
      */
     protected abstract void writeValuesToRules(final List<Neuron> neurons);
 
@@ -312,9 +390,21 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      */
     public static ArrayList<Randomizer> getRandomizers(
             List<NeuronUpdateRule> ruleList) throws ClassCastException {
-        return (ArrayList<Randomizer>) ruleList.stream().map(r -> ((NoisyUpdateRule)r).getNoiseGenerator())
+        return (ArrayList<Randomizer>) ruleList.stream()
+                .map(r -> ((NoisyUpdateRule) r).getNoiseGenerator())
                 .collect(Collectors.toList());
+    }
 
+    /**
+     * Check if this panel represents a neuron associated with a noise generator.
+     *
+     * @return true if the panel represents a noisy update rule, false otherwise
+     */
+    private boolean isNoisePanel() {
+        if (this.getPrototypeRule() instanceof NoisyUpdateRule) {
+            return true;
+        }
+        return false;
     }
 
 }

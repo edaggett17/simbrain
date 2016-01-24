@@ -318,6 +318,9 @@ public class DecayRule extends NeuronUpdateRule implements BoundedUpdateRule,
      * List of property editors for use by neuron property dialogs.
      */
     public static List<ParameterEditor> editorList = Arrays.asList(
+            new ParameterEditor<NeuronUpdateRule, Integer>(Integer.class, "relAbs",
+                    (r) -> ((DecayRule) r).getRelAbs(),
+                    (r, val) -> ((DecayRule) r).setRelAbs((int) val)),
             new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "baseLine",
                     (r) -> ((DecayRule) r).getBaseLine(),
                     (r, val) -> ((DecayRule) r).setBaseLine((double) val)),

@@ -58,7 +58,7 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
     private Randomizer noiseGenerator = new Randomizer();
 
     /** Add noise to the neuron. */
-    private boolean addNoise;
+    private boolean addNoise = false;
 
     /** Clipping. */
     private boolean clipping = DEFAULT_CLIPPING;
@@ -275,9 +275,6 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
                     (r, val) -> ((LinearRule) r).setSlope((double) val)),
             new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "bias",
                     (r) -> ((LinearRule) r).getBias(),
-                    (r, val) -> ((LinearRule) r).setBias((double) val)),
-            new ParameterEditor<NeuronUpdateRule, Boolean>(Boolean.class, "addNoise",
-                    (r) -> ((LinearRule) r).getAddNoise(),
-                    (r, val) -> ((LinearRule) r).setAddNoise((boolean) val)));
+                    (r, val) -> ((LinearRule) r).setBias((double) val)));
 
 }

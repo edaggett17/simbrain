@@ -231,8 +231,7 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
         checkNeuronConsistency();
         startingPanel = neuronRulePanel;
         initializeLayout();
-        addListeners();
-        
+        addListeners();        
         setRandomizerPanelParent();
     }
     

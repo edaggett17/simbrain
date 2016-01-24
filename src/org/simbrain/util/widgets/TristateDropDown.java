@@ -25,7 +25,7 @@ import javax.swing.JComboBox;
 import org.simbrain.util.SimbrainConstants;
 
 /**
- * <b>TristateDropDown</b> ceates a combo box that has three states; True, false
+ * <b>TristateDropDown</b> creates a combo box that has three states; True, false
  * and null. It is used where it needs to be determined if multiple items have
  * the same value. (e.g. Multiple selected neurons.)
  */

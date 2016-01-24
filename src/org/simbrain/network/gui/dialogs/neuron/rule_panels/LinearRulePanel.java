@@ -66,7 +66,7 @@ public class LinearRulePanel extends AbstractNeuronRulePanel {
 
     @Override
     public void fillDefaultValues() {
-        // TODO Auto-generated method stub        
+        fillDefault();     
     }
 
     @Override

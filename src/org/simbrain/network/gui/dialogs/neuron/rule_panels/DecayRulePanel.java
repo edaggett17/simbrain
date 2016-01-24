@@ -18,10 +18,6 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
@@ -31,17 +27,12 @@ import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.DecayRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.NStateDropDown;
 
 /**
- * <b>DecayNeuronPanel</b>.
+ * <b>DecayNeuronPanel</b> 
  */
-public class DecayRulePanel extends AbstractNeuronRulePanel implements
-        ActionListener, PropertyChangeListener {
-
-    /** Relative absolute combo box. */
-    private TristateDropDown cbRelAbs = new TristateDropDown("Relative",
-            "Absolute");
+public class DecayRulePanel extends AbstractNeuronRulePanel  {
 
     /** Tabbed pane. */
     private JTabbedPane tabbedPane = new JTabbedPane();
@@ -57,41 +48,33 @@ public class DecayRulePanel extends AbstractNeuronRulePanel implements
      */
     public DecayRulePanel() {
         super();
-        cbRelAbs.addActionListener(this);
-        cbRelAbs.setActionCommand("relAbs");
 
         init(DecayRule.editorList);
         this.add(tabbedPane);
-        
-        mainTab.addItem("", cbRelAbs);
+        NStateDropDown dropdown =  ((NStateDropDown) componentMap.get("relAbs"));
+        dropdown.setItems(new String[] { "Relative", "Absolute" });
+        dropdown.addActionListener(e -> {
+            checkBounds(dropdown.getSelectedIndex());
+
+        });
+
+        mainTab.addItem("", dropdown);
         mainTab.addItem("Base line", componentMap.get("baseLine"));
         mainTab.addItem("Decay amount", componentMap.get("decayAmount"));
         mainTab.addItem("Decay fraction", componentMap.get("decayFraction"));
+        mainTab.addItem("Add noise", componentMap.get("addNoise"));
         tabbedPane.add(mainTab, "Main");
 
-        noisePanel = new NoiseGeneratorPanel();
-
+        noisePanel = new NoiseGeneratorPanel(); 
         tabbedPane.add(noisePanel, "Noise");
-        checkBounds();
-    }
-
-    /**
-     * Responds to actions performed.
-     *
-     * @param e Action event
-     */
-    public void actionPerformed(final ActionEvent e) {
-        if (e.getActionCommand().equals("relAbs")) {
-            checkBounds();
-            this.firePropertyChange("dummy", null, null);
-        }
+        checkBounds(dropdown.getSelectedIndex());
     }
 
     /**
      * Checks the relative absolute bounds.
      */
-    private void checkBounds() {
-        if (cbRelAbs.getSelectedIndex() == 0) {
+    private void checkBounds(int selectedIndex) {
+        if (selectedIndex == 0) {
             componentMap.get("decayAmount").setEnabled(false);
             componentMap.get("decayFraction").setEnabled(true);
         } else {
@@ -100,16 +83,9 @@ public class DecayRulePanel extends AbstractNeuronRulePanel implements
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     protected DecayRule getPrototypeRule() {
         return prototypeRule.deepCopy();
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent arg0) {
-        this.firePropertyChange("", null, null);
     }
 
     @Override
