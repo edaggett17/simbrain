@@ -18,11 +18,15 @@
  */
 package org.simbrain.network.neuron_update_rules;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import org.simbrain.network.core.Neuron;
+import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.core.SpikingNeuronUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
+import org.simbrain.util.ParameterEditor;
 import org.simbrain.util.randomizer.Randomizer;
 
 /**
@@ -111,5 +115,13 @@ public class SpikingThresholdRule extends SpikingNeuronUpdateRule implements
     public void setAddNoise(boolean noise) {
         this.addNoise = noise;
     }
+    
+    /**
+     * List of property editors for use by neuron property dialogs.
+     */
+    public static List<ParameterEditor> editorList = Arrays.asList(
+            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "threshold",
+                    (r) -> ((SpikingThresholdRule) r).getThreshold(),
+                    (r, val) -> ((SpikingThresholdRule) r).setThreshold((double) val)));
 
 }
