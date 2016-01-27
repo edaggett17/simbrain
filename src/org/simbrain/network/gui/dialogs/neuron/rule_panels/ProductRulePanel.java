@@ -18,20 +18,16 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import org.simbrain.network.core.Neuron;
-import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
-import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
-import org.simbrain.network.neuron_update_rules.LinearRule;
-import org.simbrain.network.neuron_update_rules.ProductRule;
-import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.Utils;
-import org.simbrain.util.widgets.TristateDropDown;
+import java.util.List;
 
 import javax.swing.JTabbedPane;
-import java.util.Collections;
-import java.util.List;
+
+import org.simbrain.network.core.Neuron;
+import org.simbrain.network.core.NeuronUpdateRule;
+import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
+import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
+import org.simbrain.network.neuron_update_rules.ProductRule;
+import org.simbrain.util.LabelledItemPanel;
 
 /**
  * <b>ProductNeuronPanel</b>.
@@ -44,15 +40,6 @@ public class ProductRulePanel extends AbstractNeuronRulePanel {
     /** Main tab. */
     private LabelledItemPanel mainTab = new LabelledItemPanel();
 
-    /** Random tab. */
-    private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
-
-    /** Add noise combo box. */
-    private TristateDropDown isUseWeights = new TristateDropDown();
-
-    /** Add noise combo box. */
-    private TristateDropDown isAddNoise = new TristateDropDown();
-
     /** A reference to the neuron update rule being edited. */
     private static final ProductRule prototypeRule = new ProductRule();
 
@@ -62,118 +49,31 @@ public class ProductRulePanel extends AbstractNeuronRulePanel {
      */
     public ProductRulePanel() {
         this.add(tabbedPane);
-        mainTab.addItem("Use weights", isUseWeights);
-        mainTab.addItem("Add noise", isAddNoise);
+        init(ProductRule.editorList);
+        mainTab.addItem("Use weight values", componentMap.get("useWeights"));
+        mainTab.addItem("Add noise", componentMap.get("addNoise"));
         tabbedPane.add(mainTab, "Main");
-        tabbedPane.add(randTab, "Noise");
+
+        noisePanel = new NoiseGeneratorPanel();
+        tabbedPane.add(noisePanel, "Noise");
     }
 
-    /**
-     * Populate fields with current data.
-     * @param ruleList
-     */
-    public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-
-        ProductRule neuronRef = (ProductRule) ruleList.get(0);
-
-        // (Below) Handle consistency of multiple selections
-
-        // Handle weights
-        if (!NetworkUtils.isConsistent(ruleList, ProductRule.class,
-                "getUseWeights")) {
-            isUseWeights.setNull();            
-        } else {
-            isUseWeights.setSelected(neuronRef.getUseWeights());
-        }
-        
-        // Handle Noise
-        if (!NetworkUtils.isConsistent(ruleList, ProductRule.class,
-                "getAddNoise")) {
-            isAddNoise.setNull();            
-        } else {
-            isAddNoise.setSelected(neuronRef.getAddNoise());
-        }
-
-        randTab.fillFieldValues(getRandomizers(ruleList));
-
+    @Override
+    protected NeuronUpdateRule getPrototypeRule() {
+        return prototypeRule.deepCopy();
     }
 
-    /**
-     * Fill field values to default values for linear neuron.
-     */
+    @Override
     public void fillDefaultValues() {
-        isUseWeights.setSelected(prototypeRule.getUseWeights());
-        isAddNoise.setSelected(prototypeRule.getAddNoise());
-        randTab.fillDefaultValues();
+        fillDefault();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void commitChanges(Neuron neuron) {
-
-        if (!(neuron.getUpdateRule() instanceof ProductRule)) {
-            neuron.setUpdateRule(prototypeRule.deepCopy());
-        }
-
-        writeValuesToRules(Collections.singletonList(neuron));
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void commitChanges(List<Neuron> neurons) {
-
-        if (isReplacingUpdateRules()) {
-            ProductRule neuronRef = prototypeRule.deepCopy();
-            for (Neuron n : neurons) {
-                n.setUpdateRule(neuronRef.deepCopy());
-            }
-        }
-
-        writeValuesToRules(neurons);
-
     }
 
     @Override
     protected void writeValuesToRules(List<Neuron> neurons) {
-        int numNeurons = neurons.size();
-
-        // Use weights
-        if (!isUseWeights.isNull()) {
-            boolean useWeights = isUseWeights.getSelectedIndex() == TristateDropDown
-                    .getTRUE();
-            for (int i = 0; i < numNeurons; i++) {
-                ((ProductRule) neurons.get(i).getUpdateRule())
-                        .setUseWeights(useWeights);
-            }
-
-        }
-        
-        // Add Noise?
-        if (!isAddNoise.isNull()) {
-            boolean addNoise = isAddNoise.getSelectedIndex() == TristateDropDown
-                    .getTRUE();
-            for (int i = 0; i < numNeurons; i++) {
-                ((ProductRule) neurons.get(i).getUpdateRule())
-                        .setAddNoise(addNoise);
-            }
-            if (addNoise) {
-                randTab.commitRandom(neurons);
-            }
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected NeuronUpdateRule getPrototypeRule() {
-        return prototypeRule.deepCopy();
     }
 
 }

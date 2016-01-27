@@ -102,9 +102,6 @@ public class SigmoidalRule extends AbstractSigmoidalRule {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double getDerivative(final double val) {
         double up = getUpperBound();

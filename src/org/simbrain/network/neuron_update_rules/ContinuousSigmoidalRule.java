@@ -314,10 +314,6 @@ public class ContinuousSigmoidalRule extends AbstractSigmoidalRule {
         return tau;
     }
 
-    /**
-     * @param timeConstant
-     *            the new time constant
-     */
     public void setTimeConstant(double timeConstant) {
         this.tau = timeConstant;
     }

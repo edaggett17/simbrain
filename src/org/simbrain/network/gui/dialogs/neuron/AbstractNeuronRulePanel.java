@@ -66,22 +66,22 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * Each neuron panel contains a static final subclass of NeuronUpdateRule
      * variable called a prototype rule. The specific subclass of
      * NeuronUpdateRule corresponds to the rule specified by the panel name.
-     * 
+     *
      * Used so that other classes can query specific properties of the rule the
      * panel edits. Also used internally to make deep copies.
      *
      * @return an instance of the neuron rule which corresponds to the panel.
      */
     protected abstract NeuronUpdateRule getPrototypeRule();
-    
+
     /** Noise panel if any, null otherwise. */
     protected NoiseGeneratorPanel noisePanel;
-    
+
     /**
      * Parameter editor object for the "add noise" parameter. Used in
      * consistency checks.
      */
-    ParameterEditor<NeuronUpdateRule, Boolean> addNoiseEditor = new ParameterEditor<NeuronUpdateRule, Boolean>(
+    private ParameterEditor<NeuronUpdateRule, Boolean> addNoiseEditor = new ParameterEditor<NeuronUpdateRule, Boolean>(
             Boolean.class, "addNoise",
             (r) -> ((NoisyUpdateRule) r).getAddNoise(),
             (r, val) -> ((NoisyUpdateRule) r).setAddNoise((boolean) val));
@@ -96,12 +96,12 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     /**
      * A flag used to indicate whether this panel will be replacing neuron
      * update rules or simply writing to them.
-     * 
+     *
      * If true, create new update rules If false, edit existing update rules
-     * 
+     *
      * Set based on correspondence between neuron rule and the current rule
      * panel.
-     * 
+     *
      * Optimization to prevent multiple "instanceof" checks.
      */
     private boolean replaceUpdateRules = true;
@@ -112,17 +112,27 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     public AbstractNeuronRulePanel() {
     }
 
+    // TODO: Beginning of an alternative way of doing this.
+    //protected Map<JComponent, ParameterEditor> componentMap2 = new HashMap<JComponent, ParameterEditor>();
+
     /**
      * Initialize the component map which associated with String keys with
      * property editors, which contain the getters used in
      * {@link #fillFieldValues(List)} and the setters used in
-     * {@link #commitChanges(List)}
+     * {@link #commitChanges(List)}.
      *
      * @param editorList list of editors.
      */
     protected void init(List<ParameterEditor> editorList) {
 
         this.editorList = editorList;
+
+        // TODO: Construct the edtior list here based on annotations?
+        //for (ParameterEditor<NeuronUpdateRule, ?> editor : editorList) {
+        //    if (editor.getType() == Double.class) {
+        //        componentMap2.put(new JTextField(), editor);
+        //    }
+        //}
 
         // Initialize the component map
         for (ParameterEditor<NeuronUpdateRule, ?> editor : editorList) {
@@ -327,7 +337,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
 
     /**
      * Called to commit changes to a single neuron.
-     * 
+     *
      * Usually this is a template neuron intended to be copied for the purpose
      * of creating many new neurons. Using this method to commit changes to many
      * neurons is not recommended. Instead pass a list of the neurons to be
@@ -396,7 +406,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
-     * Check if this panel represents a neuron associated with a noise generator.
+     * Check if this panel represents a neuron associated with a noise
+     * generator.
      *
      * @return true if the panel represents a noisy update rule, false otherwise
      */
