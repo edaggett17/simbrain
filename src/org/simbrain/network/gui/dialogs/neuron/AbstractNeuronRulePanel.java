@@ -418,4 +418,32 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         return false;
     }
 
+   
+    
+    List<DoubleGetter> doubleGetters = new ArrayList<DoubleGetter>();
+    List<DoubleSetter> doubleSetters = new ArrayList<DoubleSetter>();
+
+    interface DoubleGetter {
+        public double interfaceMethod();
+    }
+    interface DoubleSetter {
+        public void interfaceMethod(double val);
+    }
+
+    // registerDoubleEditor
+    // registerBooleanEditor
+    // registerNoisePanel > return useNoise textField + panel
+    // registerComboBoxEditor
+    
+    // TODO: Generify.  Or pass in a string description
+
+    // Associates a Text field with a double field.   
+    // You provide the getter and setter, it gives you the text field
+    //   then reading and writing data from the neurons, and deailng with  
+    //   inconsistencies, is handled automatically.
+    protected JComponent registerDoublePropery(DoubleGetter  getter, DoubleSetter setter) {
+       doubleGetters.add(getter); // TODO: Load a hashmap
+       doubleSetters.add(setter);
+       return new JTextField();
+    }
 }

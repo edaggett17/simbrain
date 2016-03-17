@@ -265,7 +265,8 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
     public void setClipped(boolean clipping) {
         this.clipping = clipping;
     }
-    
+
+    // TODO: This can now be removed.  Put this on the panel side
     /**
      * List of property editors for use by neuron property dialogs.
      */

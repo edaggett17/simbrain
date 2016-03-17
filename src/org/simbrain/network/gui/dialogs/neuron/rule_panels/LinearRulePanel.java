@@ -48,17 +48,30 @@ public class LinearRulePanel extends AbstractNeuronRulePanel {
      */
     public LinearRulePanel() {
         this.add(tabbedPane);
+        
+        // accumulators, javafx, javabeans, pojo.  Maybe can use that.
+        // helper methods somewhere in there that will do all that.  
+
+      // JTextField slopeField = registerDoublePropery(prototypeRule::getSlope, prototypeRule::setSlope) {
+      // mainTab.addItem("Slope", slopeField);
+      // JTextField biasField = getBooleanProperty(prototypeRule::getBias, prototypeRule::setBias) {
+      // mainTab.addItem("Bias", biasField);
+      // JTextField noiseField = getNoisePanel(prototypeRule::getSlope, prototypeRule::getSlope) {
+      // mainTab.addItem("Add noise", noiseField);
 
         init(LinearRule.editorList);
         mainTab.addItem("Slope", componentMap.get("slope"));
         mainTab.addItem("Bias", componentMap.get("bias"));
         mainTab.addItem("Add noise", componentMap.get("addNoise"));
         tabbedPane.add(mainTab, "Main");
-
+        
+        // below is superclass. Maybe call superclass method to make that more clear?
         noisePanel = new NoiseGeneratorPanel();
         tabbedPane.add(noisePanel, "Noise");
+       
     }
-    
+
+
     @Override
     protected NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
