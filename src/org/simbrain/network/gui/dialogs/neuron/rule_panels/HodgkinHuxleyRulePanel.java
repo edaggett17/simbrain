@@ -18,34 +18,38 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.List;
-
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
+import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.HodgkinHuxleyRule;
 import org.simbrain.util.LabelledItemPanel;
+import org.simbrain.util.widgets.TristateDropDown;
 
 /**
- * <b>Hodgkin-Huxley Rule Panel</b> TODO: No Implementation.
+ * <b>Hodgkin-Huxley Rule Panel</b> edits an H-H neurons.
  */
 public class HodgkinHuxleyRulePanel extends AbstractNeuronRulePanel {
 
-    private JTextField perNaChannels = new JTextField();
+    // Todo
+    private JTextField perNaChannels;
 
-    private JTextField perKChannels = new JTextField();
+    private JTextField perKChannels;
 
-    private JTextField getEna = new JTextField();
+    private JTextField getEna;
 
-    private JTextField getEk = new JTextField();
+    private JTextField getEk;
 
-    // private JTextField ENA = new JTextField();
-    //
-    // private JTextField Ek = new JTextField();
+    /** A reference to the neuron update rule being edited. */
+    private static final HodgkinHuxleyRule prototypeRule = new HodgkinHuxleyRule();
 
-    /** Main tab for neuron prefernces. */
+    /** Tabbed pane. */
+    private JTabbedPane tabbedPane = new JTabbedPane();
+
+    /** Main tab for neuron preferences. */
     private LabelledItemPanel mainTab = new LabelledItemPanel();
 
     /**
@@ -53,29 +57,34 @@ public class HodgkinHuxleyRulePanel extends AbstractNeuronRulePanel {
      */
     public HodgkinHuxleyRulePanel() {
         super();
-        this.add(mainTab);
+        this.add(tabbedPane);
+        perNaChannels = registerTextField(Float.class,
+                (r) -> ((HodgkinHuxleyRule) r).getPerNaChannels(),
+                (r, val) -> ((HodgkinHuxleyRule) r)
+                        .setPerNaChannels((float) val));
+        perKChannels = registerTextField(Float.class,
+                (r) -> ((HodgkinHuxleyRule) r).getPerKChannels(),
+                (r, val) -> ((HodgkinHuxleyRule) r)
+                        .setPerKChannels((float) val));
+        getEna = registerTextField(Float.class,
+                (r) -> ((HodgkinHuxleyRule) r).getEna(),
+                (r, val) -> ((HodgkinHuxleyRule) r).setEna((float) val));
+        getEk = registerTextField(Float.class,
+                (r) -> ((HodgkinHuxleyRule) r).getEk(),
+                (r, val) -> ((HodgkinHuxleyRule) r).setEk((float) val));
+        TristateDropDown addNoise = registerTriStateDropDown(
+                (r) -> ((HodgkinHuxleyRule) r).getAddNoise(),
+                (r, val) -> ((HodgkinHuxleyRule) r).setAddNoise((Boolean) val));
+
         mainTab.addItem("Sodium Channels", perNaChannels);
         mainTab.addItem("Potassium Channels", perKChannels);
-        mainTab.addItem("Equilibrium Potential", getEna);
-        mainTab.addItem("Equilibrium Potential", getEk);
-    }
+        mainTab.addItem("Sodium Equilibrium", getEna);
+        mainTab.addItem("Potassium Equilibrium", getEk);
+        mainTab.addItem("Add noise", addNoise);
+        tabbedPane.add(mainTab, "Main");
 
-    /**
-     * Populate fields with current data.
-     */
-    @Override
-    public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-        HodgkinHuxleyRule neuronRef = (HodgkinHuxleyRule) ruleList.get(0);
-
-        perNaChannels.setText(Double.toString(neuronRef.getPerNaChannels()));
-        perKChannels.setText(Double.toString(neuronRef.getPerKChannels()));
-        // ENA.setText(Double.toString(neuronRef.getENA()));
-
-        // //Handle consistency of multiple selections
-        // if (!NetworkUtils.isConsistent(ruleList, HodgkinHuxleyNeuron.class,
-        // "getTemp")) {
-        // tfTemp.setText(NULL_STRING);
-        // }
+        noisePanel = new NoiseGeneratorPanel();
+        tabbedPane.add(noisePanel, "Noise");
 
     }
 
@@ -83,40 +92,13 @@ public class HodgkinHuxleyRulePanel extends AbstractNeuronRulePanel {
      * Fill field values to default values for binary neuron.
      */
     public void fillDefaultValues() {
-        // HodgkinHuxleyRule neuronRef = new HodgkinHuxleyRule();
-        // tfTemp.setText(Double.toString(neuronRef.getTemp()));
-
+        System.out.println(prototypeRule.getPerKChannels());
+        fillDefault();
     }
 
-    // /**
-    // * Called externally when the dialog is closed, to commit any changes
-    // made.
-    // */
-    // public void commitChanges() {
-    // for (int i = 0; i < ruleList.size(); i++) {
-    // HodgkinHuxleyRule neuronRef = (HodgkinHuxleyRule) ruleList.get(i);
-    //
-    // // if (!tfTemp.getText().equals(NULL_STRING)) {
-    // // neuronRef.setTemp(Double.parseDouble(tfTemp.getText()));
-    // // }
-    //
-    // }
-    // }
-
-    @Override
-    public void commitChanges(List<Neuron> neuron) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected NeuronUpdateRule getPrototypeRule() {
-        // TODO Auto-generated method stub
-        return null;
+        return prototypeRule.deepCopy();
     }
-
 
 }

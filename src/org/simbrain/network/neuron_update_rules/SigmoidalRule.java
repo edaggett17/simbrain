@@ -24,10 +24,11 @@ import org.simbrain.util.math.SquashingFunction;
 import org.simbrain.util.randomizer.Randomizer;
 
 /**
- * <b>SigmoidalRule</b> provides various implementations of a standard
- * sigmoidal neuron.
+ * <b>SigmoidalRule</b> provides various implementations of a standard sigmoidal
+ * neuron.
  *
- * TODO: Possibly rename to "DiscreteSigmoidalRule"
+ * TODO: Possibly rename to "DiscreteSigmoidalRule" (after xstream is improved
+ * to allow better backwards compat)
  *
  * @author Zach Tosi
  * @author Jeff Yoshimi

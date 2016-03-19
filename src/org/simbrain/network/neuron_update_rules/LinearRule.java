@@ -54,7 +54,7 @@ public class LinearRule extends NeuronUpdateRule implements BiasedUpdateRule,
     /** Bias. */
     public double bias = 0;
 
-    /** Noise dialog. */
+    /** Noise generator. */
     private Randomizer noiseGenerator = new Randomizer();
 
     /** Add noise to the neuron. */

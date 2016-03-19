@@ -29,7 +29,7 @@ import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.widgets.TristateDropDown;
 
 /**
- * <b>ProductNeuronPanel</b>.
+ * <b>ProductNeuronPanel</b> edits a product rule.
  */
 public class ProductRulePanel extends AbstractNeuronRulePanel {
 
@@ -48,11 +48,11 @@ public class ProductRulePanel extends AbstractNeuronRulePanel {
      */
     public ProductRulePanel() {
         this.add(tabbedPane);
-        TristateDropDown useWeights = (TristateDropDown) registerProperty(
-                Boolean.class, (r) -> ((ProductRule) r).getUseWeights(),
+        TristateDropDown useWeights = registerTriStateDropDown(
+                (r) -> ((ProductRule) r).getUseWeights(),
                 (r, val) -> ((ProductRule) r).setUseWeights((boolean) val));
-        TristateDropDown addNoise = (TristateDropDown) registerProperty(
-                Boolean.class, (r) -> ((LinearRule) r).getAddNoise(),
+        TristateDropDown addNoise = registerTriStateDropDown(
+                (r) -> ((LinearRule) r).getAddNoise(),
                 (r, val) -> ((LinearRule) r).setAddNoise((Boolean) val));
         mainTab.addItem("Use weight values", useWeights);
         mainTab.addItem("Add noise", addNoise);

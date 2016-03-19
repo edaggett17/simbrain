@@ -467,5 +467,22 @@ public enum SquashingFunction {
         double a = (Math.PI * slope) / diff;
         return a * (diff / Math.PI) * (1 / (1 + Math.pow(a * val, 2)));
     }
+    
+    /**
+     * Helper method to get the list of squashing function names as an array
+     * Used to populate combo box.
+     *
+     * @return list of squashing function names, as an array.
+     */
+    public static String[] names() {
+        SquashingFunction[] states = values();
+        String[] names = new String[states.length];
+
+        for (int i = 0; i < states.length; i++) {
+            names[i] = states[i].name();
+        }
+
+        return names;
+    }
 
 }

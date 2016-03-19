@@ -47,21 +47,21 @@ public class BinaryRulePanel extends AbstractNeuronRulePanel {
         super();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JTextField biasField = (JTextField) registerProperty(Double.class,
+        JTextField biasField = registerTextField(
                 (r) -> ((BinaryRule) r).getBias(),
                 (r, val) -> ((BinaryRule) r).setBias((double) val));
-        JTextField lowerBoundField = (JTextField) registerProperty(Double.class,
+        JTextField lowerBoundField = registerTextField(
                 (r) -> ((BinaryRule) r).getLowerBound(),
                 (r, val) -> ((BinaryRule) r).setLowerBound((double) val));
 
-        JTextField upperBoundField = (JTextField) registerProperty(Double.class,
+        JTextField upperBoundField = registerTextField(
                 (r) -> ((BinaryRule) r).getUpperBound(),
                 (r, val) -> ((BinaryRule) r).setUpperBound((double) val));
 
-        JTextField thresholdField = (JTextField) registerProperty(Double.class,
+        JTextField thresholdField = registerTextField(
                 (r) -> ((BinaryRule) r).getThreshold(),
                 (r, val) -> ((BinaryRule) r).setThreshold((double) val));
-         
+
         mainTab.addItem("Threshold", thresholdField);
         mainTab.addItem("On Value", upperBoundField);
         mainTab.addItem("Off Value", lowerBoundField);
@@ -70,7 +70,7 @@ public class BinaryRulePanel extends AbstractNeuronRulePanel {
         this.add(mainTab);
     }
 
-   // TODO: Remove when done
+    // TODO: Remove when done
     public void fillDefaultValues() {
         fillDefault();
     }

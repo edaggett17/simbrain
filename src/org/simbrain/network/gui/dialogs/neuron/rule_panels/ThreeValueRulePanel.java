@@ -63,24 +63,24 @@ public class ThreeValueRulePanel extends AbstractNeuronRulePanel {
     public ThreeValueRulePanel() {
         super();
         this.add(mainTab);
-        tfBias = (JTextField) registerProperty(Double.class,
+        tfBias = registerTextField(
                 (r) -> ((ThreeValueRule) r).getBias(),
                 (r, val) -> ((ThreeValueRule) r).setBias((double) val));
-        tfLowerThreshold = (JTextField) registerProperty(Double.class,
+        tfLowerThreshold = registerTextField(
                 (r) -> ((ThreeValueRule) r).getLowerThreshold(),
                 (r, val) -> ((ThreeValueRule) r)
                         .setLowerThreshold((double) val));
-        tfUpperThreshold = (JTextField) registerProperty(Double.class,
+        tfUpperThreshold = registerTextField(
                 (r) -> ((ThreeValueRule) r).getUpperThreshold(),
                 (r, val) -> ((ThreeValueRule) r)
                         .setUpperThreshold((double) val));
-        tfLowerValue = (JTextField) registerProperty(Double.class,
+        tfLowerValue = registerTextField(
                 (r) -> ((ThreeValueRule) r).getLowerValue(),
                 (r, val) -> ((ThreeValueRule) r).setLowerValue((double) val));
-        tfMiddleValue = (JTextField) registerProperty(Double.class,
+        tfMiddleValue = registerTextField(
                 (r) -> ((ThreeValueRule) r).getMiddleValue(),
                 (r, val) -> ((ThreeValueRule) r).setMiddleValue((double) val));
-        tfUpperValue = (JTextField) registerProperty(Double.class,
+        tfUpperValue = registerTextField(
                 (r) -> ((ThreeValueRule) r).getUpperValue(),
                 (r, val) -> ((ThreeValueRule) r).setUpperValue((double) val));
         mainTab.addItem("Bias", tfBias);

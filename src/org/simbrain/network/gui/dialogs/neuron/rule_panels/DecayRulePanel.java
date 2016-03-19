@@ -18,12 +18,9 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.List;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.Neuron;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.DecayRule;
@@ -34,7 +31,7 @@ import org.simbrain.util.widgets.TristateDropDown;
 /**
  * <b>DecayNeuronPanel</b> represents a decay neuron.
  */
-public class DecayRulePanel extends AbstractNeuronRulePanel  {
+public class DecayRulePanel extends AbstractNeuronRulePanel {
 
     /** Tabbed pane. */
     private JTabbedPane tabbedPane = new JTabbedPane();
@@ -47,10 +44,10 @@ public class DecayRulePanel extends AbstractNeuronRulePanel  {
 
     /** Decay fraction text field. */
     JTextField decayFraction;
-    
+
     /** Decay amount text field. */
     JTextField decayAmount;
-    
+
     /**
      * This method is the default constructor.
      */
@@ -59,19 +56,18 @@ public class DecayRulePanel extends AbstractNeuronRulePanel  {
 
         this.add(tabbedPane);
 
-        NStateDropDown dropdown = ((NStateDropDown) registerProperty(
-                Integer.class, (r) -> ((DecayRule) r).getRelAbs(),
-                (r, val) -> ((DecayRule) r).setRelAbs((int) val)));
-        JTextField baseLine = (JTextField) registerProperty(Double.class,
+        NStateDropDown dropdown = registerNStateDropDown(
+                (r) -> ((DecayRule) r).getRelAbs(),
+                (r, val) -> ((DecayRule) r).setRelAbs((int) val));
+        JTextField baseLine = registerTextField(
                 (r) -> ((DecayRule) r).getBaseLine(),
                 (r, val) -> ((DecayRule) r).setBaseLine((double) val));
-        decayAmount = (JTextField) registerProperty(Double.class,
-                (r) -> ((DecayRule) r).getDecayAmount(),
+        decayAmount = registerTextField((r) -> ((DecayRule) r).getDecayAmount(),
                 (r, val) -> ((DecayRule) r).setDecayAmount((double) val));
-        decayFraction = (JTextField) registerProperty(Double.class,
+        decayFraction = registerTextField(
                 (r) -> ((DecayRule) r).getDecayFraction(),
                 (r, val) -> ((DecayRule) r).setDecayFraction((double) val));
-        TristateDropDown addNoise = (TristateDropDown) registerProperty(Boolean.class,
+        TristateDropDown addNoise = registerTriStateDropDown(
                 (r) -> ((DecayRule) r).getAddNoise(),
                 (r, val) -> ((DecayRule) r).setAddNoise((Boolean) val));
 
@@ -88,7 +84,7 @@ public class DecayRulePanel extends AbstractNeuronRulePanel  {
 
         tabbedPane.add(mainTab, "Main");
 
-        noisePanel = new NoiseGeneratorPanel(); 
+        noisePanel = new NoiseGeneratorPanel();
         tabbedPane.add(noisePanel, "Noise");
         checkBounds(dropdown.getSelectedIndex());
     }

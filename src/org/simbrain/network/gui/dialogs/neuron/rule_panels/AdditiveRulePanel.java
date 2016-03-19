@@ -32,12 +32,6 @@ import org.simbrain.util.widgets.TristateDropDown;
  */
 public class AdditiveRulePanel extends AbstractNeuronRulePanel {
 
-    /** Lambda field. */
-    private JTextField tfLambda = new JTextField();
-
-    /** Resistance field. */
-    private JTextField tfResistance = new JTextField();
-
     /** Tabbed pane. */
     private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -59,6 +53,16 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
     public AdditiveRulePanel() {
         super();
         this.add(tabbedPane);
+        JTextField tfLambda = registerTextField(
+                (r) -> ((AdditiveRule) r).getLambda(),
+                (r, val) -> ((AdditiveRule) r).setLambda((double) val));
+        JTextField tfResistance = registerTextField(
+                (r) -> ((AdditiveRule) r).getResistance(),
+                (r, val) -> ((AdditiveRule) r).setResistance((double) val));
+        TristateDropDown isAddNoise = registerTriStateDropDown(
+                (r) -> ((AdditiveRule) r).getAddNoise(),
+                (r, val) -> ((AdditiveRule) r).setAddNoise((Boolean) val));
+
         mainTab.addItem("Lambda", tfLambda);
         mainTab.addItem("Resistance", tfResistance);
         mainTab.addItem("Add noise", isAddNoise);
@@ -70,10 +74,7 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
      * Fill field values to default values for additive neuron.
      */
     public void fillDefaultValues() {
-        tfLambda.setText(Double.toString(prototypeRule.getLambda()));
-        tfResistance.setText(Double.toString(prototypeRule.getResistance()));
-        // isClipping.setSelected(prototypeRule.getClipping());
-        isAddNoise.setSelected(prototypeRule.getAddNoise());
+        fillDefault();
         randTab.fillDefaultValues();
     }
 

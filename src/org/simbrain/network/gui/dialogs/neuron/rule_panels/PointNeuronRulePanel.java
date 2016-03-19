@@ -18,27 +18,22 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.PointNeuronRule;
 import org.simbrain.network.neuron_update_rules.PointNeuronRule.OutputFunction;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.SimbrainConstants;
-import org.simbrain.util.Utils;
 
 /**
- * <b>PointNeuronPanel</b> TODO: Check this class for consistency. Excitatory
+ * <b>PointNeuronPanel</b> TODO:Excitatory
  * normalization was removed because it was both unused and had no accessor
  * methods in PointNeuronRule.
+ * 
+ * TODO: Not yet wired up in the new style (since it's not visible in the GUI right now)
  */
 public class PointNeuronRulePanel extends AbstractNeuronRulePanel {
 

@@ -20,12 +20,10 @@ package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
@@ -75,28 +73,28 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel
     public NakaRushtonRulePanel() {
         super();
 
-        tfSteepness = (JTextField) registerProperty(Double.class,
+        tfSteepness = registerTextField(
                 (r) -> ((NakaRushtonRule) r).getSteepness(),
                 (r, val) -> ((NakaRushtonRule) r).setSteepness((double) val));
-        tfSemiSaturation = (JTextField) registerProperty(Double.class,
+        tfSemiSaturation = registerTextField(
                 (r) -> ((NakaRushtonRule) r).getSteepness(),
                 (r, val) -> ((NakaRushtonRule) r).setSteepness((double) val));
-        tfTimeConstant = (JTextField) registerProperty(Double.class,
+        tfTimeConstant = registerTextField(
                 (r) -> ((NakaRushtonRule) r).getTimeConstant(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setTimeConstant((double) val));
-        tsUseAdaptation = (TristateDropDown) registerProperty(
-                Boolean.class, (r) -> ((NakaRushtonRule) r).getUseAdaptation(),
+        tsUseAdaptation = registerTriStateDropDown(
+                (r) -> ((NakaRushtonRule) r).getUseAdaptation(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setUseAdaptation((Boolean) val));
-        tsNoise = (TristateDropDown) registerProperty(
-                Boolean.class, (r) -> ((NakaRushtonRule) r).getAddNoise(),
+        tsNoise = registerTriStateDropDown(
+                (r) -> ((NakaRushtonRule) r).getAddNoise(),
                 (r, val) -> ((NakaRushtonRule) r).setAddNoise((Boolean) val));
-        tfAdaptationParam = (JTextField) registerProperty(Double.class,
+        tfAdaptationParam = registerTextField(
                 (r) -> ((NakaRushtonRule) r).getAdaptationParameter(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setAdaptationParameter((double) val));
-        tfAdaptationTime = (JTextField) registerProperty(Double.class,
+        tfAdaptationTime = registerTextField(
                 (r) -> ((NakaRushtonRule) r).getAdaptationTimeConstant(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setAdaptationTimeConstant((double) val));

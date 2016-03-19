@@ -48,15 +48,14 @@ public class SpikingThresholdRulePanel extends AbstractNeuronRulePanel {
      */
     public SpikingThresholdRulePanel() {
         super();
-        JTextField thresholdField = (JTextField) registerProperty(Double.class,
+        JTextField thresholdField = registerTextField(
                 (r) -> ((SpikingThresholdRule) r).getThreshold(),
                 (r, val) -> ((SpikingThresholdRule) r)
                         .setThreshold((double) val));
-        TristateDropDown addNoise = (TristateDropDown) registerProperty(
-                Boolean.class, (r) -> ((SpikingThresholdRule) r).getAddNoise(),
+        TristateDropDown addNoise = registerTriStateDropDown(
+                (r) -> ((SpikingThresholdRule) r).getAddNoise(),
                 (r, val) -> ((SpikingThresholdRule) r)
                         .setAddNoise((Boolean) val));
-
         this.add(tabbedPane);
         mainTab.addItem("Threshold", thresholdField);
         mainTab.addItem("Add noise", addNoise);

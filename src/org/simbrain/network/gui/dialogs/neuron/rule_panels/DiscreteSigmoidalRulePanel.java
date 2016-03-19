@@ -26,70 +26,61 @@ import org.simbrain.network.neuron_update_rules.SigmoidalRule;
 import org.simbrain.util.math.SquashingFunction;
 
 /**
- * <b>SigmoidalRulePanel</b>. A rule panel for editing neurons which use
- * a discrete sigmoid squashing function as their update rule.
- * 
- * TODO: Discuss renaming to "DiscreteSigmoidalRulePanel".
+ * <b>SigmoidalRulePanel</b>. A rule panel for editing neurons which use a
+ * discrete sigmoid squashing function as their update rule.
  * 
  * @author Zach Tosi
  * @author Jeff Yoshimi
  */
 @SuppressWarnings("serial")
-public class SigmoidalRulePanel extends AbstractSigmoidalRulePanel {
+public class DiscreteSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
 
     /** A reference to the neuron rule being edited. */
-    private static SigmoidalRule prototypeRule;
+    private static SigmoidalRule prototypeRule = new SigmoidalRule();
 
-    /**
-     * Creates a fully functional discrete sigmoidal rule panel.
-     * 
-     * @return
-     */
-    public static SigmoidalRulePanel createSigmoidalRulePanel() {
-        prototypeRule = new SigmoidalRule();
-        final SigmoidalRulePanel dsrp = new SigmoidalRulePanel();
-        dsrp.cbImplementation.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SquashingFunction currentFunc = (SquashingFunction)
-                    dsrp.cbImplementation.getSelectedItem();
-                if (!currentFunc.equals(dsrp.initialSfunction)) {
-                    prototypeRule.setSquashFunctionType(currentFunc);
-                    dsrp.fillDefaultValues();
-                }
-                dsrp.repaint();
-            }
-        });
-        dsrp.fillDefaultValues();
-        return dsrp;
-    }
+//    /**
+//     * Creates a fully functional discrete sigmoidal rule panel.
+//     */
+//    public static DiscreteSigmoidalRulePanel createSigmoidalRulePanel() {
+//        prototypeRule = new SigmoidalRule();
+//        final DiscreteSigmoidalRulePanel dsrp = new DiscreteSigmoidalRulePanel();
+//        dsrp.cbImplementation.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                SquashingFunction currentFunc = (SquashingFunction) dsrp.cbImplementation
+//                        .getSelectedItem();
+//                if (!currentFunc.equals(dsrp.initialSfunction)) {
+//                    prototypeRule.setSquashFunctionType(currentFunc);
+//                    dsrp.fillDefaultValues();
+//                }
+//                dsrp.repaint();
+//            }
+//        });
+//        dsrp.fillDefaultValues();
+//        return dsrp;
+//    }
 
     /**
      * Creates the discrete sigmoidal rule panel, but does not initialize the
      * listeners responsible for altering the panel in response to the selected
      * squashing function.
      */
-    private SigmoidalRulePanel() {
+    public DiscreteSigmoidalRulePanel() {
         super();
         this.add(tabbedPane);
-
         mainTab.addItem("Implementation", cbImplementation);
         mainTab.addItem("Bias", tfBias);
         mainTab.addItem("Slope", tfSlope);
         mainTab.addItem("Add Noise", isAddNoise);
         tabbedPane.add(mainTab, "Main");
-        tabbedPane.add(randTab, "Noise");
+        tabbedPane.add(noisePanel, "Noise");
     }
 
     /**
      * Fill field values to default values for sigmoidal neuron.
      */
     public void fillDefaultValues() {
-        cbImplementation.setSelectedItem(prototypeRule.getSquashFunctionType());
-        tfBias.setText(Double.toString(prototypeRule.getBias()));
-        tfSlope.setText(Double.toString(prototypeRule.getSlope()));
-        isAddNoise.setSelected(prototypeRule.getAddNoise());
-        randTab.fillDefaultValues();
+        this.fillDefault();
     }
 
     /**

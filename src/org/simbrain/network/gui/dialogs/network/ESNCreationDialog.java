@@ -57,7 +57,7 @@ import org.simbrain.network.gui.NetworkPanel;
 import org.simbrain.network.gui.dialogs.connect.CondensedConnectionPanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.AbstractSigmoidalRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.ContinuousSigmoidalRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.rule_panels.SigmoidalRulePanel;
+import org.simbrain.network.gui.dialogs.neuron.rule_panels.DiscreteSigmoidalRulePanel;
 import org.simbrain.network.subnetworks.EchoStateNetwork;
 import org.simbrain.resource.ResourceManager;
 import org.simbrain.util.StandardDialog;
@@ -726,21 +726,22 @@ public class ESNCreationDialog extends StandardDialog {
          *
          */
         public void resetLabelColors() {
-            JComboBox<SquashingFunction> impCb = rulePanel
-                    .getCbImplementation();
-            SquashingFunction func = (SquashingFunction) impCb
-                    .getSelectedItem();
-            typeLabel.setText(func.toString());
-            // TODO: Cleanup/generalize
-            if (func == SquashingFunction.TANH) {
-                typeLabel.setForeground(TANH_COLOR);
-            } else if (func == SquashingFunction.LOGISTIC) {
-                typeLabel.setForeground(LOG_COLOR);
-            } else {
-                // TODO: Better assertion. Check ALL Squashing functions.
-                assert func == SquashingFunction.ARCTAN : "No such squashing function";
-                typeLabel.setForeground(ARCT_COLOR);
-            }
+            //TODO: Reimplement
+//            JComboBox<SquashingFunction> impCb = rulePanel
+//                    .getCbImplementation();
+//            SquashingFunction func = (SquashingFunction) impCb
+//                    .getSelectedItem();
+//            typeLabel.setText(func.toString());
+//            // TODO: Cleanup/generalize
+//            if (func == SquashingFunction.TANH) {
+//                typeLabel.setForeground(TANH_COLOR);
+//            } else if (func == SquashingFunction.LOGISTIC) {
+//                typeLabel.setForeground(LOG_COLOR);
+//            } else {
+//                // TODO: Better assertion. Check ALL Squashing functions.
+//                assert func == SquashingFunction.ARCTAN : "No such squashing function";
+//                typeLabel.setForeground(ARCT_COLOR);
+//            }
         }
 
         /**
@@ -770,27 +771,28 @@ public class ESNCreationDialog extends StandardDialog {
          * @param timeType
          */
         public void setTimeType(TimeType timeType) {
-            if (timeType == TimeType.DISCRETE) {
-                rulePanel = SigmoidalRulePanel.createSigmoidalRulePanel();
-            } else {
-                rulePanel = ContinuousSigmoidalRulePanel
-                        .createContinuousSigmoidalRulePanel();
-            }
-            // Update the Type Label based on the selection in the combobox
-            final JComboBox<SquashingFunction> impCb = rulePanel
-                    .getCbImplementation();
-            impCb.setSelectedItem(DEFAULT_INITIAL_FUNCTION);
-            impCb.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    SquashingFunction func = (SquashingFunction) impCb
-                            .getSelectedItem();
-                    typeLabel.setText(func.toString());
-                    // TODO: Cleanup/generalize
-                    resetLabelColors();
-                    repaint();
-                }
-            });
+            //TODO: Reimplement
+//            if (timeType == TimeType.DISCRETE) {
+//                rulePanel = DiscreteSigmoidalRulePanel.createSigmoidalRulePanel();
+//            } else {
+//                rulePanel = ContinuousSigmoidalRulePanel
+//                        .createContinuousSigmoidalRulePanel();
+//            }
+//            // Update the Type Label based on the selection in the combobox
+//            final JComboBox<SquashingFunction> impCb = rulePanel
+//                    .getCbImplementation();
+//            impCb.setSelectedItem(DEFAULT_INITIAL_FUNCTION);
+//            impCb.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    SquashingFunction func = (SquashingFunction) impCb
+//                            .getSelectedItem();
+//                    typeLabel.setText(func.toString());
+//                    // TODO: Cleanup/generalize
+//                    resetLabelColors();
+//                    repaint();
+//                }
+//            });
             removeAll();
             init();
             revalidate();

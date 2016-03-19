@@ -18,22 +18,14 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.AbstractSigmoidalRule;
-import org.simbrain.network.neuron_update_rules.DecayRule;
-import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.math.SquashingFunction;
-import org.simbrain.util.randomizer.Randomizer;
 import org.simbrain.util.widgets.NStateDropDown;
 import org.simbrain.util.widgets.TristateDropDown;
 
@@ -44,63 +36,57 @@ import org.simbrain.util.widgets.TristateDropDown;
  * @author Zach Tosi
  * @author Jeff Yoshimi
  */
-public abstract class AbstractSigmoidalRulePanel extends
-    AbstractNeuronRulePanel {
+public abstract class AbstractSigmoidalRulePanel
+        extends AbstractNeuronRulePanel {
 
     /** Implementation combo box. */
-    protected JComboBox<SquashingFunction> cbImplementation =
-        new JComboBox<SquashingFunction>(new SquashingFunction[] {
-            SquashingFunction.ARCTAN, SquashingFunction.LOGISTIC,
-            SquashingFunction.TANH, });
+    protected NStateDropDown cbImplementation;
 
     /** Bias field. */
-    protected JTextField tfBias = new JTextField();
+    protected JTextField tfBias;
 
     /** Slope field. */
-    protected JTextField tfSlope = new JTextField();
+    protected JTextField tfSlope;
 
     /** Tabbed pane. */
     protected JTabbedPane tabbedPane = new JTabbedPane();
 
     /** Main tab. */
     protected LabelledItemPanel mainTab = new LabelledItemPanel();
-
-    /** Random tab. */
-    protected NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
-
-    /** Add noise combo box. */
-    protected TristateDropDown isAddNoise = new TristateDropDown();
-
-    /**
-     * The initially selected squashing function (or NULL_STRING), used for
-     * determining how to fill field values based on the selected
-     * implementation.
-     */
-    protected SquashingFunction initialSfunction;
-
-    /**
-     * @return the combo box responsible for setting the specific squashing
-     * function
-     */
-    public JComboBox<SquashingFunction> getCbImplementation() {
-        return cbImplementation;
-    }
     
+    /** Add noise combo box. */
+    protected TristateDropDown isAddNoise;
+
+    /**
+     * Construct the abstract panel.
+     */
     protected AbstractSigmoidalRulePanel() {
-        //TODO: Figure out combo-boxes
-        //  Maybe pull isAddNoise back to the super-level
-//        NStateDropDown dropdown = ((NStateDropDown) registerProperty(
-//                Integer.class, (r) -> ((DecayRule) r).getRelAbs(),
-//                (r, val) -> ((DecayRule) r).setRelAbs((int) val)));
-        JTextField tfSlope = (JTextField) registerProperty(Double.class,
+        // TODO: Maybe pull isAddNoise back to the super-level
+        cbImplementation = registerNStateDropDown(
+                (r) -> ((AbstractSigmoidalRule) r).getSquashFunctionInt(),
+                (r, val) -> ((AbstractSigmoidalRule) r)
+                        .setSquashFunctionInt((int) val));
+        cbImplementation.setItems(SquashingFunction.names());
+        tfSlope = registerTextField(
                 (r) -> ((AbstractSigmoidalRule) r).getSlope(),
                 (r, val) -> ((AbstractSigmoidalRule) r).setSlope((double) val));
-        JTextField tfBias = (JTextField) registerProperty(Double.class,
-                (r) -> ((AbstractSigmoidalRule) r).getBias(),
+        tfBias = registerTextField((r) -> ((AbstractSigmoidalRule) r).getBias(),
                 (r, val) -> ((AbstractSigmoidalRule) r).setBias((double) val));
-        TristateDropDown isAddNoise = (TristateDropDown) registerProperty(Boolean.class,
+        isAddNoise = registerTriStateDropDown(
                 (r) -> ((AbstractSigmoidalRule) r).getAddNoise(),
-                (r, val) -> ((AbstractSigmoidalRule) r).setAddNoise((Boolean) val));        
+                (r, val) -> ((AbstractSigmoidalRule) r)
+                        .setAddNoise((Boolean) val));
+        // below is superclass. Maybe call superclass method to make that more
+        // clear?
+        noisePanel = new NoiseGeneratorPanel(); // TODO: This is ugly. Fix.
     }
 
+    /**
+     * TODO. 
+     *
+     * @return the cbImplementation
+     */
+    public NStateDropDown getCbImplementation() {
+        return cbImplementation;
+    }
 }

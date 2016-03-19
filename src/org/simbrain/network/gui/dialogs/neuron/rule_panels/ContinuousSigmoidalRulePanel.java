@@ -18,21 +18,10 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.List;
-
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.neuron_update_rules.ContinuousSigmoidalRule;
-import org.simbrain.util.SimbrainConstants;
-import org.simbrain.util.Utils;
-import org.simbrain.util.math.SquashingFunction;
-import org.simbrain.util.widgets.TristateDropDown;
 
 /**
  *
@@ -43,47 +32,30 @@ import org.simbrain.util.widgets.TristateDropDown;
 public class ContinuousSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
 
     /** Time constant field. */
-    private JTextField tfTimeConstant = new JTextField();
+    private JTextField tfTimeConstant;
 
-    private JTextField tfLeakConstant = new JTextField();
+    /** Text field for leak constant. */
+    private JTextField tfLeakConstant;
 
     /** A reference to the neuron rule being edited. */
-    private static ContinuousSigmoidalRule prototypeRule;
-
-    /**
-     * Creates a fully functional continuous sigmoidal rule panel.
-     * 
-     * @return
-     */
-    public static ContinuousSigmoidalRulePanel
-        createContinuousSigmoidalRulePanel() {
-        prototypeRule = new ContinuousSigmoidalRule();
-        final ContinuousSigmoidalRulePanel csrp =
-            new ContinuousSigmoidalRulePanel();
-        csrp.cbImplementation.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SquashingFunction currentFunc = (SquashingFunction)
-                    csrp.cbImplementation.getSelectedItem();
-                if (!currentFunc.equals(csrp.initialSfunction)) {
-                    prototypeRule.setSquashFunctionType(currentFunc);
-                    csrp.fillDefaultValues();
-                }
-                csrp.repaint();
-            }
-        });
-        csrp.fillDefaultValues();
-        return csrp;
-    }
+    private static ContinuousSigmoidalRule prototypeRule = new ContinuousSigmoidalRule();
 
     /**
      * Creates the continuous sigmoidal rule panel, but does not initialize the
      * listeners responsible for altering the panel in response to the selected
      * squashing function.
      */
-    private ContinuousSigmoidalRulePanel() {
+    public ContinuousSigmoidalRulePanel() {
         super();
         this.add(tabbedPane);
+        tfTimeConstant = registerTextField(
+                (r) -> ((ContinuousSigmoidalRule) r).getTimeConstant(),
+                (r, val) -> ((ContinuousSigmoidalRule) r)
+                        .setTimeConstant((double) val));
+        tfLeakConstant = registerTextField(
+                (r) -> ((ContinuousSigmoidalRule) r).getLeakConstant(),
+                (r, val) -> ((ContinuousSigmoidalRule) r)
+                        .setLeakConstant((double) val));
         mainTab.addItem("Implementation", cbImplementation);
         mainTab.addItem("Time Constant", tfTimeConstant);
         mainTab.addItem("Leak Constant", tfLeakConstant);
@@ -91,25 +63,14 @@ public class ContinuousSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
         mainTab.addItem("Slope", tfSlope);
         mainTab.addItem("Add Noise", isAddNoise);
         tabbedPane.add(mainTab, "Main");
-        tabbedPane.add(randTab, "Noise");
+        tabbedPane.add(noisePanel, "Noise");
     }
 
-//    @Override
+    @Override
     public void fillDefaultValues() {
-        cbImplementation.setSelectedItem(prototypeRule.getSquashFunctionType());
-        tfTimeConstant.setText(Double.toString(prototypeRule
-            .getTimeConstant()));
-        tfLeakConstant.setText(Double.toString(prototypeRule
-            .getLeakConstant()));
-        tfBias.setText(Double.toString(prototypeRule.getBias()));
-        tfSlope.setText(Double.toString(prototypeRule.getSlope()));
-        isAddNoise.setSelected(prototypeRule.getAddNoise());
-        randTab.fillDefaultValues();
+        this.fillDefault();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected NeuronUpdateRule getPrototypeRule() {
         return prototypeRule;

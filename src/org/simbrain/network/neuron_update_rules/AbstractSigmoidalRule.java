@@ -29,9 +29,11 @@ import org.simbrain.util.randomizer.Randomizer;
 
 /**
  * 
- * An abstract superclass for discrete and continuous time sigmoial squashing
+ * An abstract superclass for discrete and continuous time sigmodial squashing
  * function based update rules containing methods and variables common to
  * both. 
+ * 
+ * TODO: Docs
  * 
  * @author Zach Tosi
  *
@@ -100,10 +102,14 @@ public abstract class AbstractSigmoidalRule extends NeuronUpdateRule implements
      */
     public SquashingFunction getSquashFunctionType() {
         if (sFunction == null) {
-            sFunction = SquashingFunction.LOGISTIC; // TODO: Explain (backwards
-            // compat)
+            sFunction = SquashingFunction.LOGISTIC; // TODO: Explain (backwards compat)
         }
         return sFunction;
+    }
+
+    //TODO
+    public int getSquashFunctionInt() {
+        return  sFunction.ordinal();
     }
 
     /**
@@ -114,6 +120,10 @@ public abstract class AbstractSigmoidalRule extends NeuronUpdateRule implements
         this.sFunction = type;
         setUpperBound(type.getDefaultUpperBound());
         setLowerBound(type.getDefaultLowerBound());
+    }
+    
+    public void setSquashFunctionInt(Integer typeIndex) {
+        this.sFunction = SquashingFunction.values()[typeIndex];
     }
 
     /**

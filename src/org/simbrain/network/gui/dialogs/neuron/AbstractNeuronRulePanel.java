@@ -21,11 +21,10 @@ package org.simbrain.network.gui.dialogs.neuron;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,7 +34,6 @@ import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
-import org.simbrain.util.ParameterEditor;
 import org.simbrain.util.ParameterGetter;
 import org.simbrain.util.ParameterSetter;
 import org.simbrain.util.SimbrainConstants;
@@ -91,6 +89,54 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      */
     public AbstractNeuronRulePanel() {
     }
+    
+    // Todo; add helper methods on top
+    //
+    // getComboBox
+    // getTextField
+    
+
+    //TODO Docs
+
+    // This assumes double.  Can make new ones for float or one where the type is specified,
+    //  e.g for reading an int
+    public JTextField registerTextField(
+            ParameterGetter<NeuronUpdateRule, Double> getter,
+            ParameterSetter<NeuronUpdateRule, Double> setter) {
+        return (JTextField) this.<NeuronUpdateRule, Double> registerProperty(
+                Double.class, getter, setter);
+    }
+    
+    public <V> JTextField registerTextField(Class<V> type,
+            ParameterGetter<NeuronUpdateRule, V> getter,
+            ParameterSetter<NeuronUpdateRule, V> setter) {
+        return (JTextField) 
+                this.<NeuronUpdateRule, V>registerProperty(type, getter, setter);
+    }
+
+    // Change name? registerBoolean
+    // Assumes boolean
+    public TristateDropDown registerTriStateDropDown(
+            ParameterGetter<NeuronUpdateRule, Boolean> getter,
+            ParameterSetter<NeuronUpdateRule, Boolean> setter) {
+        return (TristateDropDown) this.<NeuronUpdateRule, Boolean> registerProperty(
+                Boolean.class, getter, setter);
+    }
+
+    public JComboBox registerComboBox(
+            ParameterGetter<NeuronUpdateRule, Integer> getter,
+            ParameterSetter<NeuronUpdateRule, Integer> setter) {
+        return (JComboBox) this.<NeuronUpdateRule, Integer> registerProperty(
+                Integer.class, getter, setter);
+    }
+    
+    public NStateDropDown registerNStateDropDown(
+            ParameterGetter<NeuronUpdateRule, Integer> getter,
+            ParameterSetter<NeuronUpdateRule, Integer> setter) {
+        return (NStateDropDown) this.<NeuronUpdateRule, Integer> registerProperty(
+                Integer.class, getter, setter);
+    }
+
 
     /**
      * Register a component, a getter and a setter... TODO ... Rename registerEditor or editableProperty?
@@ -103,7 +149,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     protected <O,V> JComponent registerProperty(Class<V> type, ParameterGetter<O,V> getter,
             ParameterSetter<O,V> setter) {
         
-        if (type == Double.class) {
+        if (type == Double.class || type == Float.class) {
             JTextField field = new JTextField();
             editorList.add(new Editor(type, field, getter, setter));
             return field;
@@ -125,7 +171,9 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     //TODO: Spread below? Get rid of those getdefault things I have?
     public void fillDefault() {
         
-        editorList.stream().filter(editor -> editor.type == Double.class)
+        editorList.stream()
+                .filter(editor -> (editor.type == Double.class)
+                        || (editor.type == Float.class))
                 .forEach(editor -> fillDoubleField(editor,
                         Collections.singletonList(getPrototypeRule())));
         editorList.stream().filter(editor -> editor.type == Boolean.class)
@@ -236,6 +284,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
             neurons.forEach(n -> n.setUpdateRule(neuronRef.deepCopy()));
         }
         
+        //TODO: Deal with floats.  Somehow use number?
         // Write parameter values in all fields
         editorList.stream().filter(editor -> editor.type == Double.class)
                 .forEach(editor -> commitDouble(editor, neurons));
