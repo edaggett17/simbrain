@@ -18,13 +18,8 @@
  */
 package org.simbrain.network.neuron_update_rules;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.simbrain.network.core.Neuron;
-import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.core.Synapse;
-import org.simbrain.util.ParameterEditor;
 
 /**
  * <b>Product rule</b> units compute the product of the activations of incoming
@@ -97,13 +92,4 @@ public class ProductRule extends LinearRule {
     public String getDescription() {
         return "Product";
     }
-    
-    /**
-     * List of property editors for use by neuron property dialogs.
-     */
-    public static List<ParameterEditor> editorList = Arrays.asList(
-            new ParameterEditor<NeuronUpdateRule, Boolean>(Boolean.class, "useWeights",
-                    (r) -> ((ProductRule) r).getUseWeights(),
-                    (r, val) -> ((ProductRule) r).setUseWeights((boolean) val)));
-
 }

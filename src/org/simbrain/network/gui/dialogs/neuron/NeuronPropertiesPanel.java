@@ -194,7 +194,7 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
     }
     
     /**
-     * Testing main
+     * Testing main.
      */
     public static void main(String[] args) {
 
@@ -207,20 +207,24 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
             neuron.setUpdateRule(rule);
             neuronList.add(neuron);
         }
-        ((LinearRule) neuronList.get(1).getUpdateRule()).setSlope(-1); // Add an inconsistency in                                                     // slope
+//        ((LinearRule) neuronList.get(1).getUpdateRule()).setSlope(-1); // Add an inconsistency in                                                     // slope
         ((LinearRule) neuronList.get(1).getUpdateRule()).setAddNoise(true); // Add a boolean inconsistency
 
         // Test the test panel!
-        StandardDialog dialog = new StandardDialog();
-        NeuronPropertiesPanel panel = createNeuronPropertiesPanel(neuronList, dialog);
-        panel.fillFieldValues(); 
+        NeuronDialog dialog = NeuronDialog.createNeuronDialog(neuronList);
         
         // Show the test dialog
-        dialog.setContentPane(panel);
         dialog.setLocationRelativeTo(null);
         dialog.pack();
         dialog.setVisible(true);
-
+        
+        System.out.println("Slope "
+                + ((LinearRule) neuronList.get(1).getUpdateRule()).getSlope());
+        System.out.println("Bias "
+                + ((LinearRule) neuronList.get(1).getUpdateRule()).getBias());
+        System.out.println(
+                "Add noise " + ((LinearRule) neuronList.get(1).getUpdateRule())
+                        .getAddNoise());
     }
 
 }

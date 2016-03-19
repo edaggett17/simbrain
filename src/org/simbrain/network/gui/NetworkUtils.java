@@ -22,7 +22,6 @@ import java.awt.Dimension;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,7 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.util.ParameterGetter;
 
 /**
@@ -162,6 +160,7 @@ public class NetworkUtils {
     	// No inconsistencies were found
     	return true;
     }
+
 
 
 }

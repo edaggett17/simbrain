@@ -18,9 +18,6 @@
  */
 package org.simbrain.network.neuron_update_rules;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
@@ -28,7 +25,6 @@ import org.simbrain.network.core.Synapse;
 import org.simbrain.network.neuron_update_rules.interfaces.BoundedUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ClippableUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
-import org.simbrain.util.ParameterEditor;
 import org.simbrain.util.randomizer.Randomizer;
 
 /**
@@ -270,17 +266,4 @@ public class IACRule extends NeuronUpdateRule implements BoundedUpdateRule,
     public void setClipped(boolean clipping) {
         this.clipping = clipping;
     }
-
-    
-    /**
-     * List of property editors for use by neuron property dialogs.
-     */
-    public static List<ParameterEditor> editorList = Arrays.asList(
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "decay",
-                    (r) -> ((IACRule) r).getDecay(),
-                    (r, val) -> ((IACRule) r).setDecay((double) val)),
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "rest",
-                    (r) -> ((IACRule) r).getRest(),
-                    (r, val) -> ((IACRule) r).setRest((double) val)));
-    	
 }

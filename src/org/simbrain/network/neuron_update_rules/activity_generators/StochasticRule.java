@@ -18,15 +18,10 @@
  */
 package org.simbrain.network.neuron_update_rules.activity_generators;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.core.Neuron;
-import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.core.SpikingNeuronUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ActivityGenerator;
-import org.simbrain.util.ParameterEditor;
 
 /**
  * <b>StochasticNeuron</b> is a simple type of random neuron which takes the
@@ -43,13 +38,6 @@ public class StochasticRule extends SpikingNeuronUpdateRule implements
 
     /** Probability the neuron will fire. */
     private double firingProbability = DEFAULT_FIRING_PROBABILITY;
-
-    //TODO: Are these values needed?
-    /** Lower value field. */
-    private double lowerValue = 0;
-
-    /** Upper value field. */
-    private double upperValue = 1;
     
     /**
      * {@inheritDoc}
@@ -99,47 +87,5 @@ public class StochasticRule extends SpikingNeuronUpdateRule implements
     public String getDescription() {
         return "Stochastic";
     }
-
-    /**
-     * @return the lowerValue
-     */
-    public double getLowerValue() {
-        return lowerValue;
-    }
-
-    /**
-     * @param lowerValue the lowerValue to set
-     */
-    public void setLowerValue(double lowerValue) {
-        this.lowerValue = lowerValue;
-    }
-
-    /**
-     * @return the upperValue
-     */
-    public double getUpperValue() {
-        return upperValue;
-    }
-
-    /**
-     * @param upperValue the upperValue to set
-     */
-    public void setUpperValue(double upperValue) {
-        this.upperValue = upperValue;
-    }
-    
-    /**
-     * List of property editors for use by neuron property dialogs.
-     */
-    public static List<ParameterEditor> editorList = Arrays.asList(
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "firingProb",
-                    (r) -> ((StochasticRule) r).getFiringProbability(),
-                    (r, val) -> ((StochasticRule) r).setFiringProbability((double) val)),
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "lower",
-                    (r) -> ((StochasticRule) r).getLowerValue(),
-                    (r, val) -> ((StochasticRule) r).setLowerValue((double) val)),
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "upper",
-                    (r) -> ((StochasticRule) r).getUpperValue(),
-                    (r, val) -> ((StochasticRule) r).setUpperValue((double) val)));
 
 }

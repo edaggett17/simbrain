@@ -18,23 +18,18 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.generator_panels;
 
-import java.awt.GridLayout;
 import java.util.List;
 
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.activity_generators.StochasticRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.SimbrainConstants;
 
 /**
- * <b>StochasticNeuronPanel</b>.
+ * <b>StochasticNeuronPanel</b> edits a stochastic activity generator.
  */
 public class StochasticGeneratorPanel extends AbstractNeuronRulePanel {
 
@@ -46,13 +41,17 @@ public class StochasticGeneratorPanel extends AbstractNeuronRulePanel {
 
     /**
      * Creates an instance of this panel.
-     *
      */
     public StochasticGeneratorPanel() {
         super();
         add(mainPanel);
-        init(StochasticRule.editorList);
-        mainPanel.addItem("Firing Probability", componentMap.get("firingProb"));
+        JTextField firingProbability = (JTextField) registerProperty(
+                Double.class,
+                (r) -> ((StochasticRule) r).getFiringProbability(),
+                (r, val) -> ((StochasticRule) r)
+                        .setFiringProbability((double) val));
+
+        mainPanel.addItem("Firing Probability", firingProbability);
     }
 
     @Override
@@ -62,19 +61,19 @@ public class StochasticGeneratorPanel extends AbstractNeuronRulePanel {
 
     @Override
     public void fillDefaultValues() {
-        // TODO Auto-generated method stub   
+        // TODO Auto-generated method stub
     }
 
     @Override
     public void commitChanges(Neuron neuron) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     protected void writeValuesToRules(List<Neuron> neurons) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

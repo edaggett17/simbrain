@@ -21,6 +21,7 @@ package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
@@ -28,6 +29,7 @@ import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.util.LabelledItemPanel;
+import org.simbrain.util.widgets.TristateDropDown;
 
 /**
  * <b>LinearNeuronPanel</b>.
@@ -48,21 +50,18 @@ public class LinearRulePanel extends AbstractNeuronRulePanel {
      */
     public LinearRulePanel() {
         this.add(tabbedPane);
-        
-        // accumulators, javafx, javabeans, pojo.  Maybe can use that.
-        // helper methods somewhere in there that will do all that.  
-
-      // JTextField slopeField = registerDoublePropery(prototypeRule::getSlope, prototypeRule::setSlope) {
-      // mainTab.addItem("Slope", slopeField);
-      // JTextField biasField = getBooleanProperty(prototypeRule::getBias, prototypeRule::setBias) {
-      // mainTab.addItem("Bias", biasField);
-      // JTextField noiseField = getNoisePanel(prototypeRule::getSlope, prototypeRule::getSlope) {
-      // mainTab.addItem("Add noise", noiseField);
-
-        init(LinearRule.editorList);
-        mainTab.addItem("Slope", componentMap.get("slope"));
-        mainTab.addItem("Bias", componentMap.get("bias"));
-        mainTab.addItem("Add noise", componentMap.get("addNoise"));
+        JTextField slopeField = (JTextField) registerProperty(Double.class,
+                (r) -> ((LinearRule) r).getSlope(),
+                (r, val) -> ((LinearRule) r).setSlope((double) val));
+        JTextField biasField = (JTextField) registerProperty(Double.class,
+                (r) -> ((LinearRule) r).getBias(),
+                (r, val) -> ((LinearRule) r).setBias((double) val));
+        TristateDropDown addNoise = (TristateDropDown) registerProperty(Boolean.class,
+                (r) -> ((LinearRule) r).getAddNoise(),
+                (r, val) -> ((LinearRule) r).setAddNoise((Boolean) val));
+        mainTab.addItem("Slope", slopeField);
+        mainTab.addItem("Bias", biasField);
+        mainTab.addItem("Add noise", addNoise);
         tabbedPane.add(mainTab, "Main");
         
         // below is superclass. Maybe call superclass method to make that more clear?
@@ -70,7 +69,6 @@ public class LinearRulePanel extends AbstractNeuronRulePanel {
         tabbedPane.add(noisePanel, "Noise");
        
     }
-
 
     @Override
     protected NeuronUpdateRule getPrototypeRule() {

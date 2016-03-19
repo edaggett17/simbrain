@@ -18,39 +18,21 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
-import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.BinaryRule;
-import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.SimbrainConstants;
-import org.simbrain.util.Utils;
 
 /**
  * <b>BinaryNeuronPanel</b> creates a dialog for setting preferences of binary
  * neurons.
  */
 public class BinaryRulePanel extends AbstractNeuronRulePanel {
-
-    /** Threshold for this neuron. */
-    private JTextField tfThreshold = new JTextField();
-
-    /** Ceiling */
-    private JTextField tfUpbound = new JTextField();
-
-    /** Floor */
-    private JTextField tfLowbound = new JTextField();
-
-    /** Bias for this neuron. */
-    private JTextField tfBias = new JTextField();
 
     /** Main tab for neuron preferences. */
     private LabelledItemPanel mainTab = new LabelledItemPanel();
@@ -64,11 +46,26 @@ public class BinaryRulePanel extends AbstractNeuronRulePanel {
     public BinaryRulePanel() {
         super();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        init(BinaryRule.editorList);
-        mainTab.addItem("Threshold", componentMap.get("threshold"));
-        mainTab.addItem("On Value", componentMap.get("upper"));
-        mainTab.addItem("Off Value", componentMap.get("lower"));
-        mainTab.addItem("Bias", componentMap.get("bias"));
+
+        JTextField biasField = (JTextField) registerProperty(Double.class,
+                (r) -> ((BinaryRule) r).getBias(),
+                (r, val) -> ((BinaryRule) r).setBias((double) val));
+        JTextField lowerBoundField = (JTextField) registerProperty(Double.class,
+                (r) -> ((BinaryRule) r).getLowerBound(),
+                (r, val) -> ((BinaryRule) r).setLowerBound((double) val));
+
+        JTextField upperBoundField = (JTextField) registerProperty(Double.class,
+                (r) -> ((BinaryRule) r).getUpperBound(),
+                (r, val) -> ((BinaryRule) r).setUpperBound((double) val));
+
+        JTextField thresholdField = (JTextField) registerProperty(Double.class,
+                (r) -> ((BinaryRule) r).getThreshold(),
+                (r, val) -> ((BinaryRule) r).setThreshold((double) val));
+         
+        mainTab.addItem("Threshold", thresholdField);
+        mainTab.addItem("On Value", upperBoundField);
+        mainTab.addItem("Off Value", lowerBoundField);
+        mainTab.addItem("Bias", biasField);
         mainTab.setAlignmentX(CENTER_ALIGNMENT);
         this.add(mainTab);
     }

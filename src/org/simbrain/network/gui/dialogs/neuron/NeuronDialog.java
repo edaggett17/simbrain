@@ -96,6 +96,23 @@ public final class NeuronDialog extends StandardDialog {
         nd.updateHelp();
         return nd;
     }
+    
+    /**
+     * Create a neuron dialog for a list of logical neurons.
+     *
+     * @param neurons the neurons to edit
+     * @return the dialog
+     */
+    public static NeuronDialog createNeuronDialog(
+            final List<Neuron> neurons) {
+        NeuronDialog nd = new NeuronDialog(neurons);
+        nd.neuronPropertiesPanel = NeuronPropertiesPanel
+                .createNeuronPropertiesPanel(nd.neuronList, nd);
+        nd.init();
+        nd.addListeners();
+        nd.updateHelp();
+        return nd;
+    }
 
     /**
      * Construct the dialog object with no frame.
@@ -104,6 +121,15 @@ public final class NeuronDialog extends StandardDialog {
      */
     private NeuronDialog(final Collection<NeuronNode> selectedNeurons) {
         neuronList = getNeuronList(selectedNeurons);
+    }
+    
+    /**
+     * Construct a dialog for a set of neurons.
+     *
+     * @param neurons
+     */
+    private NeuronDialog(final List<Neuron> neurons) {
+        neuronList = neurons;
     }
     
     /**

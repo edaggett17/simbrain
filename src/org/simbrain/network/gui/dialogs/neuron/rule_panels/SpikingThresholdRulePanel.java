@@ -21,13 +21,16 @@ package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
+import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.SpikingThresholdRule;
 import org.simbrain.util.LabelledItemPanel;
+import org.simbrain.util.widgets.TristateDropDown;
 
 /**
  * <b>ProbabilisticSpikingNeuronPanel</b>. TODO: Deactivated until discussion
@@ -35,7 +38,7 @@ import org.simbrain.util.LabelledItemPanel;
  */
 public class SpikingThresholdRulePanel extends AbstractNeuronRulePanel {
 
-	  /** Tabbed pane. */
+    /** Tabbed pane. */
     private JTabbedPane tabbedPane = new JTabbedPane();
 
     /** Main tab. */
@@ -46,15 +49,23 @@ public class SpikingThresholdRulePanel extends AbstractNeuronRulePanel {
 
     /**
      * Creates a new instance of the probabilistic spiking neuron panel.
-     *
      */
     public SpikingThresholdRulePanel() {
         super();
+        JTextField thresholdField = (JTextField) registerProperty(Double.class,
+                (r) -> ((SpikingThresholdRule) r).getThreshold(),
+                (r, val) -> ((SpikingThresholdRule) r)
+                        .setThreshold((double) val));
+        TristateDropDown addNoise = (TristateDropDown) registerProperty(
+                Boolean.class, (r) -> ((SpikingThresholdRule) r).getAddNoise(),
+                (r, val) -> ((SpikingThresholdRule) r)
+                        .setAddNoise((Boolean) val));
+
         this.add(tabbedPane);
-        init(SpikingThresholdRule.editorList);
-        mainTab.addItem("Threshold", componentMap.get("threshold"));
+        mainTab.addItem("Threshold", thresholdField);
+        mainTab.addItem("Add noise", addNoise);
         tabbedPane.add(mainTab, "Main");
-   
+
         noisePanel = new NoiseGeneratorPanel();
         tabbedPane.add(noisePanel, "Noise");
     }
@@ -64,20 +75,20 @@ public class SpikingThresholdRulePanel extends AbstractNeuronRulePanel {
         return prototypeRule.deepCopy();
     }
 
-	@Override
-	public void fillDefaultValues() {
-		fillDefault();
-		
-	}
+    @Override
+    public void fillDefaultValues() {
+        fillDefault();
 
-	@Override
-	public void commitChanges(Neuron neuron) {
-		
-	}
+    }
 
-	@Override
-	protected void writeValuesToRules(List<Neuron> neurons) {
-		
-	}
+    @Override
+    public void commitChanges(Neuron neuron) {
+
+    }
+
+    @Override
+    protected void writeValuesToRules(List<Neuron> neurons) {
+
+    }
 
 }

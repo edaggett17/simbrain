@@ -26,8 +26,11 @@ import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
+import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.ProductRule;
 import org.simbrain.util.LabelledItemPanel;
+import org.simbrain.util.ParameterEditor;
+import org.simbrain.util.widgets.TristateDropDown;
 
 /**
  * <b>ProductNeuronPanel</b>.
@@ -49,9 +52,14 @@ public class ProductRulePanel extends AbstractNeuronRulePanel {
      */
     public ProductRulePanel() {
         this.add(tabbedPane);
-        init(ProductRule.editorList);
-        mainTab.addItem("Use weight values", componentMap.get("useWeights"));
-        mainTab.addItem("Add noise", componentMap.get("addNoise"));
+        TristateDropDown useWeights = (TristateDropDown) registerProperty(
+                Boolean.class, (r) -> ((ProductRule) r).getUseWeights(),
+                (r, val) -> ((ProductRule) r).setUseWeights((boolean) val));
+        TristateDropDown addNoise = (TristateDropDown) registerProperty(
+                Boolean.class, (r) -> ((LinearRule) r).getAddNoise(),
+                (r, val) -> ((LinearRule) r).setAddNoise((Boolean) val));
+        mainTab.addItem("Use weight values", useWeights);
+        mainTab.addItem("Add noise", addNoise);
         tabbedPane.add(mainTab, "Main");
 
         noisePanel = new NoiseGeneratorPanel();

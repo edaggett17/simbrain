@@ -21,6 +21,7 @@ package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
@@ -28,15 +29,16 @@ import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.IACRule;
 import org.simbrain.util.LabelledItemPanel;
+import org.simbrain.util.widgets.TristateDropDown;
 
 /**
- * <b>IACNeuronPanel</b>.
+ * <b>IACNeuronPanel</b> edits an IAC neuron or group of neurons.
  */
 public class IACRulePanel extends AbstractNeuronRulePanel {
 
     /** Main tab. */
     private LabelledItemPanel mainTab = new LabelledItemPanel();
-    
+
     /** Tabbed pane. */
     private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -50,41 +52,51 @@ public class IACRulePanel extends AbstractNeuronRulePanel {
     public IACRulePanel() {
         super();
         this.add(tabbedPane);
-        
-        init(IACRule.editorList);
-        mainTab.addItem("Decay", componentMap.get("decay"));
-        mainTab.addItem("Rest", componentMap.get("rest"));
-        mainTab.addItem("Add noise", componentMap.get("addNoise"));
+
+        JTextField decayField = (JTextField) registerProperty(Double.class,
+                (r) -> ((IACRule) r).getDecay(),
+                (r, val) -> ((IACRule) r).setDecay((double) val));
+        JTextField restField = (JTextField) registerProperty(Double.class,
+                (r) -> ((IACRule) r).getRest(),
+                (r, val) -> ((IACRule) r).setRest((double) val));
+        TristateDropDown addNoise = (TristateDropDown) registerProperty(
+                Boolean.class, (r) -> ((IACRule) r).getAddNoise(),
+                (r, val) -> ((IACRule) r).setAddNoise((Boolean) val));
+
+        mainTab.addItem("Decay", decayField);
+        mainTab.addItem("Rest", restField);
+        mainTab.addItem("Add noise", addNoise);
         tabbedPane.add(mainTab, "Main");
-       
+
         noisePanel = new NoiseGeneratorPanel();
         tabbedPane.add(noisePanel, "Noise");
     }
-    
+
     /**
      * Populate fields with current data.
+     * 
      * @param ruleList
      */
-    
-	@Override
-	protected NeuronUpdateRule getPrototypeRule() {
-		 return prototypeRule.deepCopy();
-	}
 
-	@Override
-	public void fillDefaultValues() {
-		fillDefault();
-		
-	}
+    @Override
+    protected NeuronUpdateRule getPrototypeRule() {
+        return prototypeRule.deepCopy();
+    }
 
-	@Override
-	public void commitChanges(Neuron neuron) {
-		
-	}
+    @Override
+    public void fillDefaultValues() {
+        fillDefault();
 
-	@Override
-	protected void writeValuesToRules(List<Neuron> neurons) {
-		
-	}
+    }
+
+    @Override
+    public void commitChanges(Neuron neuron) {
+
+    }
+
+    @Override
+    protected void writeValuesToRules(List<Neuron> neurons) {
+
+    }
 
 }

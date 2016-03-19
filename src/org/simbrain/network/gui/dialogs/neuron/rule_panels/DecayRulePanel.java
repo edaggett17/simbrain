@@ -21,6 +21,7 @@ package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
@@ -28,9 +29,10 @@ import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.DecayRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.widgets.NStateDropDown;
+import org.simbrain.util.widgets.TristateDropDown;
 
 /**
- * <b>DecayNeuronPanel</b> 
+ * <b>DecayNeuronPanel</b> represents a decay neuron.
  */
 public class DecayRulePanel extends AbstractNeuronRulePanel  {
 
@@ -43,26 +45,47 @@ public class DecayRulePanel extends AbstractNeuronRulePanel  {
     /** A reference to the neuron update rule being edited. */
     private static final DecayRule prototypeRule = new DecayRule();
 
+    /** Decay fraction text field. */
+    JTextField decayFraction;
+    
+    /** Decay amount text field. */
+    JTextField decayAmount;
+    
     /**
      * This method is the default constructor.
      */
     public DecayRulePanel() {
         super();
 
-        init(DecayRule.editorList);
         this.add(tabbedPane);
-        NStateDropDown dropdown =  ((NStateDropDown) componentMap.get("relAbs"));
+
+        NStateDropDown dropdown = ((NStateDropDown) registerProperty(
+                Integer.class, (r) -> ((DecayRule) r).getRelAbs(),
+                (r, val) -> ((DecayRule) r).setRelAbs((int) val)));
+        JTextField baseLine = (JTextField) registerProperty(Double.class,
+                (r) -> ((DecayRule) r).getBaseLine(),
+                (r, val) -> ((DecayRule) r).setBaseLine((double) val));
+        decayAmount = (JTextField) registerProperty(Double.class,
+                (r) -> ((DecayRule) r).getDecayAmount(),
+                (r, val) -> ((DecayRule) r).setDecayAmount((double) val));
+        decayFraction = (JTextField) registerProperty(Double.class,
+                (r) -> ((DecayRule) r).getDecayFraction(),
+                (r, val) -> ((DecayRule) r).setDecayFraction((double) val));
+        TristateDropDown addNoise = (TristateDropDown) registerProperty(Boolean.class,
+                (r) -> ((DecayRule) r).getAddNoise(),
+                (r, val) -> ((DecayRule) r).setAddNoise((Boolean) val));
+
         dropdown.setItems(new String[] { "Relative", "Absolute" });
         dropdown.addActionListener(e -> {
             checkBounds(dropdown.getSelectedIndex());
 
         });
-
         mainTab.addItem("", dropdown);
-        mainTab.addItem("Base line", componentMap.get("baseLine"));
-        mainTab.addItem("Decay amount", componentMap.get("decayAmount"));
-        mainTab.addItem("Decay fraction", componentMap.get("decayFraction"));
-        mainTab.addItem("Add noise", componentMap.get("addNoise"));
+        mainTab.addItem("Base line", baseLine);
+        mainTab.addItem("Decay amount", decayAmount);
+        mainTab.addItem("Decay fraction", decayFraction);
+        mainTab.addItem("Add noise", addNoise);
+
         tabbedPane.add(mainTab, "Main");
 
         noisePanel = new NoiseGeneratorPanel(); 
@@ -75,11 +98,11 @@ public class DecayRulePanel extends AbstractNeuronRulePanel  {
      */
     private void checkBounds(int selectedIndex) {
         if (selectedIndex == 0) {
-            componentMap.get("decayAmount").setEnabled(false);
-            componentMap.get("decayFraction").setEnabled(true);
+            decayAmount.setEnabled(false);
+            decayFraction.setEnabled(true);
         } else {
-            componentMap.get("decayAmount").setEnabled(true);
-            componentMap.get("decayFraction").setEnabled(false);
+            decayAmount.setEnabled(true);
+            decayFraction.setEnabled(false);
         }
     }
 

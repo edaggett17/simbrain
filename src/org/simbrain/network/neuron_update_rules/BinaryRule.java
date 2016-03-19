@@ -168,23 +168,5 @@ public class BinaryRule extends NeuronUpdateRule {
     public double getGraphicalUpperBound() {
         return ceiling + 1;
     }
-    
-    /**
-     * List of property editors for use by neuron property dialogs.
-     */
-    public static List<ParameterEditor> editorList = Arrays.asList(
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "bias",
-                    (r) -> ((BinaryRule) r).getBias(),
-                    (r, val) -> ((BinaryRule) r).setBias((double) val)),
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "lower",
-                    (r) -> ((BinaryRule) r).getLowerBound(),
-                    (r, val) -> ((BinaryRule) r).setLowerBound((double) val)),
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "upper",
-                    (r) -> ((BinaryRule) r).getUpperBound(),
-                    (r, val) -> ((BinaryRule) r).setUpperBound((double) val)),
-            new ParameterEditor<NeuronUpdateRule, Double>(Double.class, "threshold",
-                    (r) -> ((BinaryRule) r).getThreshold(),
-                    (r, val) -> ((BinaryRule) r).setThreshold((double) val))
-            );
 
 }
