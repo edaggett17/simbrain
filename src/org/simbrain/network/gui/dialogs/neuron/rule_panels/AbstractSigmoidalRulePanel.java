@@ -29,9 +29,12 @@ import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.AbstractSigmoidalRule;
+import org.simbrain.network.neuron_update_rules.DecayRule;
+import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.math.SquashingFunction;
 import org.simbrain.util.randomizer.Randomizer;
+import org.simbrain.util.widgets.NStateDropDown;
 import org.simbrain.util.widgets.TristateDropDown;
 
 /**
@@ -81,6 +84,23 @@ public abstract class AbstractSigmoidalRulePanel extends
      */
     public JComboBox<SquashingFunction> getCbImplementation() {
         return cbImplementation;
+    }
+    
+    protected AbstractSigmoidalRulePanel() {
+        //TODO: Figure out combo-boxes
+        //  Maybe pull isAddNoise back to the super-level
+//        NStateDropDown dropdown = ((NStateDropDown) registerProperty(
+//                Integer.class, (r) -> ((DecayRule) r).getRelAbs(),
+//                (r, val) -> ((DecayRule) r).setRelAbs((int) val)));
+        JTextField tfSlope = (JTextField) registerProperty(Double.class,
+                (r) -> ((AbstractSigmoidalRule) r).getSlope(),
+                (r, val) -> ((AbstractSigmoidalRule) r).setSlope((double) val));
+        JTextField tfBias = (JTextField) registerProperty(Double.class,
+                (r) -> ((AbstractSigmoidalRule) r).getBias(),
+                (r, val) -> ((AbstractSigmoidalRule) r).setBias((double) val));
+        TristateDropDown isAddNoise = (TristateDropDown) registerProperty(Boolean.class,
+                (r) -> ((AbstractSigmoidalRule) r).getAddNoise(),
+                (r, val) -> ((AbstractSigmoidalRule) r).setAddNoise((Boolean) val));        
     }
 
 }

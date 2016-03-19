@@ -18,22 +18,12 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.Neuron;
-import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.AdditiveRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.SimbrainConstants;
-import org.simbrain.util.Utils;
-import org.simbrain.util.randomizer.Randomizer;
 import org.simbrain.util.randomizer.gui.RandomizerPanel;
 import org.simbrain.util.widgets.TristateDropDown;
 
@@ -77,38 +67,6 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
     }
 
     /**
-     * Populate fields with current data.
-     */
-    @Override
-    public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-
-        AdditiveRule neuronRef = (AdditiveRule) ruleList.get(0);
-
-        tfLambda.setText(Double.toString(neuronRef.getLambda()));
-        tfResistance.setText(Double.toString(neuronRef.getResistance()));
-        // isClipping.setSelected(neuronRef.getClipping());
-        isAddNoise.setSelected(neuronRef.getAddNoise());
-
-        // Handle consistency of multiple selections
-        if (!NetworkUtils.isConsistent(ruleList, AdditiveRule.class,
-                "getLambda")) {
-            tfLambda.setText(SimbrainConstants.NULL_STRING);
-        }
-
-        if (!NetworkUtils.isConsistent(ruleList, AdditiveRule.class,
-                "getResistance")) {
-            tfResistance.setText(SimbrainConstants.NULL_STRING);
-        }
-
-        if (!NetworkUtils.isConsistent(ruleList, AdditiveRule.class,
-                "getAddNoise")) {
-            isAddNoise.setNull();
-        }
-
-        randTab.fillFieldValues(getRandomizers(ruleList));
-    }
-
-    /**
      * Fill field values to default values for additive neuron.
      */
     public void fillDefaultValues() {
@@ -117,80 +75,6 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
         // isClipping.setSelected(prototypeRule.getClipping());
         isAddNoise.setSelected(prototypeRule.getAddNoise());
         randTab.fillDefaultValues();
-    }
-
-    /**
-	 *
-	 */
-    @Override
-    public void commitChanges(final Neuron neuron) {
-
-        if (!(neuron.getUpdateRule() instanceof AdditiveRule)) {
-            neuron.setUpdateRule(prototypeRule.deepCopy());
-        }
-
-        writeValuesToRules(Collections.singletonList(neuron));
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void commitChanges(final List<Neuron> neurons) {
-
-        if (isReplacingUpdateRules()) {
-            AdditiveRule neuronRef = prototypeRule.deepCopy();
-            for (Neuron n : neurons) {
-                n.setUpdateRule(neuronRef);
-            }
-        }
-
-        writeValuesToRules(neurons);
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void writeValuesToRules(final List<Neuron> neurons) {
-        int numNeurons = neurons.size();
-
-        // Lambda
-        double lambda = Utils.doubleParsable(tfLambda);
-        if (!Double.isNaN(lambda)) {
-            for (int i = 0; i < numNeurons; i++) {
-                ((AdditiveRule) neurons.get(i).getUpdateRule())
-                        .setLambda(lambda);
-            }
-        }
-
-        // Resistance
-        double resistance = Utils.doubleParsable(tfResistance);
-        if (!Double.isNaN(resistance)) {
-            for (int i = 0; i < numNeurons; i++) {
-                ((AdditiveRule) neurons.get(i).getUpdateRule())
-                        .setResistance(resistance);
-            }
-        }
-
-        // Add Noise?
-        if (!isAddNoise.isNull()) {
-            boolean addNoise = isAddNoise.getSelectedIndex() == TristateDropDown
-                    .getTRUE();
-            for (int i = 0; i < numNeurons; i++) {
-                ((AdditiveRule) neurons.get(i).getUpdateRule())
-                        .setAddNoise(addNoise);
-
-            }
-            if (addNoise) {
-                for (int i = 0; i < numNeurons; i++) {
-                    randTab.commitRandom(((AdditiveRule) neurons.get(i)
-                            .getUpdateRule()).getNoiseGenerator());
-                }
-            }
-        }
     }
 
     /**

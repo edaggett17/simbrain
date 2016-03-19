@@ -74,41 +74,6 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
     }
 
     /**
-     * Populates the field with current data.
-     * @param ruleList
-     */
-    public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-
-        neuronRef = (SinusoidalRule) ruleList.get(0);
-
-        // (Below) Handle consistency of multiple selections
-
-        // Handle Frequency
-        if (!NetworkUtils.isConsistent(ruleList, SinusoidalRule.class,
-            "getFrequency"))
-            tfFrequency.setText(SimbrainConstants.NULL_STRING);
-        else
-            tfFrequency.setText(Double.toString(neuronRef.getFrequency()));
-
-        // Handle Phase
-        if (!NetworkUtils.isConsistent(ruleList, SinusoidalRule.class,
-            "getPhase"))
-            tfPhase.setText(SimbrainConstants.NULL_STRING);
-        else
-            tfPhase.setText(Double.toString(neuronRef.getPhase()));
-
-        // Handle Noise
-        if (!NetworkUtils.isConsistent(ruleList, SinusoidalRule.class,
-            "getAddNoise"))
-            isAddNoise.setNull();
-        else
-            isAddNoise.setSelected(neuronRef.getAddNoise());
-
-        randPanel.fillFieldValues(getRandomizers(ruleList));
-
-    }
-
-    /**
      * Populates the fields with default data.
      */
     public void fillDefaultValues() {
@@ -123,67 +88,9 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
      * {@inheritDoc}
      */
     @Override
-    public void commitChanges(Neuron neuron) {
-
-        if (neuron.getUpdateRule() instanceof SinusoidalRule) {
-            neuronRef = (SinusoidalRule) neuron.getUpdateRule();
-        } else {
-            neuron.setUpdateRule(neuronRef);
-        }
-
-        // Phase
-        if (!tfPhase.getText().equals(SimbrainConstants.NULL_STRING))
-            neuronRef.setPhase(Double.parseDouble(tfPhase.getText()));
-
-        // Frequency
-        if (!tfFrequency.getText().equals(SimbrainConstants.NULL_STRING))
-            neuronRef.setFrequency(Double.parseDouble(tfFrequency.getText()));
-
-        // Noise
-        if (!isAddNoise.isNull())
-            neuronRef.setAddNoise(isAddNoise.isSelected());
-
-        randPanel.commitRandom(neuronRef.getNoiseGenerator());
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void commitChanges(List<Neuron> neurons) {
-
-        // Phase
-        if (!tfPhase.getText().equals(SimbrainConstants.NULL_STRING))
-            neuronRef.setPhase(Double.parseDouble(tfPhase.getText()));
-
-        // Frequency
-        if (!tfFrequency.getText().equals(SimbrainConstants.NULL_STRING))
-            neuronRef.setFrequency(Double.parseDouble(tfFrequency.getText()));
-
-        // Noise
-        if (!isAddNoise.isNull())
-            neuronRef.setAddNoise(isAddNoise.isSelected());
-
-        randPanel.commitRandom(neuronRef.getNoiseGenerator());
-
-        for (Neuron n : neurons) {
-            n.setUpdateRule(neuronRef);
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public NeuronUpdateRule getPrototypeRule() {
         return neuronRef.deepCopy();
     }
 
-    @Override
-    protected void writeValuesToRules(List<Neuron> neurons) {
-        // TODO Auto-generated method stub
-    }
 
 }

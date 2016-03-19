@@ -72,6 +72,11 @@ public class RunningAverageRulePanel extends AbstractNeuronRulePanel {
         tfRateConstant.setText(Double.toString(neuronRef.getRateConstant()));
     }
 
+    @Override
+    protected NeuronUpdateRule getPrototypeRule() {
+        return null;
+    }
+
     // /**
     // * Called externally when the dialog is closed, to commit any changes
     // made.
@@ -87,36 +92,4 @@ public class RunningAverageRulePanel extends AbstractNeuronRulePanel {
     // }
     // }
 
-    @Override
-    public void commitChanges(Neuron neuron) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void commitChanges(List<Neuron> neuron) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected NeuronUpdateRule getPrototypeRule() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    protected void writeValuesToRules(List<Neuron> neurons) {
-        // TODO Auto-generated method stub
-
-    }
 }

@@ -64,16 +64,4 @@ public class StochasticGeneratorPanel extends AbstractNeuronRulePanel {
         // TODO Auto-generated method stub
     }
 
-    @Override
-    public void commitChanges(Neuron neuron) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void writeValuesToRules(List<Neuron> neurons) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

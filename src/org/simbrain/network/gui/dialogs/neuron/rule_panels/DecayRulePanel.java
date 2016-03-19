@@ -116,12 +116,4 @@ public class DecayRulePanel extends AbstractNeuronRulePanel  {
         fillDefault();
     }
 
-    @Override
-    public void commitChanges(Neuron neuron) {
-    }
-
-    @Override
-    protected void writeValuesToRules(List<Neuron> neurons) {
-    }
-
 }

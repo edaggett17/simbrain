@@ -119,12 +119,10 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
 
         return null;
     }
-    
-    /**
-     * Populate fields with default data. TODO: Replace with below when done.
-     */
+
     public abstract void fillDefaultValues();
 
+    //TODO: Spread below? Get rid of those getdefault things I have?
     public void fillDefault() {
         
         editorList.stream().filter(editor -> editor.type == Double.class)
@@ -202,6 +200,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         }
     }
     
+    //TODO: Make all these private
+    
     /**
      * Sets state of a combo box using an integer index (we do assume all neuron
      * update rule integer fields can be thought of as indices of an enum).
@@ -209,7 +209,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param editor the editor object to access the update rule
      * @param ruleList rule list, used for the consistency check
      */
-    public void fillIntegerField(
+    private void fillIntegerField(
             Editor editor,
             List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
@@ -249,7 +249,6 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         }
     }
 
-
     /**
      * Write a double value to a neuron rule.
      *
@@ -265,7 +264,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
                     .setParameter(r.getUpdateRule(), value));
         }
     }
-   
+
 
     /**
      * Write a boolean value to a neuron rule.
@@ -298,32 +297,6 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
                     .setParameter(r.getUpdateRule(), index));
         }
     }
-
-
-    /**
-     * Called to commit changes to a single neuron.
-     *
-     * Usually this is a template neuron intended to be copied for the purpose
-     * of creating many new neurons. Using this method to commit changes to many
-     * neurons is not recommended. Instead pass a list of the neurons to be
-     * changed into {@link #commitChanges(List) commitChanges}.
-     *
-     * @param neuron the neuron to which changes are being committed to.
-     */
-    public abstract void commitChanges(final Neuron neuron);
-
-    // TODO: Remove below when done with other changes.
-    /**
-     * Edits neuron update rules that already exist. This is the alternative to
-     * replacing the rules and occurs when the neuron update rules being edited
-     * are the same type as the panel. {@link #replaceUpdateRules} is the flag
-     * for whether this method is used for committing or the rules are deleted
-     * and replaced entirely, in which case this method is not called.
-     *
-     * @param neurons the neurons whose rules are being <b>edited</b>, not
-     *            replaced.
-     */
-    protected abstract void writeValuesToRules(final List<Neuron> neurons);
 
     /**
      * Override to add custom notes or other text to bottom of panel. Can be
@@ -383,6 +356,9 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         return false;
     }
     
+    
+    //TODO: Do we need fillDefault at what level?  Check all.
+
     /**
      * TODO.  Doc. Also convert to getter/setter?
      *

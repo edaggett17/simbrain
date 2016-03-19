@@ -422,10 +422,6 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
         }
 
         @Override
-        public void commitChanges(Neuron neuron) {
-        }
-
-        @Override
         public void commitChanges(List<Neuron> neuron) {
         }
 
@@ -434,9 +430,6 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
             return null;
         }
 
-        @Override
-        protected void writeValuesToRules(List<Neuron> neurons) {
-        }
 
     }
 

@@ -18,18 +18,14 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.List;
-
 import javax.swing.JTabbedPane;
 
-import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.ProductRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.ParameterEditor;
 import org.simbrain.util.widgets.TristateDropDown;
 
 /**
@@ -74,14 +70,6 @@ public class ProductRulePanel extends AbstractNeuronRulePanel {
     @Override
     public void fillDefaultValues() {
         fillDefault();
-    }
-
-    @Override
-    public void commitChanges(Neuron neuron) {
-    }
-
-    @Override
-    protected void writeValuesToRules(List<Neuron> neurons) {
     }
 
 }

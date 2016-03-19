@@ -18,9 +18,6 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.generator_panels;
 
-import java.util.List;
-
-import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
@@ -54,12 +51,4 @@ public class RandomGeneratorPanel extends AbstractNeuronRulePanel {
     public void fillDefaultValues() {        
     }
 
-    @Override
-    public void commitChanges(Neuron neuron) {
-        
-    }
-
-    @Override
-    protected void writeValuesToRules(List<Neuron> neurons) {
-    }
 }

@@ -83,16 +83,4 @@ public class BinaryRulePanel extends AbstractNeuronRulePanel {
         return prototypeRule.deepCopy();
     }
 
-    @Override
-    public void commitChanges(Neuron neuron) {
-        // TODO Auto-generated method stub // to be removed!
-        
-    }
-
-    @Override
-    protected void writeValuesToRules(List<Neuron> neurons) {
-        // TODO Auto-generated method stub
-        
-    }
-
 }
