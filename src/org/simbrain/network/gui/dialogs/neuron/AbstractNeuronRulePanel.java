@@ -93,7 +93,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
-     * Todo.
+     * Todo.  Default text field for doubles
      *
      * @param getter
      * @param setter
@@ -107,7 +107,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
-     * Todo.
+     * Todo.  Specify float.  used in HH for now.
      *
      * @param type
      * @param getter
@@ -142,20 +142,6 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param setter
      * @return
      */
-    public JComboBox registerComboBox(
-            ParameterGetter<NeuronUpdateRule, Integer> getter,
-            ParameterSetter<NeuronUpdateRule, Integer> setter) {
-        return (JComboBox) this.<Integer> registerProperty(
-                Integer.class, getter, setter);
-    }
-
-    /**
-     * Todo.
-     *
-     * @param getter
-     * @param setter
-     * @return
-     */
     public NStateDropDown registerNStateDropDown(
             ParameterGetter<NeuronUpdateRule, Integer> getter,
             ParameterSetter<NeuronUpdateRule, Integer> setter) {
@@ -174,7 +160,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @return the component (text field, drop-down, etc) associated with this
      *         editor.
      */
-    protected <V> JComponent registerProperty(Class<V> type,
+    private <V> JComponent registerProperty(Class<V> type,
             ParameterGetter<NeuronUpdateRule, V> getter,
             ParameterSetter<NeuronUpdateRule, V> setter) {
 
@@ -229,7 +215,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     public final void fillFieldValues(final List<NeuronUpdateRule> ruleList) {
 
         // Iterate through editable properties of the update rule
-        // and fill corresponding field values.
+        // and fill corresponding field values using registered property
+        // getters.
         editorList.stream().filter(editor -> editor.type == Double.class)
                 .forEach(editor -> fillDoubleField(editor, ruleList));
         editorList.stream().filter(editor -> editor.type == Boolean.class)
@@ -245,12 +232,11 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     /**
      * Fills text field with a double value.
      *
-     * @param editor the editor object to access the update rule. TODO.Here and
-     *            next 7 or 8 javadocs.
+     * @param editor the editor object to access the update rule..
      * @param ruleList rule list, used for the consistency check
      */
-    private void fillDoubleField(Editor editor,
-            List<NeuronUpdateRule> ruleList) {
+    private void fillDoubleField(final Editor<Double> editor,
+            final List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
         JTextField textField = (JTextField) editor.component;
         if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {
@@ -266,8 +252,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param editor the editor object to access the update rule
      * @param ruleList rule list, used for the consistency check
      */
-    private void fillBooleanField(Editor editor,
-            List<NeuronUpdateRule> ruleList) {
+    private void fillBooleanField(final Editor<Boolean> editor,
+            final List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
         TristateDropDown dropDown = (TristateDropDown) editor.component;
         if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {
@@ -286,8 +272,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param editor the editor object to access the update rule
      * @param ruleList rule list, used for the consistency check
      */
-    private void fillIntegerField(Editor editor,
-            List<NeuronUpdateRule> ruleList) {
+    private void fillIntegerField(final Editor<Integer> editor,
+            final List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
         NStateDropDown dropDown = (NStateDropDown) editor.component;
         if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {

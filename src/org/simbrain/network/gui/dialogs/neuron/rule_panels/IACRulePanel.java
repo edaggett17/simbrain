@@ -49,14 +49,13 @@ public class IACRulePanel extends AbstractNeuronRulePanel {
         super();
         this.add(tabbedPane);
 
-        JTextField decayField = (JTextField) registerProperty(Double.class,
+        JTextField decayField = registerTextField(
                 (r) -> ((IACRule) r).getDecay(),
                 (r, val) -> ((IACRule) r).setDecay((double) val));
-        JTextField restField = (JTextField) registerProperty(Double.class,
-                (r) -> ((IACRule) r).getRest(),
+        JTextField restField = registerTextField((r) -> ((IACRule) r).getRest(),
                 (r, val) -> ((IACRule) r).setRest((double) val));
-        TristateDropDown addNoise = (TristateDropDown) registerProperty(
-                Boolean.class, (r) -> ((IACRule) r).getAddNoise(),
+        TristateDropDown addNoise = registerTriStateDropDown(
+                (r) -> ((IACRule) r).getAddNoise(),
                 (r, val) -> ((IACRule) r).setAddNoise((Boolean) val));
 
         mainTab.addItem("Decay", decayField);
@@ -67,7 +66,6 @@ public class IACRulePanel extends AbstractNeuronRulePanel {
         noisePanel = new NoiseGeneratorPanel();
         tabbedPane.add(noisePanel, "Noise");
     }
-
 
     @Override
     protected final NeuronUpdateRule getPrototypeRule() {
