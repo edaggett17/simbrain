@@ -327,7 +327,7 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
 
             // If so we have to fill the new panel with default values
             if (replaceUpdateRules) {
-                neuronRulePanel.fillDefault();
+                neuronRulePanel.fillDefaultValues();
             } else {
                 // If not we can fill the new panel with values from the
                 // neurons being edited.
@@ -414,15 +414,7 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
     private class EmptyRulePanel extends AbstractNeuronRulePanel {
 
         @Override
-        public void fillFieldValues(List<NeuronUpdateRule> ruleList) {
-        }
-
-        @Override
-        public void commitChanges(List<Neuron> neuron) {
-        }
-
-        @Override
-        public NeuronUpdateRule getPrototypeRule() {
+        protected NeuronUpdateRule getPrototypeRule() {
             return null;
         }
 
