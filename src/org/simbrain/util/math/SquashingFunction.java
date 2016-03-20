@@ -28,9 +28,6 @@ package org.simbrain.util.math;
  */
 public enum SquashingFunction {
 
-
-
-
     /** Arctangent. */
     ARCTAN {
 
@@ -164,7 +161,8 @@ public enum SquashingFunction {
 
     /**
      * The Null String "..." used in cases where neurons with different
-     * squashing functions are selected simultaneously.
+     * squashing functions are selected simultaneously. Note this must
+     * be the last item for consistency with the names function below.
      */
     NULL_STRING {
 
@@ -476,12 +474,11 @@ public enum SquashingFunction {
      */
     public static String[] names() {
         SquashingFunction[] states = values();
-        String[] names = new String[states.length];
-
-        for (int i = 0; i < states.length; i++) {
-            names[i] = states[i].name();
+        String[] names = new String[states.length-1];
+        // The last item is the ... item which should not be part of the list
+        for (int i = 0; i < states.length-1; i++) {
+            names[i] = states[i].toString();
         }
-
         return names;
     }
 

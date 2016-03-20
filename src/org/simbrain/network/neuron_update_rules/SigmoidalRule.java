@@ -52,17 +52,13 @@ public class SigmoidalRule extends AbstractSigmoidalRule {
         super(sFunction);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public TimeType getTimeType() {
+    @Override
+    public final TimeType getTimeType() {
         return TimeType.DISCRETE;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void update(Neuron neuron) {
+    @Override
+    public final void update(Neuron neuron) {
 
         double val = inputType.getInput(neuron) + bias;
 
@@ -78,7 +74,14 @@ public class SigmoidalRule extends AbstractSigmoidalRule {
     }
 
     @Override
-    public void contextualIncrement(Neuron n) {
+    public final SigmoidalRule deepCopy() {
+        SigmoidalRule sr = new SigmoidalRule();
+        sr = (SigmoidalRule) super.baseDeepCopy(sr);
+        return sr;
+    }
+    
+    @Override
+    public final void contextualIncrement(final Neuron n) {
         double act = n.getActivation();
         if (act < getUpperBound()) {
             act += getIncrement();
@@ -111,22 +114,8 @@ public class SigmoidalRule extends AbstractSigmoidalRule {
         return sFunction.derivVal(val, up, lw, diff);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public SigmoidalRule deepCopy() {
-        SigmoidalRule sn = new SigmoidalRule();
-        sn.setBias(getBias());
-        sn.setSquashFunctionType(getSquashFunctionType());
-        sn.setSlope(getSlope());
-        sn.setAddNoise(getAddNoise());
-        sn.noiseGenerator = new Randomizer(noiseGenerator);
-        return sn;
-    }
-
-    @Override
-    public String getDescription() {
+    public final String getDescription() {
         return "Sigmoidal (Discrete)";
     }
 

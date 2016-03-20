@@ -31,9 +31,7 @@ import org.simbrain.util.randomizer.Randomizer;
  * 
  * An abstract superclass for discrete and continuous time sigmodial squashing
  * function based update rules containing methods and variables common to
- * both. 
- * 
- * TODO: Docs
+ * both.
  * 
  * @author Zach Tosi
  *
@@ -107,21 +105,30 @@ public abstract class AbstractSigmoidalRule extends NeuronUpdateRule implements
         return sFunction;
     }
 
-    //TODO
-    public int getSquashFunctionInt() {
-        return  sFunction.ordinal();
-    }
-
     /**
      * @param type
      *            the type to set
      */
-    public void setSquashFunctionType(SquashingFunction type) {
+    public final void setSquashFunctionType(SquashingFunction type) {
         this.sFunction = type;
         setUpperBound(type.getDefaultUpperBound());
         setLowerBound(type.getDefaultLowerBound());
     }
     
+    /**
+     * Integer getter for use in property editors.
+     *
+     * @return the index for the squashing function
+     */
+    public final int getSquashFunctionInt() {
+        return  sFunction.ordinal();
+    }
+
+    /**
+     * Integer setter for use by property editors.
+     *
+     * @param typeIndex index of the squashing function
+     */
     public void setSquashFunctionInt(Integer typeIndex) {
         this.sFunction = SquashingFunction.values()[typeIndex];
     }
@@ -172,53 +179,52 @@ public abstract class AbstractSigmoidalRule extends NeuronUpdateRule implements
     }
 
     /**
-     * {@inheritDoc}
+     * Copy the overlapping bits of the rule for subclasses.
+     * 
+     * @param sr the sigmoid rule to copy
+     * @return the copy.
      */
+    protected final AbstractSigmoidalRule baseDeepCopy(
+            final AbstractSigmoidalRule sr) {
+        sr.setBias(getBias());
+        sr.setSquashFunctionType(getSquashFunctionType());
+        sr.setSlope(getSlope());
+        sr.setAddNoise(getAddNoise());
+        sr.noiseGenerator = new Randomizer(noiseGenerator);
+        return sr;
+    }
+
+    
     @Override
-    public double getUpperBound() {
+    public final double getUpperBound() {
         return upperBound;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public double getLowerBound() {
+    public final double getLowerBound() {
         return lowerBound;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void setUpperBound(double ceiling) {
+    public final void setUpperBound(final double ceiling) {
         this.upperBound = ceiling;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void setLowerBound(double floor) {
+    public final void setLowerBound(final double floor) {
         this.lowerBound = floor;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public double getInverse(double val) {
+    public final double getInverse(final double val) {
         double up = getUpperBound();
         double lw = getLowerBound();
         double diff = up - lw;
         return sFunction.inverseVal(val, up, lw, diff);
     }
 
-    /**
-     * @return Returns the inflectionPoint.
-     */
     @Override
-    public double getBias() {
+    public final double getBias() {
         return bias;
     }
 
@@ -227,7 +233,7 @@ public abstract class AbstractSigmoidalRule extends NeuronUpdateRule implements
      *            The inflectionY to set.
      */
     @Override
-    public void setBias(final double inflectionY) {
+    public final void setBias(final double inflectionY) {
         this.bias = inflectionY;
     }
 
