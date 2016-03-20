@@ -18,23 +18,13 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.Neuron;
-import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.IntegrateAndFireRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.SimbrainConstants;
-import org.simbrain.util.Utils;
-import org.simbrain.util.randomizer.Randomizer;
 import org.simbrain.util.widgets.TristateDropDown;
 
 /**
@@ -49,23 +39,22 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
     private LabelledItemPanel mainTab = new LabelledItemPanel();
 
     /** Time constant field. */
-    private JTextField tfTimeConstant = new JTextField();
+    private JTextField tfTimeConstant;
 
     /** Threshold field. */
-    private JTextField tfThreshold = new JTextField();
+    private JTextField tfThreshold;
 
     /** Reset field. */
-    private JTextField tfReset = new JTextField();
+    private JTextField tfReset;
 
     /** Resistance field. */
-    private JTextField tfResistance = new JTextField();
+    private JTextField tfResistance;
 
     /** Resting potential field. */
-    private JTextField tfRestingPotential = new JTextField();
+    private JTextField tfRestingPotential;
 
     /** Background current field. */
-    private JTextField tfBackgroundCurrent = new JTextField();
-
+    private JTextField tfBackgroundCurrent;
     /** Random tab. */
     private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
 
@@ -73,8 +62,7 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
     private TristateDropDown isAddNoise = new TristateDropDown();
 
     /** A reference to the neuron update rule being edited. */
-    private static final IntegrateAndFireRule prototypeRule =
-        new IntegrateAndFireRule();
+    private static final IntegrateAndFireRule prototypeRule = new IntegrateAndFireRule();
 
     /**
      * Creates a new instance of the integrate and fire neuron panel.
@@ -82,6 +70,36 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
     public IntegrateAndFireRulePanel() {
         super();
         this.add(tabbedPane);
+
+        tfTimeConstant = registerTextField(
+                (r) -> ((IntegrateAndFireRule) r).getTimeConstant(),
+                (r, val) -> ((IntegrateAndFireRule) r)
+                        .setTimeConstant((double) val));
+        tfThreshold = registerTextField(
+                (r) -> ((IntegrateAndFireRule) r).getThreshold(),
+                (r, val) -> ((IntegrateAndFireRule) r)
+                        .setThreshold((double) val));
+        tfReset = registerTextField(
+                (r) -> ((IntegrateAndFireRule) r).getResetPotential(),
+                (r, val) -> ((IntegrateAndFireRule) r)
+                        .setResetPotential((double) val));
+        tfResistance = registerTextField(
+                (r) -> ((IntegrateAndFireRule) r).getResistance(),
+                (r, val) -> ((IntegrateAndFireRule) r)
+                        .setResistance((double) val));
+        tfRestingPotential = registerTextField(
+                (r) -> ((IntegrateAndFireRule) r).getRestingPotential(),
+                (r, val) -> ((IntegrateAndFireRule) r)
+                        .setRestingPotential((double) val));
+        tfBackgroundCurrent = registerTextField(
+                (r) -> ((IntegrateAndFireRule) r).getBackgroundCurrent(),
+                (r, val) -> ((IntegrateAndFireRule) r)
+                        .setBackgroundCurrent((double) val));
+        TristateDropDown isAddNoise = registerTriStateDropDown(
+                (r) -> ((IntegrateAndFireRule) r).getAddNoise(),
+                (r, val) -> ((IntegrateAndFireRule) r)
+                        .setAddNoise((Boolean) val));
+
         mainTab.addItem("Threshold (mV)", tfThreshold);
         mainTab.addItem("Resting potential (mV)", tfRestingPotential);
         mainTab.addItem("Reset potential (mV)", tfReset);
@@ -90,6 +108,7 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
         mainTab.addItem("Time constant (ms)", tfTimeConstant);
         mainTab.addItem("Add noise", isAddNoise);
         tabbedPane.add(mainTab, "Main");
+        noisePanel = new NoiseGeneratorPanel();
         tabbedPane.add(randTab, "Noise");
     }
 
@@ -97,17 +116,7 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
      * Populate fields with default data.
      */
     public void fillDefaultValues() {
-        tfRestingPotential.setText(Double.toString(prototypeRule
-            .getRestingPotential()));
-        tfResistance.setText(Double.toString(prototypeRule.getResistance()));
-        tfReset.setText(Double.toString(prototypeRule.getResetPotential()));
-        tfThreshold.setText(Double.toString(prototypeRule.getThreshold()));
-        tfBackgroundCurrent.setText(Double.toString(prototypeRule
-            .getBackgroundCurrent()));
-        tfTimeConstant
-            .setText(Double.toString(prototypeRule.getTimeConstant()));
-        isAddNoise.setSelected(prototypeRule.getAddNoise());
-        randTab.fillDefaultValues();
+        this.fillDefault();
     }
 
     /**

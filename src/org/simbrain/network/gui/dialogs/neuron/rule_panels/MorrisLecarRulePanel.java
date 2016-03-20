@@ -1,94 +1,98 @@
+/*
+ * Part of Simbrain--a java-based neural network kit
+ * Copyright (C) 2005,2007 The Authors.  See http://www.simbrain.net/credits
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import org.simbrain.network.core.Neuron;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+
 import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
-import org.simbrain.network.neuron_update_rules.FitzhughNagumo;
+import org.simbrain.network.neuron_update_rules.DecayRule;
 import org.simbrain.network.neuron_update_rules.MorrisLecarRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.ParameterGetter;
-import org.simbrain.util.SimbrainConstants;
-import org.simbrain.util.Utils;
 import org.simbrain.util.widgets.TristateDropDown;
 
-import javax.swing.*;
-
-import java.util.Collections;
-import java.util.List;
-
 /**
+ * <b>MorrisLecarRulePanel</b> edits MorrisLecar neurons.
+ *
  * @author Amanda Pandey <amanda.pandey@gmail.com>
  */
-public class MorrisLecarRulePanel extends AbstractNeuronRulePanel{
+public class MorrisLecarRulePanel extends AbstractNeuronRulePanel {
 
-    /** Calcium channel conductance (micro Siemens/cm^2). */
-    private JTextField tfG_Ca = new JTextField();
-
-    /** Potassium channel conductance (micro Siemens/cm^2). */
-    private JTextField tfG_K = new JTextField();
-
-    /** Leak conductance (micro Siemens/cm^2). */
-    private JTextField tfG_L = new JTextField();
-
-    /** Resting potential calcium (mV). */
-    private JTextField tfVRest_Ca = new JTextField();
-
-    /** Resting potential potassium (mV). */
-    private JTextField tfvRest_k = new JTextField();
-
-    /** Resting potential for leak current (mV). */
-    private JTextField tfVRest_L = new JTextField();
-
-    /** Membrane capacitance per unit area (micro Farads/cm^2). */
-    private JTextField tfCMembrane = new JTextField();
-
-    /** Membrane voltage constant 1. */
-    private JTextField tfV_M1 = new JTextField();
-
-    /** Membrane voltage constant 2. */
-    private JTextField tfV_M2 = new JTextField();
-
-    /** Potassium channel constant 1. */
-    private JTextField tfV_W1 = new JTextField();
-
-    /** Potassium channel constant 2. */
-    private JTextField tfV_W2 = new JTextField();
-
-    /** Fraction of open potassium channels. */
-    private JTextField tfW_K = new JTextField();
-
-    /** Potassium channel time constant/decay rate (s^-1). */
-    private JTextField tfPhi = new JTextField();
-
-    /** Background current (mA). */
-    private JTextField tfI_Bg = new JTextField();
-
-    /** Threshold for neurotransmitter release (mV) */
-    private JTextField tfThreshold = new JTextField();
-
-    private TristateDropDown isAddNoise = new TristateDropDown();
-
+    /** Tabbed pane. */
     private JTabbedPane tabbedPane = new JTabbedPane();
 
-    /** Random tab. */
-    private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
-    
     /** A reference to the neuron update rule being edited. */
     private static final MorrisLecarRule prototypeRule = new MorrisLecarRule();
 
+    /**
+     * Construct the panel.
+     */
     public MorrisLecarRulePanel() {
         super();
         this.add(tabbedPane);
+
+        JTextField tfCMembrane = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getcMembrane(),
+                (r, val) -> ((MorrisLecarRule) r).setcMembrane((double) val));
+        JTextField tfV_M1 = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getV_m1(),
+                (r, val) -> ((MorrisLecarRule) r).setV_m1((double) val));
+        JTextField tfV_M2 = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getV_m2(),
+                (r, val) -> ((MorrisLecarRule) r).setV_m2((double) val));
+        JTextField tfThreshold = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getThreshold(),
+                (r, val) -> ((MorrisLecarRule) r).setThreshold((double) val));
+        JTextField tfI_Bg = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getI_bg(),
+                (r, val) -> ((MorrisLecarRule) r).setI_bg((double) val));
+//        TristateDropDown isAddNoise = registerTriStateDropDown(
+//                (r) -> ((DecayRule) r).getAddNoise(),
+//                (r, val) -> ((DecayRule) r).setAddNoise((Boolean) val));
         LabelledItemPanel cellPanel = new LabelledItemPanel();
         cellPanel.addItem("Capacitance (\u03BCF/cm\u00B2)", tfCMembrane);
         cellPanel.addItem("Voltage const. 1", tfV_M1);
         cellPanel.addItem("Voltage const. 2", tfV_M2);
         cellPanel.addItem("Threshold (mV)", tfThreshold);
         cellPanel.addItem("Background current (nA)", tfI_Bg);
-        cellPanel.addItem("Add noise: ", isAddNoise);
-        
+//        cellPanel.addItem("Add noise: ", isAddNoise); // TODO: Think
+
+        JTextField tfG_Ca = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getG_Ca(),
+                (r, val) -> ((MorrisLecarRule) r).setG_Ca((double) val));
+        JTextField tfG_K = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getG_K(),
+                (r, val) -> ((MorrisLecarRule) r).setG_K((double) val));
+        JTextField tfG_L = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getG_L(),
+                (r, val) -> ((MorrisLecarRule) r).setG_L((double) val));
+        JTextField tfVRest_Ca = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getvRest_Ca(),
+                (r, val) -> ((MorrisLecarRule) r).setvRest_Ca((double) val));
+        JTextField tfvRest_k = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getvRest_k(),
+                (r, val) -> ((MorrisLecarRule) r).setvRest_k((double) val));
+        JTextField tfVRest_L = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getvRest_Ca(),
+                (r, val) -> ((MorrisLecarRule) r).setvRest_Ca((double) val));
         LabelledItemPanel ionPanel = new LabelledItemPanel();
         ionPanel.addItem("Ca\u00B2\u207A conductance (\u03BCS/cm\u00B2)",
                 tfG_Ca);
@@ -98,6 +102,18 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel{
         ionPanel.addItem("K\u207A equilibrium (mV)", tfvRest_k);
         ionPanel.addItem("Leak equilibrium (mV)", tfVRest_L);
 
+        JTextField tfV_W1 = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getV_w1(),
+                (r, val) -> ((MorrisLecarRule) r).setV_w1((double) val));
+        JTextField tfV_W2 = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getV_w2(),
+                (r, val) -> ((MorrisLecarRule) r).setV_w2((double) val));
+        JTextField tfW_K = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getW_K(),
+                (r, val) -> ((MorrisLecarRule) r).setW_K((double) val));
+        JTextField tfPhi = registerTextField(
+                (r) -> ((MorrisLecarRule) r).getPhi(),
+                (r, val) -> ((MorrisLecarRule) r).setPhi((double) val));
         LabelledItemPanel potas = new LabelledItemPanel();
         potas.addItem("K\u207A const. 1", tfV_W1);
         potas.addItem("K\u207A const. 2", tfV_W2);
@@ -107,27 +123,14 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel{
         tabbedPane.add(cellPanel, "Membrane Properties");
         tabbedPane.add(ionPanel, "Ion Properties");
         tabbedPane.add(potas, "K\u207A consts.");
-        tabbedPane.add(randTab, "Noise");
+
+        noisePanel = new NoiseGeneratorPanel();
+        tabbedPane.add(noisePanel, "Noise");
     }
 
     @Override
     public void fillDefaultValues() {
-        tfG_Ca.setText(Double.toString(prototypeRule.getG_Ca()));
-        tfG_K.setText(Double.toString(prototypeRule.getG_K()));
-        tfG_L.setText(Double.toString(prototypeRule.getG_L()));
-        tfVRest_Ca.setText(Double.toString(prototypeRule.getvRest_Ca()));
-        tfvRest_k.setText(Double.toString(prototypeRule.getvRest_k()));
-        tfVRest_L.setText(Double.toString(prototypeRule.getvRest_L()));
-        tfCMembrane.setText(Double.toString(prototypeRule.getcMembrane()));
-        tfV_M1.setText(Double.toString(prototypeRule.getV_m1()));
-        tfV_M2.setText(Double.toString(prototypeRule.getV_m2()));
-        tfV_W1.setText(Double.toString(prototypeRule.getV_w1()));
-        tfV_W2.setText(Double.toString(prototypeRule.getV_w2()));
-        tfW_K.setText(Double.toString(prototypeRule.getW_K()));
-        tfPhi.setText(Double.toString(prototypeRule.getPhi()));
-        tfI_Bg.setText(Double.toString(prototypeRule.getI_bg()));
-        tfThreshold.setText(Double.toString(prototypeRule.getThreshold()));
-        randTab.fillDefaultValues();
+        this.fillDefault();
     }
 
     @Override
