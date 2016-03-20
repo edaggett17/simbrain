@@ -18,10 +18,10 @@ public class FitzhughNagumoRulePanel extends AbstractNeuronRulePanel {
     /** A variable governs overall rate of recovery equation. */
     private JTextField tfA;
 
-    /** Influence of V on recovery variable */
+    /** Influence of V on recovery variable. */
     private JTextField tfB;
 
-    /** Influence of W on future values of W */
+    /** Influence of W on future values of W. */
     private JTextField tfC;
 
     /** Constant background current. KEEP */
@@ -32,13 +32,19 @@ public class FitzhughNagumoRulePanel extends AbstractNeuronRulePanel {
 
     private TristateDropDown isAddNoise;
     private JTabbedPane tabbedPane = new JTabbedPane();
+    
+    /** Main tab. */
     private LabelledItemPanel mainTab = new LabelledItemPanel();
+
     /** Random tab. */
     private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
 
     /** A reference to the neuron update rule being edited. */
     private static final FitzhughNagumo prototypeRule = new FitzhughNagumo();
 
+    /**
+     * Construct panel.
+     */
     public FitzhughNagumoRulePanel() {
         super();
         this.add(tabbedPane);
@@ -69,12 +75,7 @@ public class FitzhughNagumoRulePanel extends AbstractNeuronRulePanel {
     }
 
     @Override
-    public void fillDefaultValues() {
-        fillDefault();
-    }
-
-    @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 

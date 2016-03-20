@@ -44,7 +44,6 @@ public class IACRulePanel extends AbstractNeuronRulePanel {
 
     /**
      * This method is the default constructor.
-     *
      */
     public IACRulePanel() {
         super();
@@ -69,21 +68,10 @@ public class IACRulePanel extends AbstractNeuronRulePanel {
         tabbedPane.add(noisePanel, "Noise");
     }
 
-    /**
-     * Populate fields with current data.
-     * 
-     * @param ruleList
-     */
 
     @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
-    }
-
-    @Override
-    public void fillDefaultValues() {
-        fillDefault();
-
     }
 
 }

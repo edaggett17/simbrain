@@ -63,13 +63,9 @@ public class ProductRulePanel extends AbstractNeuronRulePanel {
     }
 
     @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 
-    @Override
-    public void fillDefaultValues() {
-        fillDefault();
-    }
 
 }

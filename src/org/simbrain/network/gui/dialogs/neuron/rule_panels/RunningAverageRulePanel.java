@@ -18,14 +18,10 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.util.List;
-
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.neuron_update_rules.RunningAverageRule;
 import org.simbrain.util.LabelledItemPanel;
 
 /**
@@ -49,47 +45,11 @@ public class RunningAverageRulePanel extends AbstractNeuronRulePanel {
         mainTab.addItem("Rate Constant", tfRateConstant);
     }
 
-    // /**
-    // * Populate fields with current data.
-    // */
-    // public void fillFieldValues() {
-    // RunningAverageRule neuronRef = (RunningAverageRule) ruleList.get(0);
-    //
-    // tfRateConstant.setText(Double.toString(neuronRef.getRateConstant()));
-    //
-    // // Handle consistency of multiple selections
-    // if (!NetworkUtils.isConsistent(ruleList, RunningAverageRule.class,
-    // "getRateConstant")) {
-    // tfRateConstant.setText(NULL_STRING);
-    // }
-    // }
-
-    /**
-     * Populate fields with default data.
-     */
-    public void fillDefaultValues() {
-        RunningAverageRule neuronRef = new RunningAverageRule();
-        tfRateConstant.setText(Double.toString(neuronRef.getRateConstant()));
-    }
 
     @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return null;
     }
 
-    // /**
-    // * Called externally when the dialog is closed, to commit any changes
-    // made.
-    // */
-    // public void commitChanges() {
-    // for (int i = 0; i < ruleList.size(); i++) {
-    // RunningAverageRule neuronRef = (RunningAverageRule) ruleList.get(i);
-    //
-    // if (!tfRateConstant.getText().equals(NULL_STRING)) {
-    // neuronRef.setRateConstant(Double.parseDouble(tfRateConstant
-    // .getText()));
-    // }
-    // }
-    // }
 
 }

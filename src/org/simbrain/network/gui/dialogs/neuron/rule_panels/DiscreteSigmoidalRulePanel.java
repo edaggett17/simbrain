@@ -18,12 +18,8 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.neuron_update_rules.SigmoidalRule;
-import org.simbrain.util.math.SquashingFunction;
 
 /**
  * <b>SigmoidalRulePanel</b>. A rule panel for editing neurons which use a
@@ -37,28 +33,6 @@ public class DiscreteSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
 
     /** A reference to the neuron rule being edited. */
     private static SigmoidalRule prototypeRule = new SigmoidalRule();
-
-//    /**
-//     * Creates a fully functional discrete sigmoidal rule panel.
-//     */
-//    public static DiscreteSigmoidalRulePanel createSigmoidalRulePanel() {
-//        prototypeRule = new SigmoidalRule();
-//        final DiscreteSigmoidalRulePanel dsrp = new DiscreteSigmoidalRulePanel();
-//        dsrp.cbImplementation.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                SquashingFunction currentFunc = (SquashingFunction) dsrp.cbImplementation
-//                        .getSelectedItem();
-//                if (!currentFunc.equals(dsrp.initialSfunction)) {
-//                    prototypeRule.setSquashFunctionType(currentFunc);
-//                    dsrp.fillDefaultValues();
-//                }
-//                dsrp.repaint();
-//            }
-//        });
-//        dsrp.fillDefaultValues();
-//        return dsrp;
-//    }
 
     /**
      * Creates the discrete sigmoidal rule panel, but does not initialize the
@@ -76,18 +50,8 @@ public class DiscreteSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
         tabbedPane.add(noisePanel, "Noise");
     }
 
-    /**
-     * Fill field values to default values for sigmoidal neuron.
-     */
-    public void fillDefaultValues() {
-        this.fillDefault();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 

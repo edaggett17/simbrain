@@ -47,8 +47,4 @@ public class RandomGeneratorPanel extends AbstractNeuronRulePanel {
         return prototypeRule;
     }
 
-    @Override
-    public void fillDefaultValues() {        
-    }
-
 }

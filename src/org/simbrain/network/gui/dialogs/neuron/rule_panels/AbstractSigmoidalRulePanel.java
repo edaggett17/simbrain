@@ -39,6 +39,8 @@ import org.simbrain.util.widgets.TristateDropDown;
 public abstract class AbstractSigmoidalRulePanel
         extends AbstractNeuronRulePanel {
 
+    //TODO: Clean up top
+    
     /** Implementation combo box. */
     protected NStateDropDown cbImplementation;
 

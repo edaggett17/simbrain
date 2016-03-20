@@ -129,12 +129,7 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel {
     }
 
     @Override
-    public void fillDefaultValues() {
-        this.fillDefault();
-    }
-
-    @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 }

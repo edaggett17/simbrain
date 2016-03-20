@@ -70,18 +70,8 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
         tabbedPane.add(randTab, "Noise");
     }
 
-    /**
-     * Fill field values to default values for additive neuron.
-     */
-    public void fillDefaultValues() {
-        fillDefault();
-        randTab.fillDefaultValues();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected AdditiveRule getPrototypeRule() {
+    @Override
+    protected final AdditiveRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 

@@ -18,31 +18,20 @@
  */
 package org.simbrain.network.gui.dialogs.neuron.generator_panels;
 
-import java.util.List;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
-import org.simbrain.network.gui.NetworkUtils;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.activity_generators.SinusoidalRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.widgets.TristateDropDown;
 
 /**
  * <b>SinusoidalNeuronPanel</b>.
  */
 public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
-
-    /** Phase field. */
-    private JTextField tfPhase = new JTextField();
-
-    /** Frequency field. */
-    private JTextField tfFrequency = new JTextField();
 
     /** Add noise combo box. */
     private TristateDropDown isAddNoise = new TristateDropDown();
@@ -57,7 +46,7 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
     private JTabbedPane tabbedPanel = new JTabbedPane();
 
     /** A reference to the neuron rule being edited. */
-    private SinusoidalRule neuronRef = new SinusoidalRule();
+    private SinusoidalRule prototypeRule = new SinusoidalRule();
 
     /**
      * Creates an instance of this panel.
@@ -66,30 +55,23 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
     public SinusoidalGeneratorPanel() {
         super();
         this.add(tabbedPanel);
+        JTextField tfPhase = registerTextField(
+                (r) -> ((SinusoidalRule) r).getPhase(),
+                (r, val) -> ((SinusoidalRule) r).setPhase((double) val));
+        JTextField tfFrequency = registerTextField(
+                (r) -> ((SinusoidalRule) r).getFrequency(),
+                (r, val) -> ((SinusoidalRule) r).setFrequency((double) val));
         mainPanel.addItem("Phase", tfPhase);
         mainPanel.addItem("Frequency", tfFrequency);
         mainPanel.addItem("Add noise", isAddNoise);
         tabbedPanel.add(mainPanel, "Main");
-        tabbedPanel.add(randPanel, "Noise");
+        noisePanel = new NoiseGeneratorPanel();
+        tabbedPanel.add(noisePanel, "Noise");
     }
 
-    /**
-     * Populates the fields with default data.
-     */
-    public void fillDefaultValues() {
-        neuronRef = new SinusoidalRule();
-        tfFrequency.setText(Double.toString(neuronRef.getFrequency()));
-        tfPhase.setText(Double.toString(neuronRef.getPhase()));
-        isAddNoise.setSelected(neuronRef.getAddNoise());
-        randPanel.fillDefaultValues();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public NeuronUpdateRule getPrototypeRule() {
-        return neuronRef.deepCopy();
+    public final NeuronUpdateRule getPrototypeRule() {
+        return prototypeRule.deepCopy();
     }
 
 

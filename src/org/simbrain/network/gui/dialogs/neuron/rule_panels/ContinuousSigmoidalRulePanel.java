@@ -67,11 +67,6 @@ public class ContinuousSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
     }
 
     @Override
-    public void fillDefaultValues() {
-        this.fillDefault();
-    }
-
-    @Override
     protected NeuronUpdateRule getPrototypeRule() {
         return prototypeRule;
     }

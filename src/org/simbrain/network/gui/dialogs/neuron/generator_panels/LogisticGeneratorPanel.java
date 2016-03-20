@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
+import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.activity_generators.LogisticRule;
 import org.simbrain.util.LabelledItemPanel;
 
@@ -31,21 +32,20 @@ import org.simbrain.util.LabelledItemPanel;
  */
 public class LogisticGeneratorPanel extends AbstractNeuronRulePanel {
 
-    /** Growth rate field. */
-    private JTextField tfGrowthRate = new JTextField();
-
     /** Main panel. */
     private LabelledItemPanel mainPanel = new LabelledItemPanel();
 
-    // TODO:Lists?
     /** A reference to the neuron rule being edited. */
-    private LogisticRule neuronRef = new LogisticRule();
+    private LogisticRule prototypRule  = new LogisticRule();
 
     /**
      * Creates an instance of this panel.
      */
     public LogisticGeneratorPanel() {
         super();
+        JTextField tfGrowthRate = registerTextField(
+                (r) -> ((LogisticRule) r).getGrowthRate(),
+                (r, val) -> ((LogisticRule) r).setGrowthRate((double) val));
         mainPanel.addItem("Growth Rate", tfGrowthRate);
         add(mainPanel);
         this.addBottomText(
@@ -54,17 +54,8 @@ public class LogisticGeneratorPanel extends AbstractNeuronRulePanel {
                         + " Note 2: for chaos, try growth rates between 3.6 and 4</html>");
     }
 
-    /**
-     * Populate fields with default data.
-     */
-    public void fillDefaultValues() {
-        LogisticRule neuronRef = new LogisticRule();
-        tfGrowthRate.setText(Double.toString(neuronRef.getGrowthRate()));
-    }
-
     @Override
-    public NeuronUpdateRule getPrototypeRule() {
-        // TODO Auto-generated method stub
-        return null;
+    public final NeuronUpdateRule getPrototypeRule() {
+        return prototypRule.deepCopy();
     }
 }

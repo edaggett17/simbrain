@@ -59,9 +59,5 @@ public class StochasticGeneratorPanel extends AbstractNeuronRulePanel {
         return prototypeRule.deepCopy();
     }
 
-    @Override
-    public void fillDefaultValues() {
-        // TODO Auto-generated method stub
-    }
 
 }

@@ -91,25 +91,8 @@ public class ThreeValueRulePanel extends AbstractNeuronRulePanel {
         mainTab.addItem("Upper value", tfUpperValue);
     }
 
-    /**
-     * Fill field values to default values for binary neuron.
-     */
-    public void fillDefaultValues() {
-        tfLowerThreshold
-                .setText(Double.toString(prototypeRule.getLowerThreshold()));
-        tfBias.setText(Double.toString(prototypeRule.getBias()));
-        tfUpperThreshold
-                .setText(Double.toString(prototypeRule.getUpperThreshold()));
-        tfLowerValue.setText(Double.toString(prototypeRule.getLowerValue()));
-        tfMiddleValue.setText(Double.toString(prototypeRule.getMiddleValue()));
-        tfUpperValue.setText(Double.toString(prototypeRule.getUpperValue()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 

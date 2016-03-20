@@ -19,6 +19,7 @@
 package org.simbrain.network.gui.dialogs.neuron;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -88,7 +89,9 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * This method is the default constructor.
      */
     public AbstractNeuronRulePanel() {
+        this.setLayout(new BorderLayout());
     }
+    
     
     // Todo; add helper methods on top
     //
@@ -165,8 +168,6 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
 
         return null;
     }
-
-    public abstract void fillDefaultValues();
 
     //TODO: Spread below? Get rid of those getdefault things I have?
     public void fillDefault() {
@@ -404,9 +405,6 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         }
         return false;
     }
-    
-    
-    //TODO: Do we need fillDefault at what level?  Check all.
 
     /**
      * TODO.  Doc. Also convert to getter/setter?
@@ -430,6 +428,11 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
             this.getter = getter;
             this.setter = setter;
         }
+    }
+
+    @Override
+    public Component add(Component comp) {
+        return this.add(BorderLayout.CENTER, comp);
     }
 
 }

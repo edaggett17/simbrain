@@ -75,12 +75,7 @@ public class IzhikevichRulePanel extends AbstractNeuronRulePanel {
     }
 
     @Override
-    public void fillDefaultValues() {
-        this.fillDefault();
-    }
-
-    @Override
-    protected IzhikevichRule getPrototypeRule() {
+    protected final IzhikevichRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 

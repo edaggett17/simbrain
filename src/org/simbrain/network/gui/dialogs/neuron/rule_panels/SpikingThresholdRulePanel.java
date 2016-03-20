@@ -70,9 +70,5 @@ public class SpikingThresholdRulePanel extends AbstractNeuronRulePanel {
         return prototypeRule.deepCopy();
     }
 
-    @Override
-    public void fillDefaultValues() {
-        fillDefault();
-    }
 
 }

@@ -99,12 +99,6 @@ public class AdExIFRulePanel extends AbstractNeuronRulePanel {
     }
 
     @Override
-    public void fillDefaultValues() {
-        this.fillDefault();
-
-    }
-
-    @Override
     protected AdExIFRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }

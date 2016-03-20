@@ -27,9 +27,7 @@ import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
 import org.simbrain.util.randomizer.Randomizer;
 
 /**
- * <b>SinusoidalNeuron</b> produces a sine wave; inputs are ignored.
- *
- * TODO: Input generator
+ * <b>SinusoidalNeuron</b> produces a sine wave.
  */
 public class SinusoidalRule extends NeuronUpdateRule implements
         BoundedUpdateRule, ActivityGenerator, NoisyUpdateRule {
@@ -52,17 +50,13 @@ public class SinusoidalRule extends NeuronUpdateRule implements
     /** Add noise to the neuron. */
     private boolean addNoise = false;
 
-    /**
-     * {@inheritDoc}
-     */
-    public TimeType getTimeType() {
+    @Override
+    public final TimeType getTimeType() {
         return TimeType.DISCRETE;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public SinusoidalRule deepCopy() {
+    @Override
+    public final SinusoidalRule deepCopy() {
         SinusoidalRule sn = new SinusoidalRule();
         sn.setPhase(getPhase());
         sn.setFrequency(getFrequency());
@@ -71,10 +65,8 @@ public class SinusoidalRule extends NeuronUpdateRule implements
         return sn;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void update(Neuron neuron) {
+    @Override
+    public final void update(Neuron neuron) {
 
         double upperBound = getUpperBound();
         double lowerBound = getLowerBound();

@@ -129,25 +129,6 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel
     }
 
     /**
-     * Fill field values to default values for this synapse type.
-     */
-    public void fillDefaultValues() {
-        checkUsingAdaptation();
-        tfSemiSaturation.setText(
-                Double.toString(prototypeRule.getSemiSaturationConstant()));
-        tfSteepness.setText(Double.toString(prototypeRule.getSteepness()));
-        tfTimeConstant
-                .setText(Double.toString(prototypeRule.getTimeConstant()));
-        tsNoise.setSelected(prototypeRule.getAddNoise());
-        tsUseAdaptation.setSelected(prototypeRule.getUseAdaptation());
-        tfAdaptationTime.setText(
-                Double.toString(prototypeRule.getAdaptationTimeConstant()));
-        tfAdaptationParam.setText(
-                Double.toString(prototypeRule.getAdaptationParameter()));
-        noisePanel.fillDefaultValues();
-    }
-
-    /**
      * Responds to actions performed.
      *
      * @param e Action event
@@ -161,7 +142,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel
     }
 
     @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 

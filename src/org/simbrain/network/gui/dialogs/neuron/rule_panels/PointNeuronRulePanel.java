@@ -106,29 +106,8 @@ public class PointNeuronRulePanel extends AbstractNeuronRulePanel {
         tabbedPane.add(outputFunctionTab, "Output Function");
     }
 
-    /**
-     * Populate fields with default data.
-     */
-    public void fillDefaultValues() {
-        tfER.setText(Double.toString(prototypeRule.getExcitatoryReversal()));
-        tfIR.setText(Double.toString(prototypeRule.getInhibitoryReversal()));
-        tfLR.setText(Double.toString(prototypeRule.getLeakReversal()));
-        tfLC.setText(Double.toString(prototypeRule.getLeakConductance()));
-        // cbOutputFunction.setSelectedIndex(neuronRef.getOutputFunction());
-        tfThreshold.setText(Double.toString(prototypeRule
-                .getThresholdPotential()));
-        tfGain.setText(Double.toString(prototypeRule.getGain()));
-        tfBias.setText(Double.toString(prototypeRule.getBias()));
-        tfTimeAveraging.setText(Double.toString(prototypeRule
-                .getNetTimeConstant()));
-        // tfNormFactor.setText(Double.toString(neuronRef.getNormFactor()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 

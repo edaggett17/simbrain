@@ -88,16 +88,8 @@ public class HodgkinHuxleyRulePanel extends AbstractNeuronRulePanel {
 
     }
 
-    /**
-     * Fill field values to default values for binary neuron.
-     */
-    public void fillDefaultValues() {
-        System.out.println(prototypeRule.getPerKChannels());
-        fillDefault();
-    }
-
     @Override
-    protected NeuronUpdateRule getPrototypeRule() {
+    protected final NeuronUpdateRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 

@@ -103,13 +103,8 @@ public class DecayRulePanel extends AbstractNeuronRulePanel {
     }
 
     @Override
-    protected DecayRule getPrototypeRule() {
+    protected final DecayRule getPrototypeRule() {
         return prototypeRule.deepCopy();
-    }
-
-    @Override
-    public void fillDefaultValues() {
-        fillDefault();
     }
 
 }

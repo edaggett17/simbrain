@@ -112,17 +112,8 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
         tabbedPane.add(randTab, "Noise");
     }
 
-    /**
-     * Populate fields with default data.
-     */
-    public void fillDefaultValues() {
-        this.fillDefault();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected IntegrateAndFireRule getPrototypeRule() {
+    @Override
+    protected final IntegrateAndFireRule getPrototypeRule() {
         return prototypeRule.deepCopy();
     }
 
