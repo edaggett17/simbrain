@@ -186,6 +186,7 @@ public class NeuronNode extends ScreenElement implements PropertyChangeListener 
         if (!currentTextVisibility) {
             return;
         }
+        
         double act = neuron.getActivation();
         activationText.setScale(1);
         setActivationTextPosition();
@@ -195,7 +196,11 @@ public class NeuronNode extends ScreenElement implements PropertyChangeListener 
         priorityText.setText("" + neuron.getUpdatePriority()); // todo: respond
         // to listener
 
-        if ((act > 0) && (neuron.getActivation() < 1)) { // Between 0 and 1
+        if (java.lang.Double.isNaN(neuron.getActivation())) {
+            activationText.setText("NaN");
+            activationText.scale(.7);
+            activationText.translate(-4, 3);
+        } else if ((act > 0) && (neuron.getActivation() < 1)) { // Between 0 and 1
             activationText.setFont(NEURON_FONT_BOLD);
             String text = Utils.round(act, 1);
             if (text.startsWith("0.")) {
