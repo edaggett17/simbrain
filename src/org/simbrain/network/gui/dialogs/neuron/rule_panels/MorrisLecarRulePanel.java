@@ -27,7 +27,7 @@ import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.DecayRule;
 import org.simbrain.network.neuron_update_rules.MorrisLecarRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * <b>MorrisLecarRulePanel</b> edits MorrisLecar neurons.

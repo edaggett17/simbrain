@@ -24,11 +24,13 @@ import javax.swing.JComboBox;
 import org.simbrain.util.SimbrainConstants;
 
 /**
- * <b>NstateDropDown</b> is basically a combo box with a null state. See
- * tri-state, which this is based on.
+ * <b>ChoicesWithNull</b> is a combo box with a null state. Used
+ * used to edit properties that return that can be one of a 
+ * a discrete set of states.  When the edited  objects
+ * return different states, the null "..." is shown.
  */
 @SuppressWarnings("serial")
-public class NStateDropDown extends JComboBox<String> {
+public class ChoicesWithNull extends JComboBox<String> {
 
     /** Whether the combo box has the null string in it. */
     private boolean hasNull = false;
@@ -36,10 +38,10 @@ public class NStateDropDown extends JComboBox<String> {
     /**
      * Default constructor.
      */
-    public NStateDropDown() {
+    public ChoicesWithNull() {
         super();
     }
-    
+
     /**
      * Set the items in the combo box, e.g. {"Relative", "Absolute"} or
      * {"Happy","Neutral","Sad"}.
@@ -60,6 +62,19 @@ public class NStateDropDown extends JComboBox<String> {
             hasNull = true;
         }
     }
+    // /**
+    // * Sets the tristate drop down box to null. If the box does not have a
+    // null
+    // * entry (i.e. has only 2 items), adds a null entry and sets it as the
+    // * selected item.
+    // */
+    // public void setNull() {
+    // if (this.getItemCount() == 2) {
+    // addItem(SimbrainConstants.NULL_STRING);
+    // }
+    // setSelectedIndex(NULL);
+    // }
+    //
 
     /**
      * Remove the null state from the combo box.
@@ -71,6 +86,14 @@ public class NStateDropDown extends JComboBox<String> {
             hasNull = false;
         }
     }
+    // /**
+    // * Remove the null item.
+    // */
+    // public void removeNull() {
+    // if (this.getItemCount() == 3) {
+    // removeItem(SimbrainConstants.NULL_STRING);
+    // }
+    // }
 
     /**
      * Determines if the combo box is currently set to the null state.
@@ -84,5 +107,17 @@ public class NStateDropDown extends JComboBox<String> {
         }
         return false;
     }
+    // /**
+    // * Determines if value is null.
+    // *
+    // * @return true or false if value is null
+    // */
+    // public boolean isNull() {
+    // if (this.getSelectedIndex() == NULL) {
+    // return true;
+    // } else {
+    // return false;
+    // }
+    // }
 
 }

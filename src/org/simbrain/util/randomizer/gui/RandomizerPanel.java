@@ -40,7 +40,7 @@ import org.simbrain.util.math.ProbDistribution;
 import org.simbrain.util.math.SimbrainMath;
 import org.simbrain.util.randomizer.Randomizer;
 import org.simbrain.util.widgets.LabelledItem;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * <b>RandomizerPanel</b> an interface for setting parameters of a randomizer
@@ -280,7 +280,7 @@ public class RandomizerPanel extends JPanel {
     /**
      * @return Returns the isUseBoundsBox.
      */
-    public TristateDropDown getTsClipping() {
+    public YesNoNull getTsClipping() {
         if (cbDistribution.getSelectedItem().toString()
             .equals(SimbrainConstants.NULL_STRING)) {
             return null;

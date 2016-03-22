@@ -25,7 +25,7 @@ import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.AdditiveRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.randomizer.gui.RandomizerPanel;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * <b>AdditiveNeuronPanel</b>. TODO: No implementation... why?
@@ -42,7 +42,7 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
     private RandomizerPanel randTab = new RandomizerPanel();
 
     /** Add noise combo box. */
-    private TristateDropDown isAddNoise = new TristateDropDown();
+    private YesNoNull isAddNoise = new YesNoNull();
 
     /** A reference to the neuron update rule being edited. */
     private static final AdditiveRule prototypeRule = new AdditiveRule();
@@ -59,7 +59,7 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
         JTextField tfResistance = registerTextField(
                 (r) -> ((AdditiveRule) r).getResistance(),
                 (r, val) -> ((AdditiveRule) r).setResistance((double) val));
-        TristateDropDown isAddNoise = registerTriStateDropDown(
+        YesNoNull isAddNoise = registerTriStateDropDown(
                 (r) -> ((AdditiveRule) r).getAddNoise(),
                 (r, val) -> ((AdditiveRule) r).setAddNoise((Boolean) val));
 

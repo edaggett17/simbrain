@@ -26,7 +26,7 @@ import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.IACRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * <b>IACNeuronPanel</b> edits an IAC neuron or group of neurons.

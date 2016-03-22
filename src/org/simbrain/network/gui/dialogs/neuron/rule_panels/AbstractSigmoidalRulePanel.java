@@ -26,8 +26,8 @@ import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.AbstractSigmoidalRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.math.SquashingFunction;
-import org.simbrain.util.widgets.NStateDropDown;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.ChoicesWithNull;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * A rule panel containing all the variables and methods which would be shared
@@ -42,7 +42,7 @@ public abstract class AbstractSigmoidalRulePanel
     //TODO: Clean up top
     
     /** Implementation combo box. */
-    protected NStateDropDown cbImplementation;
+    protected ChoicesWithNull cbImplementation;
 
     /** Bias field. */
     protected JTextField tfBias;
@@ -78,7 +78,7 @@ public abstract class AbstractSigmoidalRulePanel
      *
      * @return the cbImplementation
      */
-    public NStateDropDown getCbImplementation() {
+    public ChoicesWithNull getCbImplementation() {
         return cbImplementation;
     }
 }

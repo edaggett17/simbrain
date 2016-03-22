@@ -25,7 +25,7 @@ import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.SpikingThresholdRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * <b>ProbabilisticSpikingNeuronPanel</b>. TODO: Deactivated until discussion
@@ -51,7 +51,7 @@ public class SpikingThresholdRulePanel extends AbstractNeuronRulePanel {
                 (r) -> ((SpikingThresholdRule) r).getThreshold(),
                 (r, val) -> ((SpikingThresholdRule) r)
                         .setThreshold((double) val));
-        TristateDropDown addNoise = registerTriStateDropDown(
+        YesNoNull addNoise = registerTriStateDropDown(
                 (r) -> ((SpikingThresholdRule) r).getAddNoise(),
                 (r, val) -> ((SpikingThresholdRule) r)
                         .setAddNoise((Boolean) val));

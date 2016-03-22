@@ -25,8 +25,8 @@ import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.DecayRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.NStateDropDown;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.ChoicesWithNull;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * <b>DecayNeuronPanel</b> represents a decay neuron.
@@ -56,7 +56,7 @@ public class DecayRulePanel extends AbstractNeuronRulePanel {
 
         this.add(tabbedPane);
 
-        NStateDropDown dropdown = registerNStateDropDown(
+        ChoicesWithNull dropdown = registerNStateDropDown(
                 (r) -> ((DecayRule) r).getRelAbs(),
                 (r, val) -> ((DecayRule) r).setRelAbs((int) val));
         JTextField baseLine = registerTextField(

@@ -36,7 +36,7 @@ import org.simbrain.util.Utils;
 import org.simbrain.util.math.ProbDistribution;
 import org.simbrain.util.randomizer.Randomizer;
 import org.simbrain.util.widgets.LabelledItem;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * A panel representing a given probability distribution.
@@ -62,8 +62,8 @@ public class ProbDistPanel {
     private JTextField tfParam2 = new JTextField(DEFAULT_TF_SIZE);
 
     /** Clipping combo box. */
-    private TristateDropDown tsClipping =
-        new TristateDropDown();
+    private YesNoNull tsClipping =
+        new YesNoNull();
 
     /** The panel where all items are placed. */
     private JPanel mainPanel = new JPanel();
@@ -281,7 +281,7 @@ public class ProbDistPanel {
     /**
      * @return Returns the isUseBoundsBox.
      */
-    public TristateDropDown getTsClipping() {
+    public YesNoNull getTsClipping() {
         return tsClipping;
     }
 

@@ -35,7 +35,7 @@ import org.simbrain.network.neuron_update_rules.interfaces.ClippableUpdateRule;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.Utils;
 import org.simbrain.util.widgets.EditablePanel;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * Manage the clipping, upper bound, and lower bound fields, and their logic. If
@@ -86,7 +86,7 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
      * A drop down box to display whether clipping is used, unused or both among
      * the selected neurons.
      */
-    private final TristateDropDown clippingDropDown = new TristateDropDown();
+    private final YesNoNull clippingDropDown = new YesNoNull();
     
     /** Parent reference so pack can be called. */
     private final Window parent;
@@ -104,7 +104,7 @@ public class BoundsClippingPanel extends JPanel implements EditablePanel {
 
         // Clipping dropdown listener
         clippingDropDown.addActionListener(e -> setBoundsEnabled(
-                clippingDropDown.getSelectedIndex() == TristateDropDown.getTRUE()));
+                clippingDropDown.getSelectedIndex() == YesNoNull.getTRUE()));
  
         // Layout panel
         boundsPanel.setLayout(new BoxLayout(boundsPanel, BoxLayout.Y_AXIS));

@@ -29,7 +29,7 @@ import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.NakaRushtonRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * <b>NakaRushtonNeuronPanel</b> edits a Naka Rushton neuron.
@@ -47,7 +47,7 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel
     private JTextField tfTimeConstant;
 
     /** Use adaptation combo box. */
-    private TristateDropDown tsUseAdaptation;
+    private YesNoNull tsUseAdaptation;
 
     /** Adaptation time constant. */
     private JTextField tfAdaptationTime;

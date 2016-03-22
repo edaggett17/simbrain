@@ -39,8 +39,8 @@ import org.simbrain.util.ParameterSetter;
 import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.Utils;
 import org.simbrain.util.randomizer.Randomizer;
-import org.simbrain.util.widgets.NStateDropDown;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.ChoicesWithNull;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * <b>AbstractNeuronPanel</b> is the parent class for all panels used to set
@@ -72,7 +72,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     private NoiseGeneratorPanel noisePanel;
     
     /** Drop-down to turn noise on, for noisy update rules. */
-    private TristateDropDown addNoise;
+    private YesNoNull addNoise;
 
 
     /**
@@ -130,10 +130,10 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param setter
      * @return
      */
-    public TristateDropDown registerTriStateDropDown(
+    public YesNoNull registerTriStateDropDown(
             ParameterGetter<NeuronUpdateRule, Boolean> getter,
             ParameterSetter<NeuronUpdateRule, Boolean> setter) {
-        return (TristateDropDown) this.<Boolean> registerProperty(Boolean.class,
+        return (YesNoNull) this.<Boolean> registerProperty(Boolean.class,
                 getter, setter);
     }
 
@@ -144,10 +144,10 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param setter
      * @return
      */
-    public NStateDropDown registerNStateDropDown(
+    public ChoicesWithNull registerNStateDropDown(
             ParameterGetter<NeuronUpdateRule, Integer> getter,
             ParameterSetter<NeuronUpdateRule, Integer> setter) {
-        return (NStateDropDown) this.<Integer> registerProperty(Integer.class,
+        return (ChoicesWithNull) this.<Integer> registerProperty(Integer.class,
                 getter, setter);
     }
 
@@ -170,11 +170,11 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
             editorList.add(new Editor(type, field, getter, setter));
             return field;
         } else if (type == Boolean.class) {
-            TristateDropDown dropDown = new TristateDropDown();
+            YesNoNull dropDown = new YesNoNull();
             editorList.add(new Editor(type, dropDown, getter, setter));
             return dropDown;
         } else if (type == Integer.class) {
-            NStateDropDown dropDown = new NStateDropDown();
+            ChoicesWithNull dropDown = new ChoicesWithNull();
             editorList.add(new Editor(type, dropDown, getter, setter));
             return dropDown;
         }
@@ -256,7 +256,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     private void fillBooleanField(final Editor<Boolean> editor,
             final List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
-        TristateDropDown dropDown = (TristateDropDown) editor.component;
+        YesNoNull dropDown = (YesNoNull) editor.component;
         if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {
             dropDown.setNull();
         } else {
@@ -276,7 +276,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     private void fillIntegerField(final Editor<Integer> editor,
             final List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
-        NStateDropDown dropDown = (NStateDropDown) editor.component;
+        ChoicesWithNull dropDown = (ChoicesWithNull) editor.component;
         if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {
             dropDown.setNull();
         } else {
@@ -338,7 +338,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      */
     private void commitBoolean(final Editor<Boolean> editor,
             final List<Neuron> neurons) {
-        TristateDropDown tdd = (TristateDropDown) editor.component;
+        YesNoNull tdd = (YesNoNull) editor.component;
         if (!tdd.isNull()) {
             boolean value = tdd.isSelected();
             neurons.stream().forEach(
@@ -354,7 +354,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      */
     private void commitInteger(final Editor<Integer> editor,
             final List<Neuron> neurons) {
-        NStateDropDown cb = (NStateDropDown) editor.component;
+        ChoicesWithNull cb = (ChoicesWithNull) editor.component;
         if (!cb.isNull()) {
             int index = cb.getSelectedIndex();
             neurons.stream().forEach(
@@ -485,7 +485,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     /**
      * @return the dropdown
      */
-    public TristateDropDown getAddNoise() {
+    public YesNoNull getAddNoise() {
         if (addNoise == null) {
             addNoise = registerTriStateDropDown(
                     (r) -> ((NoisyUpdateRule) r).getAddNoise(),

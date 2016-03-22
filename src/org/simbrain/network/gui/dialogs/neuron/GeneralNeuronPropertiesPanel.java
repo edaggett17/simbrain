@@ -44,7 +44,7 @@ import org.simbrain.util.Utils;
 import org.simbrain.util.widgets.DropDownTriangle;
 import org.simbrain.util.widgets.DropDownTriangle.UpDirection;
 import org.simbrain.util.widgets.EditablePanel;
-import org.simbrain.util.widgets.TristateDropDown;
+import org.simbrain.util.widgets.YesNoNull;
 
 /**
  * A panel containing more detailed generic information about neurons. Generally
@@ -97,14 +97,14 @@ public class GeneralNeuronPropertiesPanel extends JPanel
     private final JTextField tfPriority = new JTextField();
 
     /** Input type dropdown. */
-    private final TristateDropDown inputType = new TristateDropDown(
+    private final YesNoNull inputType = new YesNoNull(
             InputType.WEIGHTED.toString(), InputType.SYNAPTIC.toString());
 
     /**
      * Whether or not the neuron is clamped (i.e. will not update/change its
      * activation once set).
      */
-    private final TristateDropDown clamped = new TristateDropDown();
+    private final YesNoNull clamped = new YesNoNull();
 
     /** Parent reference so pack can be called. */
     private final Window parent;
