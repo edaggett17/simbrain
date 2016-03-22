@@ -22,13 +22,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.IntegrateAndFireRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.TristateDropDown;
 
 /**
- * <b>IntegrateAndFireNeuronPanel</b>.
+ * <b>IntegrateAndFireNeuronPanel</b> edits an integrate and fire neuron.
  */
 public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
 
@@ -55,11 +53,6 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
 
     /** Background current field. */
     private JTextField tfBackgroundCurrent;
-    /** Random tab. */
-    private NoiseGeneratorPanel randTab = new NoiseGeneratorPanel();
-
-    /** Add noise combo box. */
-    private TristateDropDown isAddNoise = new TristateDropDown();
 
     /** A reference to the neuron update rule being edited. */
     private static final IntegrateAndFireRule prototypeRule = new IntegrateAndFireRule();
@@ -95,10 +88,6 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
                 (r) -> ((IntegrateAndFireRule) r).getBackgroundCurrent(),
                 (r, val) -> ((IntegrateAndFireRule) r)
                         .setBackgroundCurrent((double) val));
-        TristateDropDown isAddNoise = registerTriStateDropDown(
-                (r) -> ((IntegrateAndFireRule) r).getAddNoise(),
-                (r, val) -> ((IntegrateAndFireRule) r)
-                        .setAddNoise((Boolean) val));
 
         mainTab.addItem("Threshold (mV)", tfThreshold);
         mainTab.addItem("Resting potential (mV)", tfRestingPotential);
@@ -106,10 +95,9 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
         mainTab.addItem("Resistance (M\u03A9)", tfResistance);
         mainTab.addItem("Background Current (nA)", tfBackgroundCurrent);
         mainTab.addItem("Time constant (ms)", tfTimeConstant);
-        mainTab.addItem("Add noise", isAddNoise);
+        mainTab.addItem("Add noise", getAddNoise());
         tabbedPane.add(mainTab, "Main");
-        noisePanel = new NoiseGeneratorPanel();
-        tabbedPane.add(randTab, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
     }
 
     @Override

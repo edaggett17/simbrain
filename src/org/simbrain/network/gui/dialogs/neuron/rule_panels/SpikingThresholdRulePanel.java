@@ -23,7 +23,6 @@ import javax.swing.JTextField;
 
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.SpikingThresholdRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.widgets.TristateDropDown;
@@ -60,9 +59,7 @@ public class SpikingThresholdRulePanel extends AbstractNeuronRulePanel {
         mainTab.addItem("Threshold", thresholdField);
         mainTab.addItem("Add noise", addNoise);
         tabbedPane.add(mainTab, "Main");
-
-        noisePanel = new NoiseGeneratorPanel();
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
     }
 
     @Override

@@ -45,9 +45,9 @@ public class DiscreteSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
         mainTab.addItem("Implementation", cbImplementation);
         mainTab.addItem("Bias", tfBias);
         mainTab.addItem("Slope", tfSlope);
-        mainTab.addItem("Add Noise", isAddNoise);
+        mainTab.addItem("Add Noise", getAddNoise());
         tabbedPane.add(mainTab, "Main");
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
     }
 
     @Override

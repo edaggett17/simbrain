@@ -22,7 +22,6 @@ import javax.swing.JTabbedPane;
 
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.ProductRule;
 import org.simbrain.util.LabelledItemPanel;
@@ -55,11 +54,10 @@ public class ProductRulePanel extends AbstractNeuronRulePanel {
                 (r) -> ((LinearRule) r).getAddNoise(),
                 (r, val) -> ((LinearRule) r).setAddNoise((Boolean) val));
         mainTab.addItem("Use weight values", useWeights);
-        mainTab.addItem("Add noise", addNoise);
+        mainTab.addItem("Add noise", getAddNoise());
         tabbedPane.add(mainTab, "Main");
 
-        noisePanel = new NoiseGeneratorPanel();
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
     }
 
     @Override

@@ -351,8 +351,8 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
      */
     private void setRandomizerPanelParent() {
         if (neuronRulePanel.getPrototypeRule() instanceof NoisyUpdateRule) {
-            if (neuronRulePanel.noisePanel != null) {
-                neuronRulePanel.noisePanel.setParent(parent);
+            if (neuronRulePanel.getNoisePanel() != null) {
+                neuronRulePanel.getNoisePanel().setParent(parent);
             }
         }
     }

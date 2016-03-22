@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -70,7 +69,11 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     protected abstract NeuronUpdateRule getPrototypeRule();
 
     /** Noise panel if any, null otherwise. */
-    protected NoiseGeneratorPanel noisePanel;
+    private NoiseGeneratorPanel noisePanel;
+    
+    /** Drop-down to turn noise on, for noisy update rules. */
+    private TristateDropDown addNoise;
+
 
     /**
      * A flag used to indicate whether this panel will be replacing neuron
@@ -93,7 +96,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
-     * Todo.  Default text field for doubles
+     * Todo. Default text field for doubles
      *
      * @param getter
      * @param setter
@@ -102,12 +105,12 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     public JTextField registerTextField(
             ParameterGetter<NeuronUpdateRule, Double> getter,
             ParameterSetter<NeuronUpdateRule, Double> setter) {
-        return (JTextField) this.<Double> registerProperty(
-                Double.class, getter, setter);
+        return (JTextField) this.<Double> registerProperty(Double.class, getter,
+                setter);
     }
 
     /**
-     * Todo.  Specify float.  used in HH for now.
+     * Todo. Specify float. used in HH for now.
      *
      * @param type
      * @param getter
@@ -117,8 +120,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     public <V> JTextField registerTextField(Class<V> type,
             ParameterGetter<NeuronUpdateRule, V> getter,
             ParameterSetter<NeuronUpdateRule, V> setter) {
-        return (JTextField) this.<V> registerProperty(type,
-                getter, setter);
+        return (JTextField) this.<V> registerProperty(type, getter, setter);
     }
 
     /**
@@ -132,7 +134,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
             ParameterGetter<NeuronUpdateRule, Boolean> getter,
             ParameterSetter<NeuronUpdateRule, Boolean> setter) {
         return (TristateDropDown) this.<Boolean> registerProperty(Boolean.class,
-                        getter, setter);
+                getter, setter);
     }
 
     /**
@@ -145,9 +147,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     public NStateDropDown registerNStateDropDown(
             ParameterGetter<NeuronUpdateRule, Integer> getter,
             ParameterSetter<NeuronUpdateRule, Integer> setter) {
-        return (NStateDropDown) this
-                .<Integer> registerProperty(Integer.class,
-                        getter, setter);
+        return (NStateDropDown) this.<Integer> registerProperty(Integer.class,
+                getter, setter);
     }
 
     /**
@@ -422,7 +423,7 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         }
         return false;
     }
-    
+
     /**
      * Forces adds to respect borderlayout so that addBottomText works properly.
      */
@@ -431,10 +432,9 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         return this.add(BorderLayout.CENTER, comp);
     }
 
-
     /**
-     * Associates a JComponent with methods used to set a property on a
-     * neuron update rule object. 
+     * Associates a JComponent with methods used to set a property on a neuron
+     * update rule object.
      *
      * @param <V> type of property being edited (double, boolean, etc).
      */
@@ -442,13 +442,15 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
 
         /** The type being edited. */
         private final Class<V> type;
-        
-        /** The Component (text field, dropdown, etc) used to edit this property. */
+
+        /**
+         * The Component (text field, dropdown, etc) used to edit this property.
+         */
         private final JComponent component;
-        
+
         /** The getter. */
         private final ParameterGetter<NeuronUpdateRule, V> getter;
-        
+
         /** The setter. */
         private final ParameterSetter<NeuronUpdateRule, V> setter;
 
@@ -461,11 +463,36 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
          * @param setter set property
          */
         public Editor(Class<V> type, JComponent component,
-                ParameterGetter<NeuronUpdateRule, V> getter, ParameterSetter<NeuronUpdateRule, V> setter) {
+                ParameterGetter<NeuronUpdateRule, V> getter,
+                ParameterSetter<NeuronUpdateRule, V> setter) {
             this.type = type;
             this.component = component;
             this.getter = getter;
             this.setter = setter;
         }
+    }
+
+    /**
+     * @return the noisePanel
+     */
+    public NoiseGeneratorPanel getNoisePanel() {
+        if (noisePanel == null) {
+            noisePanel = new NoiseGeneratorPanel();
+        }
+        return noisePanel;
+    }
+
+    /**
+     * @return the dropdown
+     */
+    public TristateDropDown getAddNoise() {
+        if (addNoise == null) {
+            addNoise = registerTriStateDropDown(
+                    (r) -> ((NoisyUpdateRule) r).getAddNoise(),
+                    (r, val) -> ((NoisyUpdateRule) r)
+                            .setAddNoise((Boolean) val));
+        }
+        return addNoise;
+
     }
 }

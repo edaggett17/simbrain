@@ -38,8 +38,7 @@ public class RandomGeneratorPanel extends AbstractNeuronRulePanel {
      */
     public RandomGeneratorPanel() {
         super();
-        noisePanel = new NoiseGeneratorPanel();
-        this.add(noisePanel);
+        this.add(getNoisePanel());
     }
 
     @Override

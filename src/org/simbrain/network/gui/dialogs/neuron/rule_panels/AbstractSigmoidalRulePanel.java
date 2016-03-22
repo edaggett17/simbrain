@@ -55,9 +55,6 @@ public abstract class AbstractSigmoidalRulePanel
 
     /** Main tab. */
     protected LabelledItemPanel mainTab = new LabelledItemPanel();
-    
-    /** Add noise combo box. */
-    protected TristateDropDown isAddNoise;
 
     /**
      * Construct the abstract panel.
@@ -74,13 +71,6 @@ public abstract class AbstractSigmoidalRulePanel
                 (r, val) -> ((AbstractSigmoidalRule) r).setSlope((double) val));
         tfBias = registerTextField((r) -> ((AbstractSigmoidalRule) r).getBias(),
                 (r, val) -> ((AbstractSigmoidalRule) r).setBias((double) val));
-        isAddNoise = registerTriStateDropDown(
-                (r) -> ((AbstractSigmoidalRule) r).getAddNoise(),
-                (r, val) -> ((AbstractSigmoidalRule) r)
-                        .setAddNoise((Boolean) val));
-        // below is superclass. Maybe call superclass method to make that more
-        // clear?
-        noisePanel = new NoiseGeneratorPanel(); // TODO: This is ugly. Fix.
     }
 
     /**

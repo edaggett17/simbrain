@@ -46,9 +46,6 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel
     /** Time constant field. */
     private JTextField tfTimeConstant;
 
-    /** Noise combo box. */
-    private TristateDropDown tsNoise;
-
     /** Use adaptation combo box. */
     private TristateDropDown tsUseAdaptation;
 
@@ -87,9 +84,6 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel
                 (r) -> ((NakaRushtonRule) r).getUseAdaptation(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setUseAdaptation((Boolean) val));
-        tsNoise = registerTriStateDropDown(
-                (r) -> ((NakaRushtonRule) r).getAddNoise(),
-                (r, val) -> ((NakaRushtonRule) r).setAddNoise((Boolean) val));
         tfAdaptationParam = registerTextField(
                 (r) -> ((NakaRushtonRule) r).getAdaptationParameter(),
                 (r, val) -> ((NakaRushtonRule) r)
@@ -102,16 +96,15 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel
         tsUseAdaptation.addActionListener(this);
 
         this.add(tabbedPane);
-        noisePanel = new NoiseGeneratorPanel();
         mainTab.addItem("Steepness", tfSteepness);
         mainTab.addItem("Semi-saturation constant", tfSemiSaturation);
         mainTab.addItem("Time constant", tfTimeConstant);
-        mainTab.addItem("Add noise", tsNoise);
+        mainTab.addItem("Add noise", getAddNoise());
         mainTab.addItem("Use Adaptation", tsUseAdaptation);
         mainTab.addItem("Adaptation parameter", tfAdaptationParam);
         mainTab.addItem("Adaptation time constant", tfAdaptationTime);
         tabbedPane.add(mainTab, "Main");
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
     }
 
     /**

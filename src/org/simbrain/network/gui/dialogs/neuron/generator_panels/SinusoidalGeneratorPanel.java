@@ -23,24 +23,16 @@ import javax.swing.JTextField;
 
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.activity_generators.SinusoidalRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.TristateDropDown;
 
 /**
- * <b>SinusoidalNeuronPanel</b>.
+ * <b>SinusoidalGeneratorPanel</b> edits a sinusoidal actiity generator.
  */
 public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
 
-    /** Add noise combo box. */
-    private TristateDropDown isAddNoise = new TristateDropDown();
-
     /** Main panel. */
     private LabelledItemPanel mainPanel = new LabelledItemPanel();
-
-    /** Random panel. */
-    private NoiseGeneratorPanel randPanel = new NoiseGeneratorPanel();
 
     /** Tabbed panel. */
     private JTabbedPane tabbedPanel = new JTabbedPane();
@@ -63,10 +55,9 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
                 (r, val) -> ((SinusoidalRule) r).setFrequency((double) val));
         mainPanel.addItem("Phase", tfPhase);
         mainPanel.addItem("Frequency", tfFrequency);
-        mainPanel.addItem("Add noise", isAddNoise);
+        mainPanel.addItem("Add noise", getAddNoise());
         tabbedPanel.add(mainPanel, "Main");
-        noisePanel = new NoiseGeneratorPanel();
-        tabbedPanel.add(noisePanel, "Noise");
+        tabbedPanel.add(getNoisePanel(), "Noise");
     }
 
     @Override

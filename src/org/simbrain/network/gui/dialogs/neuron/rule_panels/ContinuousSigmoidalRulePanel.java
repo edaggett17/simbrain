@@ -61,9 +61,9 @@ public class ContinuousSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
         mainTab.addItem("Leak Constant", tfLeakConstant);
         mainTab.addItem("Bias", tfBias);
         mainTab.addItem("Slope", tfSlope);
-        mainTab.addItem("Add Noise", isAddNoise);
+        mainTab.addItem("Add Noise", getAddNoise());
         tabbedPane.add(mainTab, "Main");
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
     }
 
     @Override

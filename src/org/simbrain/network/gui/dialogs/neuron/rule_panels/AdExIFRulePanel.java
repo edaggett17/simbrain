@@ -81,6 +81,7 @@ public class AdExIFRulePanel extends AbstractNeuronRulePanel {
         mainTab.addItem("Capacitance (pF)", tfCap);
         mainTab.addItem("Background Current (nA)", tfBgCurrent);
         mainTab.addItem("Slope Factor", tfSlopeFactor);
+        mainTab.addItem("Add noise", this.getAddNoise());
         currentTab.addItem("Leak Conductance (nS)", tfGL);
         currentTab.addItem("Max Ex. Conductance (nS)", tfGeBar);
         currentTab.addItem("Max In. Conductance (nS)", tfGiBar);
@@ -94,8 +95,7 @@ public class AdExIFRulePanel extends AbstractNeuronRulePanel {
         tabbedPane.add(currentTab, "Input Currents");
         tabbedPane.add(adaptationTab, "Adaptation");
 
-        noisePanel = new NoiseGeneratorPanel();
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(this.getNoisePanel(), "Noise");
     }
 
     @Override

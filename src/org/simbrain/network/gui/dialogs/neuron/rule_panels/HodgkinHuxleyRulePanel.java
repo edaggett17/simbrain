@@ -72,19 +72,15 @@ public class HodgkinHuxleyRulePanel extends AbstractNeuronRulePanel {
         getEk = registerTextField(Float.class,
                 (r) -> ((HodgkinHuxleyRule) r).getEk(),
                 (r, val) -> ((HodgkinHuxleyRule) r).setEk((float) val));
-        TristateDropDown addNoise = registerTriStateDropDown(
-                (r) -> ((HodgkinHuxleyRule) r).getAddNoise(),
-                (r, val) -> ((HodgkinHuxleyRule) r).setAddNoise((Boolean) val));
 
         mainTab.addItem("Sodium Channels", perNaChannels);
         mainTab.addItem("Potassium Channels", perKChannels);
         mainTab.addItem("Sodium Equilibrium", getEna);
         mainTab.addItem("Potassium Equilibrium", getEk);
-        mainTab.addItem("Add noise", addNoise);
+        mainTab.addItem("Add noise", getAddNoise());
         tabbedPane.add(mainTab, "Main");
 
-        noisePanel = new NoiseGeneratorPanel();
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
 
     }
 

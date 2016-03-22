@@ -61,7 +61,7 @@ public class NeuronPropertiesPanel extends JPanel implements EditablePanel {
     private static final int DEFAULT_VGAP = 10;
     
     /** Whether to initially display the update rule panel. */ 
-    private static boolean DEFAULT_DISPLAY_UPDATE_RULE_PANEL = false;
+    private static boolean DEFAULT_DISPLAY_UPDATE_RULE_PANEL = true;
        
     /** Static initializer */
     static {

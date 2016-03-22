@@ -67,9 +67,6 @@ public class DecayRulePanel extends AbstractNeuronRulePanel {
         decayFraction = registerTextField(
                 (r) -> ((DecayRule) r).getDecayFraction(),
                 (r, val) -> ((DecayRule) r).setDecayFraction((double) val));
-        TristateDropDown addNoise = registerTriStateDropDown(
-                (r) -> ((DecayRule) r).getAddNoise(),
-                (r, val) -> ((DecayRule) r).setAddNoise((Boolean) val));
 
         dropdown.setItems(new String[] { "Relative", "Absolute" });
         dropdown.addActionListener(e -> {
@@ -80,12 +77,11 @@ public class DecayRulePanel extends AbstractNeuronRulePanel {
         mainTab.addItem("Base line", baseLine);
         mainTab.addItem("Decay amount", decayAmount);
         mainTab.addItem("Decay fraction", decayFraction);
-        mainTab.addItem("Add noise", addNoise);
+        mainTab.addItem("Add noise", getAddNoise());
 
         tabbedPane.add(mainTab, "Main");
 
-        noisePanel = new NoiseGeneratorPanel();
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
         checkBounds(dropdown.getSelectedIndex());
     }
 

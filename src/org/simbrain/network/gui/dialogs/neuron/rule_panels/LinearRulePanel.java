@@ -53,17 +53,12 @@ public class LinearRulePanel extends AbstractNeuronRulePanel {
         JTextField biasField = registerTextField(
                 (r) -> ((LinearRule) r).getBias(),
                 (r, val) -> ((LinearRule) r).setBias((double) val));
-        TristateDropDown addNoise = registerTriStateDropDown(
-                (r) -> ((LinearRule) r).getAddNoise(),
-                (r, val) -> ((LinearRule) r).setAddNoise((Boolean) val));
         mainTab.addItem("Slope", slopeField);
         mainTab.addItem("Bias", biasField);
-        mainTab.addItem("Add noise", addNoise);
+        mainTab.addItem("Add noise", this.getAddNoise());
         tabbedPane.add(mainTab, "Main");
         
-        // below is superclass. Maybe call superclass method to make that more clear?
-        noisePanel = new NoiseGeneratorPanel(); // TODO: This is ugly. Fix.
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
        
     }
 

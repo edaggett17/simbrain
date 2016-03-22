@@ -64,16 +64,14 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel {
         JTextField tfI_Bg = registerTextField(
                 (r) -> ((MorrisLecarRule) r).getI_bg(),
                 (r, val) -> ((MorrisLecarRule) r).setI_bg((double) val));
-//        TristateDropDown isAddNoise = registerTriStateDropDown(
-//                (r) -> ((DecayRule) r).getAddNoise(),
-//                (r, val) -> ((DecayRule) r).setAddNoise((Boolean) val));
+
         LabelledItemPanel cellPanel = new LabelledItemPanel();
         cellPanel.addItem("Capacitance (\u03BCF/cm\u00B2)", tfCMembrane);
         cellPanel.addItem("Voltage const. 1", tfV_M1);
         cellPanel.addItem("Voltage const. 2", tfV_M2);
         cellPanel.addItem("Threshold (mV)", tfThreshold);
         cellPanel.addItem("Background current (nA)", tfI_Bg);
-//        cellPanel.addItem("Add noise: ", isAddNoise); // TODO: Think
+        cellPanel.addItem("Add noise: ", getAddNoise());
 
         JTextField tfG_Ca = registerTextField(
                 (r) -> ((MorrisLecarRule) r).getG_Ca(),
@@ -124,8 +122,7 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel {
         tabbedPane.add(ionPanel, "Ion Properties");
         tabbedPane.add(potas, "K\u207A consts.");
 
-        noisePanel = new NoiseGeneratorPanel();
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
     }
 
     @Override

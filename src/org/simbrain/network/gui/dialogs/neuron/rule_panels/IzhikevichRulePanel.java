@@ -58,18 +58,14 @@ public class IzhikevichRulePanel extends AbstractNeuronRulePanel {
         JTextField tfIBg = registerTextField(
                 (r) -> ((IzhikevichRule) r).getiBg(),
                 (r, val) -> ((IzhikevichRule) r).setiBg((double) val));
-        TristateDropDown tfNoise = registerTriStateDropDown(
-                (r) -> ((IzhikevichRule) r).getAddNoise(),
-                (r, val) -> ((IzhikevichRule) r).setAddNoise((Boolean) val));
         mainTab.addItem("A", tfA);
         mainTab.addItem("B", tfB);
         mainTab.addItem("C", tfC);
         mainTab.addItem("D", tfD);
         mainTab.addItem("Ibg", tfIBg);
-        mainTab.addItem("Add noise", tfNoise);
+        mainTab.addItem("Add noise", getAddNoise());
         tabbedPane.add(mainTab, "Main");
-        noisePanel = new NoiseGeneratorPanel(); // todo
-        tabbedPane.add(noisePanel, "Noise");
+        tabbedPane.add(getNoisePanel(), "Noise");
         this.addBottomText("<html>For a list of useful parameter settings<p>"
                 + "press the \"Help\" Button.</html>");
     }
