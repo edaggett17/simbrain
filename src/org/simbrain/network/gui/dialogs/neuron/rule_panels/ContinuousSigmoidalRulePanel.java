@@ -48,11 +48,11 @@ public class ContinuousSigmoidalRulePanel extends AbstractSigmoidalRulePanel {
     public ContinuousSigmoidalRulePanel() {
         super();
         this.add(tabbedPane);
-        tfTimeConstant = registerTextField(
+        tfTimeConstant = createTextField(
                 (r) -> ((ContinuousSigmoidalRule) r).getTimeConstant(),
                 (r, val) -> ((ContinuousSigmoidalRule) r)
                         .setTimeConstant((double) val));
-        tfLeakConstant = registerTextField(
+        tfLeakConstant = createTextField(
                 (r) -> ((ContinuousSigmoidalRule) r).getLeakConstant(),
                 (r, val) -> ((ContinuousSigmoidalRule) r)
                         .setLeakConstant((double) val));

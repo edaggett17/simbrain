@@ -56,15 +56,15 @@ public class DecayRulePanel extends AbstractNeuronRulePanel {
 
         this.add(tabbedPane);
 
-        ChoicesWithNull dropdown = registerNStateDropDown(
+        ChoicesWithNull dropdown = createDropDown(
                 (r) -> ((DecayRule) r).getRelAbs(),
                 (r, val) -> ((DecayRule) r).setRelAbs((int) val));
-        JTextField baseLine = registerTextField(
+        JTextField baseLine = createTextField(
                 (r) -> ((DecayRule) r).getBaseLine(),
                 (r, val) -> ((DecayRule) r).setBaseLine((double) val));
-        decayAmount = registerTextField((r) -> ((DecayRule) r).getDecayAmount(),
+        decayAmount = createTextField((r) -> ((DecayRule) r).getDecayAmount(),
                 (r, val) -> ((DecayRule) r).setDecayAmount((double) val));
-        decayFraction = registerTextField(
+        decayFraction = createTextField(
                 (r) -> ((DecayRule) r).getDecayFraction(),
                 (r, val) -> ((DecayRule) r).setDecayFraction((double) val));
 

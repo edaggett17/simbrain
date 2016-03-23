@@ -47,15 +47,15 @@ public class IzhikevichRulePanel extends AbstractNeuronRulePanel {
     public IzhikevichRulePanel() {
         super();
         this.add(tabbedPane);
-        JTextField tfA = registerTextField((r) -> ((IzhikevichRule) r).getA(),
+        JTextField tfA = createTextField((r) -> ((IzhikevichRule) r).getA(),
                 (r, val) -> ((IzhikevichRule) r).setA((double) val));
-        JTextField tfB = registerTextField((r) -> ((IzhikevichRule) r).getB(),
+        JTextField tfB = createTextField((r) -> ((IzhikevichRule) r).getB(),
                 (r, val) -> ((IzhikevichRule) r).setB((double) val));
-        JTextField tfC = registerTextField((r) -> ((IzhikevichRule) r).getC(),
+        JTextField tfC = createTextField((r) -> ((IzhikevichRule) r).getC(),
                 (r, val) -> ((IzhikevichRule) r).setC((double) val));
-        JTextField tfD = registerTextField((r) -> ((IzhikevichRule) r).getD(),
+        JTextField tfD = createTextField((r) -> ((IzhikevichRule) r).getD(),
                 (r, val) -> ((IzhikevichRule) r).setD((double) val));
-        JTextField tfIBg = registerTextField(
+        JTextField tfIBg = createTextField(
                 (r) -> ((IzhikevichRule) r).getiBg(),
                 (r, val) -> ((IzhikevichRule) r).setiBg((double) val));
         mainTab.addItem("A", tfA);

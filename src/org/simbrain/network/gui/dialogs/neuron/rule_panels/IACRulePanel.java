@@ -49,10 +49,10 @@ public class IACRulePanel extends AbstractNeuronRulePanel {
         super();
         this.add(tabbedPane);
 
-        JTextField decayField = registerTextField(
+        JTextField decayField = createTextField(
                 (r) -> ((IACRule) r).getDecay(),
                 (r, val) -> ((IACRule) r).setDecay((double) val));
-        JTextField restField = registerTextField((r) -> ((IACRule) r).getRest(),
+        JTextField restField = createTextField((r) -> ((IACRule) r).getRest(),
                 (r, val) -> ((IACRule) r).setRest((double) val));
 
         mainTab.addItem("Decay", decayField);

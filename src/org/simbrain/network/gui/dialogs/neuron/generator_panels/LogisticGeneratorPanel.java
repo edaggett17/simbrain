@@ -43,7 +43,7 @@ public class LogisticGeneratorPanel extends AbstractNeuronRulePanel {
      */
     public LogisticGeneratorPanel() {
         super();
-        JTextField tfGrowthRate = registerTextField(
+        JTextField tfGrowthRate = createTextField(
                 (r) -> ((LogisticRule) r).getGrowthRate(),
                 (r, val) -> ((LogisticRule) r).setGrowthRate((double) val));
         mainPanel.addItem("Growth Rate", tfGrowthRate);

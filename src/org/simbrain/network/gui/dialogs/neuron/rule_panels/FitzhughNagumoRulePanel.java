@@ -44,15 +44,15 @@ public class FitzhughNagumoRulePanel extends AbstractNeuronRulePanel {
     public FitzhughNagumoRulePanel() {
         super();
         this.add(tabbedPane);
-        tfA = registerTextField((r) -> ((FitzhughNagumo) r).getA(),
+        tfA = createTextField((r) -> ((FitzhughNagumo) r).getA(),
                 (r, val) -> ((FitzhughNagumo) r).setA((double) val));
-        tfB = registerTextField((r) -> ((FitzhughNagumo) r).getB(),
+        tfB = createTextField((r) -> ((FitzhughNagumo) r).getB(),
                 (r, val) -> ((FitzhughNagumo) r).setB((double) val));
-        tfC = registerTextField((r) -> ((FitzhughNagumo) r).getC(),
+        tfC = createTextField((r) -> ((FitzhughNagumo) r).getC(),
                 (r, val) -> ((FitzhughNagumo) r).setC((double) val));
-        tfIbg = registerTextField((r) -> ((FitzhughNagumo) r).getiBg(),
+        tfIbg = createTextField((r) -> ((FitzhughNagumo) r).getiBg(),
                 (r, val) -> ((FitzhughNagumo) r).setiBg((double) val));
-        tfThreshold = registerTextField(
+        tfThreshold = createTextField(
                 (r) -> ((FitzhughNagumo) r).getThreshold(),
                 (r, val) -> ((FitzhughNagumo) r).setThreshold((double) val));
         mainTab.addItem("A (Recovery Rate): ", tfA);

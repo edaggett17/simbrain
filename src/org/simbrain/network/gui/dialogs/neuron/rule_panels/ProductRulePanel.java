@@ -47,10 +47,10 @@ public class ProductRulePanel extends AbstractNeuronRulePanel {
      */
     public ProductRulePanel() {
         this.add(tabbedPane);
-        YesNoNull useWeights = registerTriStateDropDown(
+        YesNoNull useWeights = createYesNoChoiceBox(
                 (r) -> ((ProductRule) r).getUseWeights(),
                 (r, val) -> ((ProductRule) r).setUseWeights((boolean) val));
-        YesNoNull addNoise = registerTriStateDropDown(
+        YesNoNull addNoise = createYesNoChoiceBox(
                 (r) -> ((LinearRule) r).getAddNoise(),
                 (r, val) -> ((LinearRule) r).setAddNoise((Boolean) val));
         mainTab.addItem("Use weight values", useWeights);

@@ -44,18 +44,18 @@ public class BinaryRulePanel extends AbstractNeuronRulePanel {
         super();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JTextField biasField = registerTextField(
+        JTextField biasField = createTextField(
                 (r) -> ((BinaryRule) r).getBias(),
                 (r, val) -> ((BinaryRule) r).setBias((double) val));
-        JTextField lowerBoundField = registerTextField(
+        JTextField lowerBoundField = createTextField(
                 (r) -> ((BinaryRule) r).getLowerBound(),
                 (r, val) -> ((BinaryRule) r).setLowerBound((double) val));
 
-        JTextField upperBoundField = registerTextField(
+        JTextField upperBoundField = createTextField(
                 (r) -> ((BinaryRule) r).getUpperBound(),
                 (r, val) -> ((BinaryRule) r).setUpperBound((double) val));
 
-        JTextField thresholdField = registerTextField(
+        JTextField thresholdField = createTextField(
                 (r) -> ((BinaryRule) r).getThreshold(),
                 (r, val) -> ((BinaryRule) r).setThreshold((double) val));
 

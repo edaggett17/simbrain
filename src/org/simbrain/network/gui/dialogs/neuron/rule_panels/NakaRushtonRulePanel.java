@@ -70,25 +70,25 @@ public class NakaRushtonRulePanel extends AbstractNeuronRulePanel
     public NakaRushtonRulePanel() {
         super();
 
-        tfSteepness = registerTextField(
+        tfSteepness = createTextField(
                 (r) -> ((NakaRushtonRule) r).getSteepness(),
                 (r, val) -> ((NakaRushtonRule) r).setSteepness((double) val));
-        tfSemiSaturation = registerTextField(
+        tfSemiSaturation = createTextField(
                 (r) -> ((NakaRushtonRule) r).getSteepness(),
                 (r, val) -> ((NakaRushtonRule) r).setSteepness((double) val));
-        tfTimeConstant = registerTextField(
+        tfTimeConstant = createTextField(
                 (r) -> ((NakaRushtonRule) r).getTimeConstant(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setTimeConstant((double) val));
-        tsUseAdaptation = registerTriStateDropDown(
+        tsUseAdaptation = createYesNoChoiceBox(
                 (r) -> ((NakaRushtonRule) r).getUseAdaptation(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setUseAdaptation((Boolean) val));
-        tfAdaptationParam = registerTextField(
+        tfAdaptationParam = createTextField(
                 (r) -> ((NakaRushtonRule) r).getAdaptationParameter(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setAdaptationParameter((double) val));
-        tfAdaptationTime = registerTextField(
+        tfAdaptationTime = createTextField(
                 (r) -> ((NakaRushtonRule) r).getAdaptationTimeConstant(),
                 (r, val) -> ((NakaRushtonRule) r)
                         .setAdaptationTimeConstant((double) val));

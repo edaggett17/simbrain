@@ -63,24 +63,24 @@ public class ThreeValueRulePanel extends AbstractNeuronRulePanel {
     public ThreeValueRulePanel() {
         super();
         this.add(mainTab);
-        tfBias = registerTextField(
+        tfBias = createTextField(
                 (r) -> ((ThreeValueRule) r).getBias(),
                 (r, val) -> ((ThreeValueRule) r).setBias((double) val));
-        tfLowerThreshold = registerTextField(
+        tfLowerThreshold = createTextField(
                 (r) -> ((ThreeValueRule) r).getLowerThreshold(),
                 (r, val) -> ((ThreeValueRule) r)
                         .setLowerThreshold((double) val));
-        tfUpperThreshold = registerTextField(
+        tfUpperThreshold = createTextField(
                 (r) -> ((ThreeValueRule) r).getUpperThreshold(),
                 (r, val) -> ((ThreeValueRule) r)
                         .setUpperThreshold((double) val));
-        tfLowerValue = registerTextField(
+        tfLowerValue = createTextField(
                 (r) -> ((ThreeValueRule) r).getLowerValue(),
                 (r, val) -> ((ThreeValueRule) r).setLowerValue((double) val));
-        tfMiddleValue = registerTextField(
+        tfMiddleValue = createTextField(
                 (r) -> ((ThreeValueRule) r).getMiddleValue(),
                 (r, val) -> ((ThreeValueRule) r).setMiddleValue((double) val));
-        tfUpperValue = registerTextField(
+        tfUpperValue = createTextField(
                 (r) -> ((ThreeValueRule) r).getUpperValue(),
                 (r, val) -> ((ThreeValueRule) r).setUpperValue((double) val));
         mainTab.addItem("Bias", tfBias);

@@ -60,16 +60,15 @@ public abstract class AbstractSigmoidalRulePanel
      * Construct the abstract panel.
      */
     protected AbstractSigmoidalRulePanel() {
-        // TODO: Maybe pull isAddNoise back to the super-level
-        cbImplementation = registerNStateDropDown(
+        cbImplementation = createDropDown(
                 (r) -> ((AbstractSigmoidalRule) r).getSquashFunctionInt(),
                 (r, val) -> ((AbstractSigmoidalRule) r)
                         .setSquashFunctionInt((int) val));
         cbImplementation.setItems(SquashingFunction.names());
-        tfSlope = registerTextField(
+        tfSlope = createTextField(
                 (r) -> ((AbstractSigmoidalRule) r).getSlope(),
                 (r, val) -> ((AbstractSigmoidalRule) r).setSlope((double) val));
-        tfBias = registerTextField((r) -> ((AbstractSigmoidalRule) r).getBias(),
+        tfBias = createTextField((r) -> ((AbstractSigmoidalRule) r).getBias(),
                 (r, val) -> ((AbstractSigmoidalRule) r).setBias((double) val));
     }
 

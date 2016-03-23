@@ -45,7 +45,7 @@ public class StochasticGeneratorPanel extends AbstractNeuronRulePanel {
     public StochasticGeneratorPanel() {
         super();
         add(mainPanel);
-        JTextField firingProbability = registerTextField(
+        JTextField firingProbability = createTextField(
                 (r) -> ((StochasticRule) r).getFiringProbability(),
                 (r, val) -> ((StochasticRule) r)
                         .setFiringProbability((double) val));

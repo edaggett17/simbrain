@@ -58,18 +58,18 @@ public class HodgkinHuxleyRulePanel extends AbstractNeuronRulePanel {
     public HodgkinHuxleyRulePanel() {
         super();
         this.add(tabbedPane);
-        perNaChannels = registerTextField(Float.class,
+        perNaChannels = createTextField(Float.class,
                 (r) -> ((HodgkinHuxleyRule) r).getPerNaChannels(),
                 (r, val) -> ((HodgkinHuxleyRule) r)
                         .setPerNaChannels((float) val));
-        perKChannels = registerTextField(Float.class,
+        perKChannels = createTextField(Float.class,
                 (r) -> ((HodgkinHuxleyRule) r).getPerKChannels(),
                 (r, val) -> ((HodgkinHuxleyRule) r)
                         .setPerKChannels((float) val));
-        getEna = registerTextField(Float.class,
+        getEna = createTextField(Float.class,
                 (r) -> ((HodgkinHuxleyRule) r).getEna(),
                 (r, val) -> ((HodgkinHuxleyRule) r).setEna((float) val));
-        getEk = registerTextField(Float.class,
+        getEk = createTextField(Float.class,
                 (r) -> ((HodgkinHuxleyRule) r).getEk(),
                 (r, val) -> ((HodgkinHuxleyRule) r).setEk((float) val));
 

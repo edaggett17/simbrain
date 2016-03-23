@@ -70,10 +70,9 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
 
     /** Noise panel if any, null otherwise. */
     private NoiseGeneratorPanel noisePanel;
-    
+
     /** Drop-down to turn noise on, for noisy update rules. */
     private YesNoNull addNoise;
-
 
     /**
      * A flag used to indicate whether this panel will be replacing neuron
@@ -96,72 +95,82 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
-     * Todo. Default text field for doubles
+     * Get a text field that will be used to edit a double-valued property of a
+     * neuron.
      *
-     * @param getter
-     * @param setter
-     * @return
+     * @param getter the getter for the property
+     * @param setter the setter for the property.
+     * @return the text field that will display that property value and be used
+     *         to set it.
      */
-    public JTextField registerTextField(
+    public JTextField createTextField(
             ParameterGetter<NeuronUpdateRule, Double> getter,
             ParameterSetter<NeuronUpdateRule, Double> setter) {
-        return (JTextField) this.<Double> registerProperty(Double.class, getter,
+        return (JTextField) this.<Double> createPropertyEditor(Double.class, getter,
                 setter);
     }
 
     /**
-     * Todo. Specify float. used in HH for now.
+     * Get a text field that will be used to edit a numerical-valued property of a
+     * neuron, beyond the default of double. Currently only supports floats.
      *
-     * @param type
-     * @param getter
-     * @param setter
-     * @return
+     * @param getter the getter for the property
+     * @param setter the setter for the property.
+     * @return the text field that will display that property value and be used
+     *         to set it.
      */
-    public <V> JTextField registerTextField(Class<V> type,
+    public <V> JTextField createTextField(Class<V> type,
             ParameterGetter<NeuronUpdateRule, V> getter,
             ParameterSetter<NeuronUpdateRule, V> setter) {
-        return (JTextField) this.<V> registerProperty(type, getter, setter);
+        return (JTextField) this.<V> createPropertyEditor(type, getter, setter);
     }
 
     /**
-     * Todo.
+     * Get a yes / no drop-down that will be used to edit a boolean-valued property of a
+     * neuron.
      *
-     * @param getter
-     * @param setter
-     * @return
+     * @param getter the getter for the property
+     * @param setter the setter for the property.
+     * @return the drop-down that will display that property value and be used
+     *         to set it.
      */
-    public YesNoNull registerTriStateDropDown(
+    public YesNoNull createYesNoChoiceBox(
             ParameterGetter<NeuronUpdateRule, Boolean> getter,
             ParameterSetter<NeuronUpdateRule, Boolean> setter) {
-        return (YesNoNull) this.<Boolean> registerProperty(Boolean.class,
+        return (YesNoNull) this.<Boolean> createPropertyEditor(Boolean.class,
                 getter, setter);
     }
 
     /**
-     * Todo.
+     * Creates a choicebox that will be used to edit an integer property of a
+     * neuron, that corresponds to a discrete list of choices.
      *
-     * @param getter
-     * @param setter
-     * @return
+     * @param getter the getter for the property
+     * @param setter the setter for the property.
+     * @return the choice box that will display that property value and be used
+     *         to set it.
      */
-    public ChoicesWithNull registerNStateDropDown(
+    public ChoicesWithNull createDropDown(
             ParameterGetter<NeuronUpdateRule, Integer> getter,
             ParameterSetter<NeuronUpdateRule, Integer> setter) {
-        return (ChoicesWithNull) this.<Integer> registerProperty(Integer.class,
+        return (ChoicesWithNull) this.<Integer> createPropertyEditor(Integer.class,
                 getter, setter);
     }
 
     /**
-     * Register a component, a getter and a setter... TODO ... Rename
-     * registerEditor or editableProperty?
+     * Private method to get a JComponent that is used to edit a property of a
+     * neuron.  The appropriate JComponent is returned based on the property
+     * being edited.
+     * 
+     * Todo: throw exception if not a supported type
      *
-     * @param type
-     * @param getter
-     * @param setter
+     * @param type the type of the property being edited
+     * @param getter a property getter
+     * @param setter a property setter
      * @return the component (text field, drop-down, etc) associated with this
      *         editor.
      */
-    private <V> JComponent registerProperty(Class<V> type,
+    private <V> JComponent createPropertyEditor(Class<V> type,
             ParameterGetter<NeuronUpdateRule, V> getter,
             ParameterSetter<NeuronUpdateRule, V> setter) {
 
@@ -189,10 +198,11 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      */
     public final void fillDefaultValues() {
 
-        editorList.stream()
-                .filter(editor -> (editor.type == Double.class)
-                        || (editor.type == Float.class))
+        editorList.stream().filter(editor -> editor.type == Double.class)
                 .forEach(editor -> fillDoubleField(editor,
+                        Collections.singletonList(getPrototypeRule())));
+        editorList.stream().filter(editor -> editor.type == Float.class)
+                .forEach(editor -> fillFloatField(editor,
                         Collections.singletonList(getPrototypeRule())));
         editorList.stream().filter(editor -> editor.type == Boolean.class)
                 .forEach(editor -> fillBooleanField(editor,
@@ -220,6 +230,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
         // getters.
         editorList.stream().filter(editor -> editor.type == Double.class)
                 .forEach(editor -> fillDoubleField(editor, ruleList));
+        editorList.stream().filter(editor -> editor.type == Float.class)
+                .forEach(editor -> fillFloatField(editor, ruleList));
         editorList.stream().filter(editor -> editor.type == Boolean.class)
                 .forEach(editor -> fillBooleanField(editor, ruleList));
         editorList.stream().filter(editor -> editor.type == Integer.class)
@@ -237,6 +249,19 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
      * @param ruleList rule list, used for the consistency check
      */
     private void fillDoubleField(final Editor<Double> editor,
+            final List<NeuronUpdateRule> ruleList) {
+        NeuronUpdateRule neuronRef = ruleList.get(0);
+        JTextField textField = (JTextField) editor.component;
+        if (!NetworkUtils.isConsistent(ruleList, editor.getter)) {
+            textField.setText(SimbrainConstants.NULL_STRING);
+        } else {
+            textField.setText("" + editor.getter.getParameter(neuronRef));
+        }
+    }
+
+    // Does the same as above but for floats. Would be nice to generalize
+    // to all number types, but got lazy, and this can be improved later. (jky)
+    private void fillFloatField(final Editor<Float> editor,
             final List<NeuronUpdateRule> ruleList) {
         NeuronUpdateRule neuronRef = ruleList.get(0);
         JTextField textField = (JTextField) editor.component;
@@ -301,7 +326,6 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
             }
         }
 
-        // TODO: Deal with floats. Somehow use number?
         // Write parameter values in all fields
         editorList.stream().filter(editor -> editor.type == Double.class)
                 .forEach(editor -> commitDouble(editor, neurons));
@@ -309,6 +333,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
                 .forEach(editor -> commitBoolean(editor, neurons));
         editorList.stream().filter(editor -> editor.type == Integer.class)
                 .forEach(editor -> commitInteger(editor, neurons));
+        editorList.stream().filter(editor -> editor.type == Float.class)
+                .forEach(editor -> commitFloat(editor, neurons));
 
         if (isNoisePanel()) {
             noisePanel.commitRandom(neurons);
@@ -325,6 +351,17 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
             final List<Neuron> neurons) {
         double value = Utils.doubleParsable((JTextField) editor.component);
         if (!Double.isNaN(value)) {
+            neurons.stream().forEach(
+                    r -> editor.setter.setParameter(r.getUpdateRule(), value));
+        }
+    }
+
+    // Does the same as above but for floats. Would be nice to generalize
+    // to all number types, but got lazy, and this can be improved later. (jky)
+    private void commitFloat(final Editor<Float> editor,
+            final List<Neuron> neurons) {
+        float value = Utils.floatParsable((JTextField) editor.component);
+        if (!Float.isNaN(value)) {
             neurons.stream().forEach(
                     r -> editor.setter.setParameter(r.getUpdateRule(), value));
         }
@@ -398,13 +435,14 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
-     * Todo.
+     * Get the randomizers associated with the provided set of neuron update
+     * rules.
      *
-     * @param ruleList
-     * @return
-     * @throws ClassCastException
+     * @param ruleList the list of neuron rules
+     * @return the associated randomizers
+     * @throws ClassCastException if the neurons are not noisy!
      */
-    public static ArrayList<Randomizer> getRandomizers(
+    private static ArrayList<Randomizer> getRandomizers(
             final List<NeuronUpdateRule> ruleList) throws ClassCastException {
         return (ArrayList<Randomizer>) ruleList.stream()
                 .map(r -> ((NoisyUpdateRule) r).getNoiseGenerator())
@@ -473,6 +511,8 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
+     * Get the noise generator panel for the edited noisy neuron rule.
+     *
      * @return the noisePanel
      */
     public NoiseGeneratorPanel getNoisePanel() {
@@ -483,11 +523,14 @@ public abstract class AbstractNeuronRulePanel extends JPanel {
     }
 
     /**
+     * Get the yes/no dropbox for the add noise property for a noisy neuron
+     * rule.
+     * 
      * @return the dropdown
      */
     public YesNoNull getAddNoise() {
         if (addNoise == null) {
-            addNoise = registerTriStateDropDown(
+            addNoise = createYesNoChoiceBox(
                     (r) -> ((NoisyUpdateRule) r).getAddNoise(),
                     (r, val) -> ((NoisyUpdateRule) r)
                             .setAddNoise((Boolean) val));

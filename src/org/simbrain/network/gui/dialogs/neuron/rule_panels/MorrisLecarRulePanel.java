@@ -49,19 +49,19 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel {
         super();
         this.add(tabbedPane);
 
-        JTextField tfCMembrane = registerTextField(
+        JTextField tfCMembrane = createTextField(
                 (r) -> ((MorrisLecarRule) r).getcMembrane(),
                 (r, val) -> ((MorrisLecarRule) r).setcMembrane((double) val));
-        JTextField tfV_M1 = registerTextField(
+        JTextField tfV_M1 = createTextField(
                 (r) -> ((MorrisLecarRule) r).getV_m1(),
                 (r, val) -> ((MorrisLecarRule) r).setV_m1((double) val));
-        JTextField tfV_M2 = registerTextField(
+        JTextField tfV_M2 = createTextField(
                 (r) -> ((MorrisLecarRule) r).getV_m2(),
                 (r, val) -> ((MorrisLecarRule) r).setV_m2((double) val));
-        JTextField tfThreshold = registerTextField(
+        JTextField tfThreshold = createTextField(
                 (r) -> ((MorrisLecarRule) r).getThreshold(),
                 (r, val) -> ((MorrisLecarRule) r).setThreshold((double) val));
-        JTextField tfI_Bg = registerTextField(
+        JTextField tfI_Bg = createTextField(
                 (r) -> ((MorrisLecarRule) r).getI_bg(),
                 (r, val) -> ((MorrisLecarRule) r).setI_bg((double) val));
 
@@ -73,22 +73,22 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel {
         cellPanel.addItem("Background current (nA)", tfI_Bg);
         cellPanel.addItem("Add noise: ", getAddNoise());
 
-        JTextField tfG_Ca = registerTextField(
+        JTextField tfG_Ca = createTextField(
                 (r) -> ((MorrisLecarRule) r).getG_Ca(),
                 (r, val) -> ((MorrisLecarRule) r).setG_Ca((double) val));
-        JTextField tfG_K = registerTextField(
+        JTextField tfG_K = createTextField(
                 (r) -> ((MorrisLecarRule) r).getG_K(),
                 (r, val) -> ((MorrisLecarRule) r).setG_K((double) val));
-        JTextField tfG_L = registerTextField(
+        JTextField tfG_L = createTextField(
                 (r) -> ((MorrisLecarRule) r).getG_L(),
                 (r, val) -> ((MorrisLecarRule) r).setG_L((double) val));
-        JTextField tfVRest_Ca = registerTextField(
+        JTextField tfVRest_Ca = createTextField(
                 (r) -> ((MorrisLecarRule) r).getvRest_Ca(),
                 (r, val) -> ((MorrisLecarRule) r).setvRest_Ca((double) val));
-        JTextField tfvRest_k = registerTextField(
+        JTextField tfvRest_k = createTextField(
                 (r) -> ((MorrisLecarRule) r).getvRest_k(),
                 (r, val) -> ((MorrisLecarRule) r).setvRest_k((double) val));
-        JTextField tfVRest_L = registerTextField(
+        JTextField tfVRest_L = createTextField(
                 (r) -> ((MorrisLecarRule) r).getvRest_Ca(),
                 (r, val) -> ((MorrisLecarRule) r).setvRest_Ca((double) val));
         LabelledItemPanel ionPanel = new LabelledItemPanel();
@@ -100,16 +100,16 @@ public class MorrisLecarRulePanel extends AbstractNeuronRulePanel {
         ionPanel.addItem("K\u207A equilibrium (mV)", tfvRest_k);
         ionPanel.addItem("Leak equilibrium (mV)", tfVRest_L);
 
-        JTextField tfV_W1 = registerTextField(
+        JTextField tfV_W1 = createTextField(
                 (r) -> ((MorrisLecarRule) r).getV_w1(),
                 (r, val) -> ((MorrisLecarRule) r).setV_w1((double) val));
-        JTextField tfV_W2 = registerTextField(
+        JTextField tfV_W2 = createTextField(
                 (r) -> ((MorrisLecarRule) r).getV_w2(),
                 (r, val) -> ((MorrisLecarRule) r).setV_w2((double) val));
-        JTextField tfW_K = registerTextField(
+        JTextField tfW_K = createTextField(
                 (r) -> ((MorrisLecarRule) r).getW_K(),
                 (r, val) -> ((MorrisLecarRule) r).setW_K((double) val));
-        JTextField tfPhi = registerTextField(
+        JTextField tfPhi = createTextField(
                 (r) -> ((MorrisLecarRule) r).getPhi(),
                 (r, val) -> ((MorrisLecarRule) r).setPhi((double) val));
         LabelledItemPanel potas = new LabelledItemPanel();

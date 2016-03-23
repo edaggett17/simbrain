@@ -47,10 +47,10 @@ public class SinusoidalGeneratorPanel extends AbstractNeuronRulePanel {
     public SinusoidalGeneratorPanel() {
         super();
         this.add(tabbedPanel);
-        JTextField tfPhase = registerTextField(
+        JTextField tfPhase = createTextField(
                 (r) -> ((SinusoidalRule) r).getPhase(),
                 (r, val) -> ((SinusoidalRule) r).setPhase((double) val));
-        JTextField tfFrequency = registerTextField(
+        JTextField tfFrequency = createTextField(
                 (r) -> ((SinusoidalRule) r).getFrequency(),
                 (r, val) -> ((SinusoidalRule) r).setFrequency((double) val));
         mainPanel.addItem("Phase", tfPhase);

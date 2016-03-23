@@ -53,13 +53,13 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
     public AdditiveRulePanel() {
         super();
         this.add(tabbedPane);
-        JTextField tfLambda = registerTextField(
+        JTextField tfLambda = createTextField(
                 (r) -> ((AdditiveRule) r).getLambda(),
                 (r, val) -> ((AdditiveRule) r).setLambda((double) val));
-        JTextField tfResistance = registerTextField(
+        JTextField tfResistance = createTextField(
                 (r) -> ((AdditiveRule) r).getResistance(),
                 (r, val) -> ((AdditiveRule) r).setResistance((double) val));
-        YesNoNull isAddNoise = registerTriStateDropDown(
+        YesNoNull isAddNoise = createYesNoChoiceBox(
                 (r) -> ((AdditiveRule) r).getAddNoise(),
                 (r, val) -> ((AdditiveRule) r).setAddNoise((Boolean) val));
 

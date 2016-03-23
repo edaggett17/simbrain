@@ -31,48 +31,48 @@ public class AdExIFRulePanel extends AbstractNeuronRulePanel {
     public AdExIFRulePanel() {
         super();
         this.add(tabbedPane);
-        JTextField tfPeak = registerTextField(
+        JTextField tfPeak = createTextField(
                 (r) -> ((AdExIFRule) r).getV_Peak(),
                 (r, val) -> ((AdExIFRule) r).setV_Peak((double) val));
-        JTextField tfThreshold = registerTextField(
+        JTextField tfThreshold = createTextField(
                 (r) -> ((AdExIFRule) r).getV_Th(),
                 (r, val) -> ((AdExIFRule) r).setV_Th((double) val));
-        JTextField tfV_Reset = registerTextField(
+        JTextField tfV_Reset = createTextField(
                 (r) -> ((AdExIFRule) r).getV_Reset(),
                 (r, val) -> ((AdExIFRule) r).setV_Reset((double) val));
-        JTextField tfCap = registerTextField(
+        JTextField tfCap = createTextField(
                 (r) -> ((AdExIFRule) r).getMemCapacitance(),
                 (r, val) -> ((AdExIFRule) r).setMemCapacitance((double) val));
-        JTextField tfBgCurrent = registerTextField(
+        JTextField tfBgCurrent = createTextField(
                 (r) -> ((AdExIFRule) r).getI_bg(),
                 (r, val) -> ((AdExIFRule) r).setI_bg((double) val));
-        JTextField tfSlopeFactor = registerTextField(
+        JTextField tfSlopeFactor = createTextField(
                 (r) -> ((AdExIFRule) r).getSlopeFactor(),
                 (r, val) -> ((AdExIFRule) r).setSlopeFactor((double) val));
-        JTextField tfGL = registerTextField((r) -> ((AdExIFRule) r).getG_L(),
+        JTextField tfGL = createTextField((r) -> ((AdExIFRule) r).getG_L(),
                 (r, val) -> ((AdExIFRule) r).setG_L((double) val));
-        JTextField tfGeBar = registerTextField(
+        JTextField tfGeBar = createTextField(
                 (r) -> ((AdExIFRule) r).getG_e_bar(),
                 (r, val) -> ((AdExIFRule) r).setG_e_bar((double) val));
-        JTextField tfGiBar = registerTextField(
+        JTextField tfGiBar = createTextField(
                 (r) -> ((AdExIFRule) r).getG_i_bar(),
                 (r, val) -> ((AdExIFRule) r).setG_i_bar((double) val));
-        JTextField tfLR = registerTextField(
+        JTextField tfLR = createTextField(
                 (r) -> ((AdExIFRule) r).getLeakReversal(),
                 (r, val) -> ((AdExIFRule) r).setLeakReversal((double) val));
-        JTextField tfER = registerTextField(
+        JTextField tfER = createTextField(
                 (r) -> ((AdExIFRule) r).getExReversal(),
                 (r, val) -> ((AdExIFRule) r).setExReversal((double) val));
-        JTextField tfIR = registerTextField(
+        JTextField tfIR = createTextField(
                 (r) -> ((AdExIFRule) r).getInReversal(),
                 (r, val) -> ((AdExIFRule) r).setInReversal((double) val));
-        JTextField tfAdaptResetParam = registerTextField(
+        JTextField tfAdaptResetParam = createTextField(
                 (r) -> ((AdExIFRule) r).getB(),
                 (r, val) -> ((AdExIFRule) r).setB((double) val));
-        JTextField tfAdaptCouplingConst = registerTextField(
+        JTextField tfAdaptCouplingConst = createTextField(
                 (r) -> ((AdExIFRule) r).getA(),
                 (r, val) -> ((AdExIFRule) r).setA((double) val));
-        JTextField tfAdaptTC = registerTextField(
+        JTextField tfAdaptTC = createTextField(
                 (r) -> ((AdExIFRule) r).getTauW(),
                 (r, val) -> ((AdExIFRule) r).setTauW((double) val));
         mainTab.addItem("Peak Voltage (mV)", tfPeak);

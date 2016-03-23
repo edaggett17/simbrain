@@ -23,13 +23,11 @@ import javax.swing.JTextField;
 
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.util.LabelledItemPanel;
-import org.simbrain.util.widgets.YesNoNull;
 
 /**
- * <b>LinearNeuronPanel</b>.
+ * <b>LinearNeuronPanel</b> edits a linear rule neuron.
  */
 public class LinearRulePanel extends AbstractNeuronRulePanel {
 
@@ -47,10 +45,10 @@ public class LinearRulePanel extends AbstractNeuronRulePanel {
      */
     public LinearRulePanel() {
         this.add(tabbedPane);
-        JTextField slopeField = registerTextField(
+        JTextField slopeField = createTextField(
                 (r) -> ((LinearRule) r).getSlope(),
                 (r, val) -> ((LinearRule) r).setSlope((double) val));
-        JTextField biasField = registerTextField(
+        JTextField biasField = createTextField(
                 (r) -> ((LinearRule) r).getBias(),
                 (r, val) -> ((LinearRule) r).setBias((double) val));
         mainTab.addItem("Slope", slopeField);

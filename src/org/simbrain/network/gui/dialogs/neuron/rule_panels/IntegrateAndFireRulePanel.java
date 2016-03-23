@@ -64,27 +64,27 @@ public class IntegrateAndFireRulePanel extends AbstractNeuronRulePanel {
         super();
         this.add(tabbedPane);
 
-        tfTimeConstant = registerTextField(
+        tfTimeConstant = createTextField(
                 (r) -> ((IntegrateAndFireRule) r).getTimeConstant(),
                 (r, val) -> ((IntegrateAndFireRule) r)
                         .setTimeConstant((double) val));
-        tfThreshold = registerTextField(
+        tfThreshold = createTextField(
                 (r) -> ((IntegrateAndFireRule) r).getThreshold(),
                 (r, val) -> ((IntegrateAndFireRule) r)
                         .setThreshold((double) val));
-        tfReset = registerTextField(
+        tfReset = createTextField(
                 (r) -> ((IntegrateAndFireRule) r).getResetPotential(),
                 (r, val) -> ((IntegrateAndFireRule) r)
                         .setResetPotential((double) val));
-        tfResistance = registerTextField(
+        tfResistance = createTextField(
                 (r) -> ((IntegrateAndFireRule) r).getResistance(),
                 (r, val) -> ((IntegrateAndFireRule) r)
                         .setResistance((double) val));
-        tfRestingPotential = registerTextField(
+        tfRestingPotential = createTextField(
                 (r) -> ((IntegrateAndFireRule) r).getRestingPotential(),
                 (r, val) -> ((IntegrateAndFireRule) r)
                         .setRestingPotential((double) val));
-        tfBackgroundCurrent = registerTextField(
+        tfBackgroundCurrent = createTextField(
                 (r) -> ((IntegrateAndFireRule) r).getBackgroundCurrent(),
                 (r, val) -> ((IntegrateAndFireRule) r)
                         .setBackgroundCurrent((double) val));
