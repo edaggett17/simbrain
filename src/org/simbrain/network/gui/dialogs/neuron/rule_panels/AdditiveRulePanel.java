@@ -59,13 +59,9 @@ public class AdditiveRulePanel extends AbstractNeuronRulePanel {
         JTextField tfResistance = createTextField(
                 (r) -> ((AdditiveRule) r).getResistance(),
                 (r, val) -> ((AdditiveRule) r).setResistance((double) val));
-        YesNoNull isAddNoise = createYesNoChoiceBox(
-                (r) -> ((AdditiveRule) r).getAddNoise(),
-                (r, val) -> ((AdditiveRule) r).setAddNoise((Boolean) val));
-
         mainTab.addItem("Lambda", tfLambda);
         mainTab.addItem("Resistance", tfResistance);
-        mainTab.addItem("Add noise", isAddNoise);
+        mainTab.addItem("Add noise", getAddNoise());
         tabbedPane.add(mainTab, "Main");
         tabbedPane.add(randTab, "Noise");
     }

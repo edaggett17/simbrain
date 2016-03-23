@@ -73,7 +73,7 @@ public abstract class AbstractSigmoidalRulePanel
     }
 
     /**
-     * TODO. 
+     * Return the combo box. 
      *
      * @return the cbImplementation
      */

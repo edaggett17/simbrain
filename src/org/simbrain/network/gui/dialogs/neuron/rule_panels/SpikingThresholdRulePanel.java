@@ -51,13 +51,9 @@ public class SpikingThresholdRulePanel extends AbstractNeuronRulePanel {
                 (r) -> ((SpikingThresholdRule) r).getThreshold(),
                 (r, val) -> ((SpikingThresholdRule) r)
                         .setThreshold((double) val));
-        YesNoNull addNoise = createYesNoChoiceBox(
-                (r) -> ((SpikingThresholdRule) r).getAddNoise(),
-                (r, val) -> ((SpikingThresholdRule) r)
-                        .setAddNoise((Boolean) val));
         this.add(tabbedPane);
         mainTab.addItem("Threshold", thresholdField);
-        mainTab.addItem("Add noise", addNoise);
+        mainTab.addItem("Add noise", getAddNoise());
         tabbedPane.add(mainTab, "Main");
         tabbedPane.add(getNoisePanel(), "Noise");
     }

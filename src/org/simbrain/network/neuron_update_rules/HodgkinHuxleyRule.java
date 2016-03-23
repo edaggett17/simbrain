@@ -90,11 +90,7 @@ public class HodgkinHuxleyRule extends NeuronUpdateRule
     /** Add noise to the neuron. */
     private boolean addNoise = false;
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @param neuron
-     */
+    @Override
     public void update(Neuron neuron) {
 
         // Advances the model by dt and returns the new voltage
@@ -130,11 +126,12 @@ public class HodgkinHuxleyRule extends NeuronUpdateRule
         // getV() converts the model's v to present day convention
 
     }
-
-    @Override
-    public void init(Neuron neuron) {
+    
+    // Initializer quickly hacked from old init. Zach this is in your hands to fix! :)
+     {
         cm = 1.0;
-        double v = neuron.getActivation();
+        double v = -70; // Arbitrary starting voltage
+        double dv = .001; // Arbitrary starting dv.  Not sure how to set.
         vna = -115;
         vk = 12;
         vl = -10.613;
@@ -148,16 +145,14 @@ public class HodgkinHuxleyRule extends NeuronUpdateRule
         am = 0.1 * (v + 25) / (Math.exp((v + 25) / 10) - 1);
         bn = 0.125 * Math.exp(v / 80);
         an = 0.01 * (v + 10) / (Math.exp((v + 10) / 10) - 1);
-        dh = (ah * (1 - h) - bh * h) * neuron.getNetwork().getTimeStep();
-        dm = (am * (1 - m) - bm * m) * neuron.getNetwork().getTimeStep();
-        dn = (an * (1 - n) - bn * n) * neuron.getNetwork().getTimeStep();
+        dh = (ah * (1 - h) - bh * h) * dv;
+        dm = (am * (1 - m) - bm * m) * dv;
+        dn = (an * (1 - n) - bn * n) * dv;
 
         // start these parameters in steady state
         n = an / (an + bn);
         m = am / (am + bm);
         h = ah / (ah + bh);
-
-        update(neuron);
 
     }
 
@@ -289,6 +284,7 @@ public class HodgkinHuxleyRule extends NeuronUpdateRule
         this.temp = temp;
     }
 
+    @Override
     public NeuronUpdateRule deepCopy() {
         HodgkinHuxleyRule hhr = new HodgkinHuxleyRule();
         hhr.set_vClampValue(this.get_vClampValue());

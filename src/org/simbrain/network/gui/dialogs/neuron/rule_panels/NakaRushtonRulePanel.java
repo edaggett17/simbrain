@@ -26,7 +26,6 @@ import javax.swing.JTextField;
 
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
-import org.simbrain.network.gui.dialogs.neuron.NoiseGeneratorPanel;
 import org.simbrain.network.neuron_update_rules.NakaRushtonRule;
 import org.simbrain.util.LabelledItemPanel;
 import org.simbrain.util.widgets.YesNoNull;

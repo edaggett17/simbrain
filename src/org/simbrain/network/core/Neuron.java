@@ -304,7 +304,6 @@ public class Neuron {
             getNetwork().updateTimeType();
             getNetwork().fireNeuronTypeChanged(oldRule, updateRule);
         }
-        updateRule.init(this);
     }
 
     /**

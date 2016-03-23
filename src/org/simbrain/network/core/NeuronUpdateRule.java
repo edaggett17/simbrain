@@ -357,9 +357,5 @@ public abstract class NeuronUpdateRule {
     public boolean isSkipsSynapticUpdates() {
     	return false;
     }
-
-    //TODO: Override if you like!
-    public void init(Neuron neuron) {
-    }
     
 }
