@@ -11,7 +11,8 @@ public class AddSTDPRule extends STDPRule {
     public void init(Synapse synapse) {
     }
 
-    @Override
+    //@Override - There is no override, there is no such method in base class.
+    //Commenting out for compilation to go through.
     public String getDescription() {
         return "STDP";
     }
