@@ -75,6 +75,7 @@ import org.simbrain.network.gui.actions.toolbar.ShowMainToolBarAction;
 import org.simbrain.network.gui.actions.toolbar.ShowRunToolBarAction;
 import org.simbrain.network.gui.dialogs.group.NeuronGroupCreationDialog;
 import org.simbrain.network.gui.dialogs.network.BackpropCreationDialog;
+import org.simbrain.network.gui.dialogs.network.BoltzmannMachineDialog;
 import org.simbrain.network.gui.dialogs.network.CompetitiveGroupCreationDialog;
 import org.simbrain.network.gui.dialogs.network.CompetitiveNetworkCreationDialog;
 import org.simbrain.network.gui.dialogs.network.ESNCreationDialog;
@@ -499,7 +500,7 @@ public final class NetworkActionManager {
                         new AddGroupAction(networkPanel,
                                 BackpropCreationDialog.class, "Backprop"),
                         new AddGroupAction(networkPanel,
-                                BackpropCreationDialog.class,
+                                BoltzmannMachineDialog.class,
                                 "Boltzmann Machine"),
                         new AddGroupAction(networkPanel,
                                 CompetitiveNetworkCreationDialog.class,
