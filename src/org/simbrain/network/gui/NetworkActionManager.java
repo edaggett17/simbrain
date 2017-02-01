@@ -18,14 +18,6 @@
  */
 package org.simbrain.network.gui;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.Action;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JToggleButton;
-
 import org.simbrain.network.connections.AllToAll;
 import org.simbrain.network.connections.OneToOne;
 import org.simbrain.network.connections.Radial;
@@ -96,6 +88,13 @@ import org.simbrain.network.gui.dialogs.network.WTACreationDialog;
 import org.simbrain.network.layouts.GridLayout;
 import org.simbrain.network.layouts.HexagonalGridLayout;
 import org.simbrain.network.layouts.LineLayout;
+
+import javax.swing.Action;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JToggleButton;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Network action manager.
@@ -499,6 +498,9 @@ public final class NetworkActionManager {
                 .asList(new Action[] {
                         new AddGroupAction(networkPanel,
                                 BackpropCreationDialog.class, "Backprop"),
+                        new AddGroupAction(networkPanel,
+                                BackpropCreationDialog.class,
+                                "Boltzmann Machine"),
                         new AddGroupAction(networkPanel,
                                 CompetitiveNetworkCreationDialog.class,
                                 "Competitive Network"),

@@ -18,9 +18,6 @@
  */
 package org.simbrain.network.subnetworks;
 
-import java.awt.geom.Point2D;
-import java.util.List;
-
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.groups.Group;
@@ -30,6 +27,9 @@ import org.simbrain.network.trainers.Trainable;
 import org.simbrain.network.trainers.TrainingSet;
 import org.simbrain.network.util.NetworkLayoutManager;
 import org.simbrain.network.util.NetworkLayoutManager.Direction;
+
+import java.awt.geom.Point2D;
+import java.util.List;
 
 /**
  * <b>SOMNetwork</b> is a small network encompassing an SOM group. An input
@@ -126,4 +126,6 @@ public class SOMNetwork  extends Subnetwork implements Trainable {
     public Group getNetwork() {
         return this;
     }
+
+
 }
