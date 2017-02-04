@@ -40,6 +40,14 @@ import java.util.List;
  */
 public class BoltzmannMachine  extends Subnetwork implements Trainable {
 
+    /** Default initial temperature */
+    public static final double DEFAULT_INIT_SIZE = 10;
+
+
+    /** Temperature */
+    private double temperature = DEFAULT_INIT_SIZE;
+
+
     /** The input layer. */
     private final NeuronGroup inputLayer;
 
@@ -75,25 +83,7 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
 
     @Override
     public void update(){
-        //algorithm implementation
-        /**
-         * chosenNode = choose random from this.getNeuronList()
-         summedFanIn = 0
-         for fanInWeight in chosenNode.getFanIn()
-         summedFanIn += fanInWeight.getStrength() * fanInWeight.getSource().getactivation() // end for loop
-
-         delta_c = 1 - 2 * chosenNode.getActivation() + summedFanIn
-         acceptChangeProb = 1/1+math.exp(-delta_c/temperature) //double
-
-         if math.rand() < acceptChangeProb //step 6?
-         chosenNode.setActivation(1 - chosenNode.getActivation())
-
-         temperature = .95*temperature
-         */
-
-        double temperature = 10;
-
-        int x = 0;//choose random number between 0 and getFlatNeuronList().size()
+        int x = 0;
 
         Neuron chosenNode = getFlatNeuronList().get(x);
 
@@ -104,11 +94,11 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
         }
 
         double delta_c = 1 - 2 * chosenNode.getActivation() + summedFanIn;
-        double acceptChangeProb = 1/(1 + Math.exp(-delta_c/temperature)); //devide by zero
+        double acceptChangeProb = 1/(1 + Math.exp(-delta_c/temperature));
 
         if (Math.random() < acceptChangeProb) {
             chosenNode.setActivation(1 - chosenNode.getActivation());
-            temperature = .95 * temperature;
+            this.temperature = .95 * temperature;
         }
     }
 
