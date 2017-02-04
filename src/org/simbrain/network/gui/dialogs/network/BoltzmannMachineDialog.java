@@ -20,9 +20,7 @@ package org.simbrain.network.gui.dialogs.network;
 
 import org.simbrain.network.gui.NetworkPanel;
 import org.simbrain.network.gui.dialogs.layout.MainLayoutPanel;
-import org.simbrain.network.gui.dialogs.network.SOMPropertiesPanel.SOMPropsPanelType;
-import org.simbrain.network.subnetworks.SOMGroup;
-import org.simbrain.network.subnetworks.SOMNetwork;
+import org.simbrain.network.subnetworks.BoltzmannMachine;
 import org.simbrain.util.StandardDialog;
 import org.simbrain.util.widgets.ShowHelpAction;
 
@@ -32,7 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 /**
- * <b>SOMDialog</b> is used as an assistant to create SOM networks.
+ * <b>BoltzmannMachineDialog</b> is used as an assistant to create Boltzmann networks.
  */
 public class BoltzmannMachineDialog extends StandardDialog {
 
@@ -45,8 +43,8 @@ public class BoltzmannMachineDialog extends StandardDialog {
     /** Layout tab panel. */
     private JPanel tabLayout = new JPanel();
 
-    /** SOM properties panel. */
-    private SOMPropertiesPanel somPanel;
+    /** Boltzmann properties panel. */
+    private BoltzmannPropertiesPanel boltzmannPanel;
 
     /** Layout panel. */
     private MainLayoutPanel layoutPanel;
@@ -71,20 +69,21 @@ public class BoltzmannMachineDialog extends StandardDialog {
     private void init() {
 
         setTitle("New Boltzmann Machine");
-        somPanel = new SOMPropertiesPanel(networkPanel,
-                SOMPropsPanelType.CREATE_NETWORK);
+
+        boltzmannPanel = new BoltzmannPropertiesPanel(networkPanel);
 
         // Set up tab panels
-        tabLogic.add(somPanel);
+        tabLogic.add(boltzmannPanel);
         layoutPanel = new MainLayoutPanel(false, this);
-        layoutPanel.setCurrentLayout(SOMGroup.DEFAULT_LAYOUT);
+        //TODO: define layout
+//        layoutPanel.setCurrentLayout(SOMGroup.DEFAULT_LAYOUT);
         tabLayout.add(layoutPanel);
         tabbedPane.addTab("Logic", tabLogic);
         tabbedPane.addTab("Layout", layoutPanel);
         setContentPane(tabbedPane);
 
         // Help action
-        Action helpAction = new ShowHelpAction(somPanel.getHelpPath());
+        Action helpAction = new ShowHelpAction(boltzmannPanel.getHelpPath());
         addButton(new JButton(helpAction));
 
     }
@@ -94,14 +93,15 @@ public class BoltzmannMachineDialog extends StandardDialog {
      */
     @Override
     protected void closeDialogOk() {
-        somPanel.commitChanges();
-        SOMNetwork somNet =  (SOMNetwork) somPanel.getGroup();
-        SOMGroup som = somNet.getSom();
+        boltzmannPanel.commitChanges();
+        BoltzmannMachine boltzmannMachine =  (BoltzmannMachine) boltzmannPanel.getGroup();
         layoutPanel.commitChanges();
-        som.setLayout(layoutPanel.getCurrentLayout());
-        som.applyLayout();
-        somNet.layoutNetwork(); // Must layout som first
-        networkPanel.getNetwork().addGroup(somNet);
+
+        //TODO: do we need to set the layout?
+//        som.setLayout(layoutPanel.getCurrentLayout());
+//        som.applyLayout();
+//        somNet.layoutNetwork(); // Must layout som first
+        //networkPanel.getNetwork().addGroup(boltzmannMachine); //this gives NPE as BoltzmannPropertiesPanel.getGroup() returns null at present
         super.closeDialogOk();
     }
 

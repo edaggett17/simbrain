@@ -32,9 +32,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * <b>SOMNetwork</b> is a small network encompassing an SOM group. An input
- * layer and input data have been added so that the SOM can be easily trained
+ * <b>BoltzmannMachine</b> An input layer and input data
+ * have been added so that the Boltzmann Machine can be easily trained
  * using existing Simbrain GUI tools
+ *
+ * TODO: Review and correct comments.
  *
  * @author Jeff Yoshimi
  */
@@ -55,11 +57,11 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
     private final TrainingSet trainingSet = new TrainingSet();
 
     /**
-     * Construct an Boltzmann Machine Network.
+     * Construct a Boltzmann Machine Network.
      *
      * @param net parent network. Set to null when this is used simply as a
      *            holder for param values.
-     * @param numBoltzmannNeurons number of neurons in the SOM layer
+     * @param numBoltzmannNeurons number of neurons in the Boltzmann layer.
      * @param numInputNeurons number of neurons in the input layer
      * @param initialPosition bottom corner where network will be placed.
      */
@@ -118,7 +120,8 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
 
     @Override
     public List<Neuron> getOutputNeurons() {
-        return Collections.emptyList(); //som.getNeuronList();
+        //TODO: implement
+        return Collections.emptyList();
     }
 
     @Override
@@ -128,15 +131,8 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
 
     @Override
     public void initNetwork() {
-        // No implementation
+        // TODO: implement
     }
-
-    /**
-     * @return the som
-     */
-  //  public SOMGroup getSom() {
-    //    return som;
-   // }
 
     /**
      * @return the inputLayer
