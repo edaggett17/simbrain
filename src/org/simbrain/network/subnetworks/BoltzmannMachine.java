@@ -18,18 +18,23 @@
  */
 package org.simbrain.network.subnetworks;
 
+import java.awt.geom.Point2D;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.simbrain.network.connections.RadialSimple;
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.Synapse;
 import org.simbrain.network.groups.Group;
 import org.simbrain.network.groups.NeuronGroup;
 import org.simbrain.network.groups.Subnetwork;
+import org.simbrain.network.layouts.GridLayout;
 import org.simbrain.network.trainers.Trainable;
 import org.simbrain.network.trainers.TrainingSet;
-
-import java.awt.geom.Point2D;
-import java.util.Collections;
-import java.util.List;
+import org.simbrain.network.util.NetworkLayoutManager;
+import org.simbrain.network.util.NetworkLayoutManager.Direction;
 
 /**
  * <b>BoltzmannMachine</b> An input layer and input data
@@ -45,13 +50,14 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
     /** Default initial temperature */
     public static final double DEFAULT_INIT_SIZE = 10;
 
-
     /** Temperature */
     private double temperature = DEFAULT_INIT_SIZE;
 
+    /** The input layer. */
+    private final NeuronGroup hiddenUnits;
 
     /** The input layer. */
-    private final NeuronGroup inputLayer;
+    private final NeuronGroup visibleUnits;
 
     /** Training set. */
     private final TrainingSet trainingSet = new TrainingSet();
@@ -61,61 +67,72 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
      *
      * @param net parent network. Set to null when this is used simply as a
      *            holder for param values.
-     * @param numBoltzmannNeurons number of neurons in the Boltzmann layer.
-     * @param numInputNeurons number of neurons in the input layer
+     * @param numVisibleNeurons number of neurons in the input layer
+     * @param numHiddenNeurons number of neurons in the Boltzmann layer.
      * @param initialPosition bottom corner where network will be placed.
      */
-    public BoltzmannMachine(Network net, int numBoltzmannNeurons, int numInputNeurons,
+    public BoltzmannMachine(Network net, int numVisibleNeurons, int numHiddenNeurons,
                       Point2D initialPosition) {
         super(net);
         this.setLabel("Boltzmann Machine");
-        inputLayer = new NeuronGroup(net, initialPosition, numInputNeurons);
-        inputLayer.setLayoutBasedOnSize();
-        if (net == null) {
-            return;
-        }
-        this.addNeuronGroup(inputLayer);
-        for (Neuron neuron : inputLayer.getNeuronList()) {
-            neuron.setLowerBound(0);
-        }
-        inputLayer.setLabel("Input layer");
-        inputLayer.setClamped(true);
-        layoutNetwork();
+
+        // Boltzmann machine
+        hiddenUnits = new NeuronGroup(net, initialPosition, numHiddenNeurons);
+        hiddenUnits.setLayoutBasedOnSize();
+        hiddenUnits.setLabel("Hidden Units");
+        this.addNeuronGroup(hiddenUnits);
+
+        // Set up input layer
+        visibleUnits = new NeuronGroup(net, initialPosition, numVisibleNeurons);
+        visibleUnits.setLayoutBasedOnSize();
+        this.addNeuronGroup(visibleUnits);
+        visibleUnits.setLabel("Visible Units");
+        visibleUnits.setClamped(true);
+
+        // Layout groups
+        NetworkLayoutManager.offsetNeuronGroup(visibleUnits, hiddenUnits,
+                Direction.EAST, 100);
+
+        // Wire up network
+        RadialSimple connection = new RadialSimple(net, hiddenUnits.getNeuronList());
+        connection.setExcitatoryRadius(100);
+        connection.setExcitatoryProbability(1);
+        connection.setInhibitoryProbability(0);
+        connection.connectNeurons(true); //TODO: Use synapse group?
+
     }
 
     @Override
     public void update(){
-        int x = 0;
 
-        Neuron chosenNode = getFlatNeuronList().get(x);
+        hiddenUnits.clearActivations();
 
-        int summedFanIn=0;
+        // Choose randomly
+        Neuron chosenNode = hiddenUnits.getNeuronList()
+                .get(ThreadLocalRandom.current().nextInt(0,
+                        hiddenUnits.getNeuronList().size()));
 
-        for(Synapse fanInWeight: chosenNode.getFanIn()){
-            summedFanIn += fanInWeight.getStrength() * fanInWeight.getSource().getActivation();
+        int summedFanIn = 0;
+
+        for (Synapse fanInWeight : chosenNode.getFanIn()) {
+            summedFanIn += fanInWeight.getStrength()
+                    * fanInWeight.getSource().getActivation();
         }
 
         double delta_c = 1 - 2 * chosenNode.getActivation() + summedFanIn;
-        double acceptChangeProb = 1/(1 + Math.exp(-delta_c/temperature));
+        double acceptChangeProb = 1 / (1 + Math.exp(-delta_c / temperature));
 
         if (Math.random() < acceptChangeProb) {
             chosenNode.setActivation(1 - chosenNode.getActivation());
             this.temperature = .95 * temperature;
         }
-    }
 
-    /**
-     * Set the layout of the network.
-     */
-    public void layoutNetwork() {
-        // TODO: Would be easy to set the layout and redo it...
-       // NetworkLayoutManager.offsetNeuronGroup(inputLayer, som,
-                //Direction.NORTH, 250);
+        System.out.println(temperature);
     }
 
     @Override
     public List<Neuron> getInputNeurons() {
-        return inputLayer.getNeuronList();
+        return visibleUnits.getNeuronList();
     }
 
     @Override
@@ -138,11 +155,25 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
      * @return the inputLayer
      */
     public NeuronGroup getInputLayer() {
-        return inputLayer;
+        return visibleUnits;
     }
 
     @Override
     public Group getNetwork() {
         return this;
+    }
+
+    /**
+     * @return the temperature
+     */
+    public double getTemperature() {
+        return temperature;
+    }
+
+    /**
+     * @param temperature the temperature to set
+     */
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
     }
 }

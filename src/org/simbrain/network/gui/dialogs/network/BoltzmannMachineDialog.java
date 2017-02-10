@@ -18,39 +18,35 @@
  */
 package org.simbrain.network.gui.dialogs.network;
 
-import org.simbrain.network.gui.NetworkPanel;
-import org.simbrain.network.gui.dialogs.layout.MainLayoutPanel;
-import org.simbrain.network.subnetworks.BoltzmannMachine;
-import org.simbrain.util.StandardDialog;
-import org.simbrain.util.widgets.ShowHelpAction;
+import java.text.NumberFormat;
 
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import org.simbrain.network.gui.NetworkPanel;
+import org.simbrain.network.gui.dialogs.layout.MainLayoutPanel;
+import org.simbrain.network.subnetworks.BoltzmannMachine;
+import org.simbrain.util.LabelledItemPanel;
+import org.simbrain.util.StandardDialog;
+import org.simbrain.util.widgets.ShowHelpAction;
 
 /**
  * <b>BoltzmannMachineDialog</b> is used as an assistant to create Boltzmann networks.
  */
 public class BoltzmannMachineDialog extends StandardDialog {
 
-    /** Tabbed pane. */
-    private JTabbedPane tabbedPane = new JTabbedPane();
-
-    /** Logic tab panel. */
-    private JPanel tabLogic = new JPanel();
-
-    /** Layout tab panel. */
-    private JPanel tabLayout = new JPanel();
-
-    /** Boltzmann properties panel. */
-    private BoltzmannPropertiesPanel boltzmannPanel;
-
     /** Layout panel. */
     private MainLayoutPanel layoutPanel;
 
     /** Network Panel. */
     private NetworkPanel networkPanel;
+
+    LabelledItemPanel propPanel = new LabelledItemPanel(); //TODOs
+    int visibleNeurons;
+    int hiddenNeurons;
 
     /**
      * This method is the default constructor.
@@ -70,38 +66,42 @@ public class BoltzmannMachineDialog extends StandardDialog {
 
         setTitle("New Boltzmann Machine");
 
-        boltzmannPanel = new BoltzmannPropertiesPanel(networkPanel);
+        JFormattedTextField tfVisibleNeurons = new JFormattedTextField(NumberFormat.getNumberInstance());
+        tfVisibleNeurons.setValue(20);
+        tfVisibleNeurons.addPropertyChangeListener("value", (evt) -> {
+            visibleNeurons = ((Number) tfVisibleNeurons.getValue()).intValue();
+            tfVisibleNeurons.setValue(visibleNeurons);
+        });
+        propPanel.addItem("Input neurons", tfVisibleNeurons);
 
-        // Set up tab panels
-        tabLogic.add(boltzmannPanel);
-        layoutPanel = new MainLayoutPanel(false, this);
-        //TODO: define layout
-//        layoutPanel.setCurrentLayout(SOMGroup.DEFAULT_LAYOUT);
-        tabLayout.add(layoutPanel);
-        tabbedPane.addTab("Logic", tabLogic);
-        tabbedPane.addTab("Layout", layoutPanel);
-        setContentPane(tabbedPane);
+        JFormattedTextField tfHiddenNeurons = new JFormattedTextField(NumberFormat.getNumberInstance());
+        tfHiddenNeurons.setValue(30);
+        tfHiddenNeurons.addPropertyChangeListener("value", (evt) -> {
+            hiddenNeurons = ((Number) tfHiddenNeurons.getValue()).intValue();
+            tfVisibleNeurons.setValue(hiddenNeurons);
+        });
+        propPanel.addItem("Hidden neurons", tfHiddenNeurons);
 
-        // Help action
-        Action helpAction = new ShowHelpAction(boltzmannPanel.getHelpPath());
+        visibleNeurons = ((Number) tfVisibleNeurons.getValue()).intValue();
+        hiddenNeurons = ((Number) tfHiddenNeurons.getValue()).intValue();
+
+        setContentPane(propPanel);
+
+        // Help action 
+        Action helpAction = new ShowHelpAction(""); //TODO
         addButton(new JButton(helpAction));
 
     }
 
-    /**
-     * Called when dialog closes.
-     */
     @Override
     protected void closeDialogOk() {
-        boltzmannPanel.commitChanges();
-        BoltzmannMachine boltzmannMachine =  (BoltzmannMachine) boltzmannPanel.getGroup();
+        BoltzmannMachine boltzmannMachine = new BoltzmannMachine(
+                networkPanel.getNetwork(), visibleNeurons, hiddenNeurons,
+                networkPanel.getLastClickedPosition());
         layoutPanel.commitChanges();
 
-        //TODO: do we need to set the layout?
-//        som.setLayout(layoutPanel.getCurrentLayout());
-//        som.applyLayout();
-//        somNet.layoutNetwork(); // Must layout som first
-        //networkPanel.getNetwork().addGroup(boltzmannMachine); //this gives NPE as BoltzmannPropertiesPanel.getGroup() returns null at present
+        networkPanel.getNetwork().addGroup(boltzmannMachine);
+        networkPanel.syncToModel(); //TODO
         super.closeDialogOk();
     }
 
