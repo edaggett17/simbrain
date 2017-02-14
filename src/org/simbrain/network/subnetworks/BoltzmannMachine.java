@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.simbrain.network.connections.AllToAll;
 import org.simbrain.network.connections.RadialSimple;
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.Neuron;
@@ -87,24 +88,34 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
         visibleUnits.setLayoutBasedOnSize();
         this.addNeuronGroup(visibleUnits);
         visibleUnits.setLabel("Visible Units");
-        visibleUnits.setClamped(true);
 
         // Layout groups
         NetworkLayoutManager.offsetNeuronGroup(visibleUnits, hiddenUnits,
                 Direction.EAST, 100);
 
         // Wire up network
-        RadialSimple connection = new RadialSimple(net, hiddenUnits.getNeuronList());
-        connection.setExcitatoryRadius(100);
-        connection.setExcitatoryProbability(1);
-        connection.setInhibitoryProbability(0);
-        connection.connectNeurons(true); //TODO: Use synapse group?
-
+        AllToAll recurrentHidden = new AllToAll();
+        recurrentHidden.setSelfConnectionAllowed(false);
+        connectNeuronGroups(hiddenUnits, hiddenUnits, recurrentHidden);
+        AllToAll recurrentVisible = new AllToAll();
+        recurrentVisible.setSelfConnectionAllowed(false);
+        connectNeuronGroups(visibleUnits, visibleUnits, recurrentVisible);
+        AllToAll visibleHidden = new AllToAll();
+        visibleHidden.setSelfConnectionAllowed(false);
+        connectNeuronGroups(visibleUnits, hiddenUnits, visibleHidden);
+        AllToAll hiddenVisible = new AllToAll();
+        hiddenVisible.setSelfConnectionAllowed(false);
+        connectNeuronGroups(hiddenUnits, visibleUnits, visibleHidden);
+        //TODO: Proper weight initialization
     }
 
     @Override
     public void update(){
 
+        // TODO: Not sure about this
+        visibleUnits.update();
+
+        // TODO: Not sure about this either!
         hiddenUnits.clearActivations();
 
         // Choose randomly
