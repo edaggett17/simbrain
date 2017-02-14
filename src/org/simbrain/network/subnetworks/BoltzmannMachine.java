@@ -127,7 +127,7 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
             this.temperature = .95 * temperature;
         }
 
-        System.out.println(temperature);
+        this.getParentNetwork().fireGroupParametersChanged(this);
     }
 
     @Override

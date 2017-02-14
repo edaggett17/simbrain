@@ -25,10 +25,9 @@ import javax.swing.Action;
 import javax.swing.JPopupMenu;
 
 import org.simbrain.network.gui.NetworkPanel;
-import org.simbrain.network.gui.dialogs.network.SOMTrainingDialog;
+import org.simbrain.network.gui.dialogs.network.BoltzmannTrainingDialog;
 import org.simbrain.network.gui.nodes.SubnetworkNode;
 import org.simbrain.network.subnetworks.BoltzmannMachine;
-import org.simbrain.network.subnetworks.SOMNetwork;
 import org.simbrain.util.StandardDialog;
 import org.simbrain.util.Utils;
 
@@ -43,18 +42,18 @@ public class BoltzmannNode extends SubnetworkNode {
      * Create a Boltzmann Network PNode.
      *
      * @param networkPanel parent panel
-     * @param network the Boltzmann network
+     * @param subnet the Boltzmann network
      */
-    public BoltzmannNode(NetworkPanel networkPanel, SOMNetwork network) {
-        super(networkPanel, network);
+    public BoltzmannNode(NetworkPanel networkPanel, BoltzmannMachine subnet) {
+        super(networkPanel, subnet);
         setInteractionBox(new BoltzmannInteractionBox(networkPanel));
         setContextMenu();
     }
 
     @Override
     protected StandardDialog getPropertyDialog() {
-        return new SOMTrainingDialog(getNetworkPanel(),
-                (SOMNetwork) getSubnetwork());
+        return new BoltzmannTrainingDialog(getNetworkPanel(),
+                (BoltzmannMachine) getSubnetwork());
     }
 
     /**

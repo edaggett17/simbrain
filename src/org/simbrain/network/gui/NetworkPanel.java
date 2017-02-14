@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.Action;
@@ -111,6 +110,7 @@ import org.simbrain.network.gui.nodes.neuronGroupNodes.CompetitiveGroupNode;
 import org.simbrain.network.gui.nodes.neuronGroupNodes.SOMGroupNode;
 import org.simbrain.network.gui.nodes.subnetworkNodes.BPTTNode;
 import org.simbrain.network.gui.nodes.subnetworkNodes.BackpropNetworkNode;
+import org.simbrain.network.gui.nodes.subnetworkNodes.BoltzmannNode;
 import org.simbrain.network.gui.nodes.subnetworkNodes.CompetitiveNetworkNode;
 import org.simbrain.network.gui.nodes.subnetworkNodes.ESNNetworkNode;
 import org.simbrain.network.gui.nodes.subnetworkNodes.HopfieldNode;
@@ -126,6 +126,7 @@ import org.simbrain.network.listeners.SynapseListener;
 import org.simbrain.network.listeners.TextListener;
 import org.simbrain.network.subnetworks.BPTTNetwork;
 import org.simbrain.network.subnetworks.BackpropNetwork;
+import org.simbrain.network.subnetworks.BoltzmannMachine;
 import org.simbrain.network.subnetworks.CompetitiveGroup;
 import org.simbrain.network.subnetworks.CompetitiveNetwork;
 import org.simbrain.network.subnetworks.EchoStateNetwork;
@@ -1471,6 +1472,8 @@ public class NetworkPanel extends JPanel {
                 (CompetitiveNetwork) subnet);
         } else if (subnet instanceof SOMNetwork) {
             ret = new SOMNetworkNode(NetworkPanel.this, (SOMNetwork) subnet);
+        } else if (subnet instanceof BoltzmannMachine) {
+                ret = new BoltzmannNode(NetworkPanel.this, (BoltzmannMachine) subnet);
         } else if (subnet instanceof EchoStateNetwork) {
             ret = new ESNNetworkNode(NetworkPanel.this,
                 (EchoStateNetwork) subnet);
