@@ -18,24 +18,22 @@
  */
 package org.simbrain.network.subnetworks;
 
-import java.awt.geom.Point2D;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.simbrain.network.connections.AllToAll;
-import org.simbrain.network.connections.RadialSimple;
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.Synapse;
 import org.simbrain.network.groups.Group;
 import org.simbrain.network.groups.NeuronGroup;
 import org.simbrain.network.groups.Subnetwork;
-import org.simbrain.network.layouts.GridLayout;
 import org.simbrain.network.trainers.Trainable;
 import org.simbrain.network.trainers.TrainingSet;
 import org.simbrain.network.util.NetworkLayoutManager;
 import org.simbrain.network.util.NetworkLayoutManager.Direction;
+
+import java.awt.geom.Point2D;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <b>BoltzmannMachine</b> An input layer and input data
@@ -162,11 +160,17 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
         // TODO: implement
     }
 
+    //TODO: Consider renames below
+
     /**
      * @return the inputLayer
      */
     public NeuronGroup getInputLayer() {
         return visibleUnits;
+    }
+
+    public NeuronGroup getHiddenUnits(){
+        return hiddenUnits;
     }
 
     @Override

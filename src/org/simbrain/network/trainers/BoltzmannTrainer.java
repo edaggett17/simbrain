@@ -18,13 +18,17 @@
  */
 package org.simbrain.network.trainers;
 
+import org.simbrain.network.core.Neuron;
+import org.simbrain.network.core.Synapse;
 import org.simbrain.network.subnetworks.BoltzmannMachine;
-import org.simbrain.network.subnetworks.SOMNetwork;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A trainer for SOM Networks. Just goes through input data sets input node and
  * updates the SOM Group, which has the training code built in.
- *
+ * <p>
  * TODO: Possibly refactor to an "unsupervised trainer" class for use by
  * competitive too, which is similar.
  *
@@ -32,14 +36,29 @@ import org.simbrain.network.subnetworks.SOMNetwork;
  */
 public class BoltzmannTrainer extends Trainer {
 
-    /** Reference to trainable network. */
+    /**
+     * Reference to trainable network.
+     */
     private final BoltzmannMachine network;
 
-    /** Flag used for iterative training methods. */
+    /**
+     * Flag used for iterative training methods.
+     */
     private boolean updateCompleted = true;
 
-    /** Iteration number. An epoch. */
+    /**
+     * Iteration number. An epoch.
+     */
     private int iteration = 0;
+
+    /**
+     * Map of Synapse statistics.
+     */
+    private Map<Synapse,Integer> pcMap = new HashMap<>();
+
+
+    private Map<Synapse,Integer> pfMap = new HashMap<>();
+
 
     /**
      * Construct the UnsupervisedNeuronGroupTrainer trainer.
@@ -56,6 +75,7 @@ public class BoltzmannTrainer extends Trainer {
     @Override
     public void apply() throws DataNotInitializedException {
 
+        // Q: Shouldn't we check target data too?
         if (network.getTrainingSet().getInputData() == null) {
             throw new DataNotInitializedException("Input data not initalized");
         }
@@ -63,9 +83,77 @@ public class BoltzmannTrainer extends Trainer {
         int numRows = network.getTrainingSet().getInputData().length;
         for (int row = 0; row < numRows; row++) {
             double[] inputs = network.getTrainingSet().getInputData()[row];
+
+            // Compute PC: given that visible units are clamped, compute
+            // probabilty that a given pair of neurons are both on relative to the training set,
+            // and at equilbrium
             network.getInputLayer().forceSetActivations(inputs);
-//            network.getBol.update(); // Call a function here to be overriden in subclasses?
+            network.getInputLayer().setClamped(true);
+
+            // Steps 4-10
+            // Get network to equilibrium
+            // Update network N(default value 10) times
+            for (int i = 0; i < BoltzmannMachine.DEFAULT_INIT_SIZE; i++) {
+                network.update();
+            }
+
+            // Gather statistics for clamped case
+            // Steps 12-19
+            for (Synapse synapse : network.getFlatSynapseList()) {
+                pcMap.put(synapse, 0); //Q: all values in PC map are 0?
+            }
+            for (Neuron neuron : network.getFlatNeuronList()) {
+                for (Synapse synapse : neuron.getFanIn()) {
+                    if (synapse.getTarget().getActivation() > 0) {
+                        pcMap.put(synapse, pcMap.get(synapse) + 1);
+                        // increment synapse.aux by 1 //Q: if we do not increment aux in synapse, then how do we increment aux?
+                    }
+                }
+            }
+
+            // Compute PF: given that visible units are "free", compute
+            // probabilty that a given pair of neurons are both on relative to the training set,
+            // and at equilibrium
+
+            network.getInputLayer().forceSetActivations(inputs);
+            network.getInputLayer().setClamped(false);
+
+            // Do the stuff above again for pfmap
+
+            //Do I need for pfMap?
+           /** for(int i = 0; i < BoltzmannMachine.DEFAULT_INIT_SIZE; i++){
+               network.update();
+            }**/
+
+            for(Synapse synapse : network.getFlatSynapseList()){
+                pfMap.put(synapse, 0);
+            }
+
+            for(Neuron neuron : network.getFlatNeuronList()){
+                for(Synapse synapse : neuron.getFanIn()){
+                    //if(synapse.getTarget().getActivation() > 0){
+                    if(pcMap.get(synapse) == null){ // only those that are not clampped
+                        //if doesn't exist, insert and set count to 1
+                        pfMap.put(synapse, pfMap.get(synapse));
+                    }
+                }
+            }
+
+            for (Synapse synapse : network.getFlatSynapseList()) {
+                synapse.incrementWeight();
+                // Increment that synapse in the pcmap //Q what does it mean?
+            }
+
+            // Step 36-37: print PC & PF
+            for (Synapse synapse : network.getFlatSynapseList()) {
+                System.out.println("PC " + synapse.getId() + ":" + pcMap.get(synapse));
+                System.out.println("PF " + synapse.getId() + ":" + pfMap.get(synapse));
+            }
+           // network.getBol.update(); // Call a function here to be overriden in subclasses?
         }
+        // Q: Doing it here or should it be done after revalidateSynapseGroups()?
+
+
         incrementIteration();
 
         // Make sure excitatory/inhibitory are in proper lists
