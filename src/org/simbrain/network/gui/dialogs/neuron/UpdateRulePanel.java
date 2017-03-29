@@ -18,22 +18,6 @@
  */
 package org.simbrain.network.gui.dialogs.neuron;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Window;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.NetworkUtils;
@@ -51,6 +35,7 @@ import org.simbrain.network.gui.dialogs.neuron.rule_panels.HodgkinHuxleyRulePane
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.IACRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.IntegrateAndFireRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.IzhikevichRulePanel;
+import org.simbrain.network.gui.dialogs.neuron.rule_panels.KuramotoRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.LinearRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.MorrisLecarRulePanel;
 import org.simbrain.network.gui.dialogs.neuron.rule_panels.NakaRushtonRulePanel;
@@ -66,6 +51,7 @@ import org.simbrain.network.neuron_update_rules.HodgkinHuxleyRule;
 import org.simbrain.network.neuron_update_rules.IACRule;
 import org.simbrain.network.neuron_update_rules.IntegrateAndFireRule;
 import org.simbrain.network.neuron_update_rules.IzhikevichRule;
+import org.simbrain.network.neuron_update_rules.KuramotoRule;
 import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.network.neuron_update_rules.MorrisLecarRule;
 import org.simbrain.network.neuron_update_rules.NakaRushtonRule;
@@ -84,6 +70,19 @@ import org.simbrain.util.SimbrainConstants;
 import org.simbrain.util.widgets.DropDownTriangle;
 import org.simbrain.util.widgets.DropDownTriangle.UpDirection;
 import org.simbrain.util.widgets.EditablePanel;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Main container for selecting and editing neuron / activity generator types.
@@ -157,6 +156,8 @@ public class UpdateRulePanel extends JPanel implements EditablePanel {
                 new IntegrateAndFireRulePanel());
         RULE_MAP.put(new IzhikevichRule().getName(),
                 new IzhikevichRulePanel());
+        RULE_MAP.put(new KuramotoRule().getName(),
+                new KuramotoRulePanel());
         RULE_MAP.put(new LinearRule().getName(), new LinearRulePanel());
         RULE_MAP.put(new MorrisLecarRule().getName(),
                 new MorrisLecarRulePanel());
