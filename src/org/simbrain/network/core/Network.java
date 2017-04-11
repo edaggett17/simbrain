@@ -295,6 +295,7 @@ public class Network {
         }
     }
 
+    // Rename to use word loose?
     /**
      * Calls {@link Neuron#update} for each neuron.
      */

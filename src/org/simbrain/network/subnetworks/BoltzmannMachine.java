@@ -114,7 +114,7 @@ public class BoltzmannMachine  extends Subnetwork implements Trainable {
         visibleUnits.update();
 
         // TODO: Not sure about this either!
-        hiddenUnits.clearActivations();
+        //hiddenUnits.clearActivations();
 
         // Choose randomly
         Neuron chosenNode = hiddenUnits.getNeuronList()

@@ -54,11 +54,8 @@ public class BoltzmannTrainer extends Trainer {
     /**
      * Map of Synapse statistics.
      */
-    private Map<Synapse,Integer> pcMap = new HashMap<>();
-
-
-    private Map<Synapse,Integer> pfMap = new HashMap<>();
-
+    private Map<Synapse, Float> pcMap = new HashMap<>();
+    private Map<Synapse, Float> pfMap = new HashMap<>();
 
     /**
      * Construct the UnsupervisedNeuronGroupTrainer trainer.
@@ -80,13 +77,15 @@ public class BoltzmannTrainer extends Trainer {
             throw new DataNotInitializedException("Input data not initalized");
         }
 
+        // See Fausett, pp. 369-370
         int numRows = network.getTrainingSet().getInputData().length;
         for (int row = 0; row < numRows; row++) {
             double[] inputs = network.getTrainingSet().getInputData()[row];
 
             // Compute PC: given that visible units are clamped, compute
-            // probabilty that a given pair of neurons are both on relative to the training set,
-            // and at equilbrium
+            // probability that a given pair of neurons are both on relative to
+            // the training set,
+            // and at equilibrium
             network.getInputLayer().forceSetActivations(inputs);
             network.getInputLayer().setClamped(true);
 
@@ -99,60 +98,63 @@ public class BoltzmannTrainer extends Trainer {
 
             // Gather statistics for clamped case
             // Steps 12-19
+
+            // Initialize all pc values to 0
             for (Synapse synapse : network.getFlatSynapseList()) {
-                pcMap.put(synapse, 0); //Q: all values in PC map are 0?
+                pcMap.put(synapse, 0f);
             }
             for (Neuron neuron : network.getFlatNeuronList()) {
                 for (Synapse synapse : neuron.getFanIn()) {
                     if (synapse.getTarget().getActivation() > 0) {
                         pcMap.put(synapse, pcMap.get(synapse) + 1);
-                        // increment synapse.aux by 1 //Q: if we do not increment aux in synapse, then how do we increment aux?
                     }
                 }
             }
+            for (Synapse synapse : pcMap.keySet()) {
+                pcMap.put(synapse, pcMap.get(synapse) / numRows);
+            }
+
+            //////////////////////////////
 
             // Compute PF: given that visible units are "free", compute
-            // probabilty that a given pair of neurons are both on relative to the training set,
-            // and at equilibrium
+            // probabilty that a given pair of neurons are both on relative to
+            // the training set, and at equilibrium
 
             network.getInputLayer().forceSetActivations(inputs);
             network.getInputLayer().setClamped(false);
 
             // Do the stuff above again for pfmap
 
-            //Do I need for pfMap?
-           /** for(int i = 0; i < BoltzmannMachine.DEFAULT_INIT_SIZE; i++){
-               network.update();
-            }**/
-
-            for(Synapse synapse : network.getFlatSynapseList()){
-                pfMap.put(synapse, 0);
+            // Let network reach equilibrium again
+            for (int i = 0; i < BoltzmannMachine.DEFAULT_INIT_SIZE; i++) {
+                network.update();
             }
 
-            for(Neuron neuron : network.getFlatNeuronList()){
-                for(Synapse synapse : neuron.getFanIn()){
-                    //if(synapse.getTarget().getActivation() > 0){
-                    if(pcMap.get(synapse) == null){ // only those that are not clampped
-                        //if doesn't exist, insert and set count to 1
-                        pfMap.put(synapse, pfMap.get(synapse));
+            // Initialize pf to 0
+            for (Synapse synapse : network.getFlatSynapseList()) {
+                pfMap.put(synapse, 0f);
+            }
+            for (Neuron neuron : network.getFlatNeuronList()) {
+                for (Synapse synapse : neuron.getFanIn()) {
+                    if (synapse.getTarget().getActivation() > 0) {
+                        pfMap.put(synapse, pfMap.get(synapse) + 1);
                     }
                 }
             }
-
-            for (Synapse synapse : network.getFlatSynapseList()) {
-                synapse.incrementWeight();
-                // Increment that synapse in the pcmap //Q what does it mean?
+            // Step 36: Compute average
+            for (Synapse synapse : pfMap.keySet()) {
+                pfMap.put(synapse, pfMap.get(synapse) / numRows);
             }
 
-            // Step 36-37: print PC & PF
+            // Step 37: update the weights
             for (Synapse synapse : network.getFlatSynapseList()) {
-                System.out.println("PC " + synapse.getId() + ":" + pcMap.get(synapse));
-                System.out.println("PF " + synapse.getId() + ":" + pfMap.get(synapse));
+                if (pcMap.get(synapse) > pfMap.get(synapse)) {
+                    synapse.setStrength(synapse.getStrength() + 2);
+                } else {
+                    synapse.setStrength(synapse.getStrength() - 2);
+                }
             }
-           // network.getBol.update(); // Call a function here to be overriden in subclasses?
         }
-        // Q: Doing it here or should it be done after revalidateSynapseGroups()?
-
 
         incrementIteration();
 
