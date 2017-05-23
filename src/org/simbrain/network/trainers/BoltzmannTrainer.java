@@ -26,11 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A trainer for SOM Networks. Just goes through input data sets input node and
- * updates the SOM Group, which has the training code built in.
- * <p>
- * TODO: Possibly refactor to an "unsupervised trainer" class for use by
- * competitive too, which is similar.
+ * TODO
  *
  * @author Jeff Yoshimi
  */
@@ -84,8 +80,7 @@ public class BoltzmannTrainer extends Trainer {
 
             // Compute PC: given that visible units are clamped, compute
             // probability that a given pair of neurons are both on relative to
-            // the training set,
-            // and at equilibrium
+            // the training set,and at equilibrium
             network.getInputLayer().forceSetActivations(inputs);
             network.getInputLayer().setClamped(true);
 
