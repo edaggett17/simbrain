@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.simbrain.network.connections.ConnectNeurons;
 import org.simbrain.network.connections.Sparse;
@@ -57,6 +56,7 @@ import org.simbrain.util.SimbrainPreferences;
 import org.simbrain.util.SimbrainPreferences.PropertyNotFoundException;
 import org.simbrain.util.SimpleId;
 import org.simbrain.util.math.SimbrainMath;
+import org.simpleframework.xml.Root;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -67,7 +67,8 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * connecting them. Most update and learning logic occurs in the neurons and
  * weights themselves, as well as in special groups.
  */
-@XmlRootElement
+@Root // For SimpleXML
+@XmlRootElement // This and below is jaxb crapola
 @XmlAccessorType(XmlAccessType.FIELD)
 // Order matters in the xml, in order for @XmlID and @XmlIDREF
 @XmlType(propOrder = { "id", "neuronList", "synapseList", "ngList", "sgList",

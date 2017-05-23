@@ -41,6 +41,8 @@ import org.simbrain.network.listeners.SynapseListener;
 import org.simbrain.workspace.Consumer2;
 import org.simbrain.workspace.Producer2;
 import org.simbrain.workspace.WorkspaceComponent;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 
 /**
  * Network component.
@@ -506,6 +508,18 @@ public final class NetworkComponent extends WorkspaceComponent {
 
     @Override
     public void save(OutputStream output, String format) {
+
+        // Test simple xml
+        Serializer serializer = new Persister();
+        try {
+            this.getNetwork().preSaveInit();
+            serializer.write(this.getNetwork(), System.out);
+        } catch (Exception e1) {
+            //TODO: Better exception handling
+            e1.printStackTrace();
+        }
+
+        // Existing 3.1 jaxb implementation
         JAXBContext jc;
         try {
             jc = JAXBContext.newInstance(Network.class);
