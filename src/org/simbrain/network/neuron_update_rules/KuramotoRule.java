@@ -1,8 +1,12 @@
 package org.simbrain.network.neuron_update_rules;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
+import org.simbrain.network.core.Synapse;
 import org.simbrain.network.neuron_update_rules.interfaces.BiasedUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.BoundedUpdateRule;
 import org.simbrain.network.neuron_update_rules.interfaces.ClippableUpdateRule;
@@ -10,16 +14,20 @@ import org.simbrain.network.neuron_update_rules.interfaces.DifferentiableUpdateR
 import org.simbrain.network.neuron_update_rules.interfaces.NoisyUpdateRule;
 import org.simbrain.util.randomizer.Randomizer;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-
 /**
- * @author Amanda Pandey <amanda.pandey@gmail.com>
+ * TODO
+ *
+ * https://en.wikipedia.org/wiki/Kuramoto_model
+ *
+ * K is weight N = number of fan-in nodes
+ *
+ * TODO: Contextual increment.  Proper randomize and bounds.
+ * Remove un-needed overrides.  Finish GUI.   Include time step in gui.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class KuramotoRule extends NeuronUpdateRule implements BiasedUpdateRule,
-        DifferentiableUpdateRule, BoundedUpdateRule, ClippableUpdateRule,
-        NoisyUpdateRule {
+public class KuramotoRule extends NeuronUpdateRule
+        implements BiasedUpdateRule, DifferentiableUpdateRule,
+        BoundedUpdateRule, ClippableUpdateRule, NoisyUpdateRule {
 
     /** The Default upper bound. */
     private static final double DEFAULT_UPPER_BOUND = 1.0;
@@ -30,8 +38,8 @@ public class KuramotoRule extends NeuronUpdateRule implements BiasedUpdateRule,
     /** Default clipping setting. */
     private static final boolean DEFAULT_CLIPPING = true;
 
-    /** Slope. */
-    public double slope = 1;
+    /** Natural Frequency. */
+    public double naturalFrequency = 1;
 
     /** Bias. */
     public double bias = 0;
@@ -51,20 +59,36 @@ public class KuramotoRule extends NeuronUpdateRule implements BiasedUpdateRule,
     /** The lower bound of the activity if clipping is used. */
     private double lowerBound = DEFAULT_LOWER_BOUND;
 
+    ///// NEW STUFF ////
+    private double timeStep;
+
     @Override
     public void update(Neuron neuron) {
-        double wtdInput = inputType.getInput(neuron);
-        double val = (slope * wtdInput) + bias;
 
-        if (addNoise) {
-            val += noiseGenerator.getRandom();
+        timeStep = neuron.getNetwork().getTimeStep();
+
+        double sum = 0;
+        for (Synapse s : neuron.getFanIn()) {
+            sum += s.getStrength() * Math.sin(
+                    s.getSource().getActivation() - neuron.getActivation());
         }
+        double N = neuron.getFanIn().size();
+        N = (N > 0) ? N : 1;
+        double theta_dot = naturalFrequency + sum / N;
 
-        if (clipping) {
-            val = clip(val);
-        }
+        double theta = neuron.getActivation()
+                + (timeStep * theta_dot);
+        theta = theta % (2 * Math.PI);
 
-        neuron.setBuffer(val);
+        // if (addNoise) {
+        // val += noiseGenerator.getRandom();
+        // }
+        //
+        // if (clipping) {
+        // val = clip(val);
+        // }
+
+        neuron.setBuffer(theta);
     }
 
     @Override
@@ -135,7 +159,7 @@ public class KuramotoRule extends NeuronUpdateRule implements BiasedUpdateRule,
         } else if (val <= getLowerBound()) {
             return 0;
         } else {
-            return slope;
+            return naturalFrequency;
         }
     }
 
@@ -153,7 +177,7 @@ public class KuramotoRule extends NeuronUpdateRule implements BiasedUpdateRule,
      * @param slope The slope to set.
      */
     public void setSlope(final double slope) {
-        this.slope = slope;
+        this.naturalFrequency = slope;
     }
 
     @Override
@@ -215,7 +239,7 @@ public class KuramotoRule extends NeuronUpdateRule implements BiasedUpdateRule,
      * @return Returns the slope.
      */
     public double getSlope() {
-        return slope;
+        return naturalFrequency;
     }
 
 }

@@ -1,18 +1,18 @@
 package org.simbrain.network.gui.dialogs.neuron.rule_panels;
 
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+
 import org.simbrain.network.core.NeuronUpdateRule;
 import org.simbrain.network.gui.dialogs.neuron.AbstractNeuronRulePanel;
 import org.simbrain.network.neuron_update_rules.KuramotoRule;
-import org.simbrain.network.neuron_update_rules.LinearRule;
 import org.simbrain.util.LabelledItemPanel;
-
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 
 /**
  * @author Amanda Pandey <amanda.pandey@gmail.com>
  */
 public class KuramotoRulePanel extends AbstractNeuronRulePanel {
+
     /** Tabbed pane. */
     private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -28,11 +28,11 @@ public class KuramotoRulePanel extends AbstractNeuronRulePanel {
     public KuramotoRulePanel() {
         this.add(tabbedPane);
         JTextField slopeField = createTextField(
-                (r) -> ((LinearRule) r).getSlope(),
-                (r, val) -> ((LinearRule) r).setSlope((double) val));
+                (r) -> ((KuramotoRule) r).getSlope(),
+                (r, val) -> ((KuramotoRule) r).setSlope((double) val));
         JTextField biasField = createTextField(
-                (r) -> ((LinearRule) r).getBias(),
-                (r, val) -> ((LinearRule) r).setBias((double) val));
+                (r) -> ((KuramotoRule) r).getBias(),
+                (r, val) -> ((KuramotoRule) r).setBias((double) val));
         mainTab.addItem("Slope", slopeField);
         mainTab.addItem("Bias", biasField);
         mainTab.addItem("Add noise", this.getAddNoise());
