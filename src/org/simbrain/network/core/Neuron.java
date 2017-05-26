@@ -18,6 +18,21 @@
  */
 package org.simbrain.network.core;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.groups.Group;
 import org.simbrain.network.neuron_update_rules.LinearRule;
@@ -26,23 +41,9 @@ import org.simbrain.network.neuron_update_rules.interfaces.BoundedUpdateRule;
 import org.simbrain.util.SimbrainConstants.Polarity;
 import org.simbrain.workspace.Consumible;
 import org.simbrain.workspace.Producible;
-import org.simpleframework.xml.Default;
-import org.simpleframework.xml.DefaultType;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Transient;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlTransient;
-import java.awt.*;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * <b>Neuron</b> represents a node in the neural network. Most of the "logic" of
@@ -53,6 +54,8 @@ import java.util.stream.Collectors;
  * @author Zach Tosi
  *
  */
+@Root(strict=false)
+//@Default
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Neuron {
 
@@ -72,12 +75,15 @@ public class Neuron {
 
     /** A unique id for this neuron. */
     @XmlID
+    @Element
     private String id;
 
     /** An optional String description associated with this neuron. */
-    private String label = "";
+    @Element(required=false)
+    private String label;
 
     /** Activation value of the neuron. The main state variable. */
+    @Element
     private double activation;
 
     /**
@@ -86,6 +92,7 @@ public class Neuron {
      * potential at time t+1. True on t+1 in that case. Always false for
      * non-spiking neuron update rules.
      */
+    @Element
     private boolean spike;
 
     /** Temporary activation value. */
@@ -105,24 +112,24 @@ public class Neuron {
 
     /** Reference to network this neuron is part of. */
     @XmlIDREF
-    private Network parent;
+    private Network parent; // TODO: Removed final. Think
 
     /** List of synapses this neuron attaches to. */
     @XmlTransient
-    @Transient
     private Map<Neuron, Synapse> fanOut = new HashMap<Neuron, Synapse>(
             PRE_ALLOCATED_NUM_SYNAPSES);
 
     /** List of synapses attaching to this neuron. */
     @XmlTransient
-    @Transient
     private ArrayList<Synapse> fanIn = new ArrayList<Synapse>(
             PRE_ALLOCATED_NUM_SYNAPSES);
 
     /** x-coordinate of this neuron in 2-space. */
+    @Element
     private double x;
 
     /** y-coordinate of this neuron in 2-space. */
+    @Element
     private double y;
 
     /**
@@ -130,6 +137,7 @@ public class Neuron {
      * but fully useable for scripting. Like polarity this will get a full
      * implementation in the next development cycle... probably by 4.0.
      */
+    @Element(required=false)
     private double z;
 
     /** If true then do not update this neuron. */
@@ -139,8 +147,10 @@ public class Neuron {
      * The polarity of this neuron (excitatory, inhibitory, or none, which is
      * null).
      */
+    //@Element
     private Polarity polarity = Polarity.BOTH;
 
+    // TODO: Remove?
     /** Target value. */
     private double targetValue;
 
@@ -156,25 +166,23 @@ public class Neuron {
      * By default, this is set to 0 for all the neurons. If you want a subset of
      * neurons to fire before other neurons, assign it a smaller priority value.
      */
+    @Element(required=false)
     private int updatePriority;
 
     /**
      * An auxiliary value associated with a neuron. Getting and setting these
      * values can be useful in scripts.
      */
+    @Element(required=false)
     private double auxValue;
 
     /**
      * The update method of this neuron, which corresponds to what kind of
      * neuron it is.
      */
+    //@Element
     private NeuronUpdateRule updateRule;
 
-    //TODO
-    public Neuron(){
-        this.parent = null;
-    };
-    
     /**
      * Construct a neuron with all default values in the specified network.
      * Sometimes used as the basis for a template neuron which will be edited
@@ -186,6 +194,13 @@ public class Neuron {
         this.parent = parent;
         setUpdateRule(DEFAULT_UPDATE_RULE.deepCopy());
     }
+
+    //TODO.  TEMP!
+    public Neuron() {
+        this.parent = null;
+        setUpdateRule(DEFAULT_UPDATE_RULE.deepCopy());
+    }
+//    public Neuron(@Element(name="parent") final Network parent) {
 
     /**
      * Construct a specific type of neuron from a string description.
@@ -248,7 +263,8 @@ public class Neuron {
      * parent network has been added.
      * @param network parent network
      */
-    public void postUnmarshallingInit() {
+    public void postUnmarshallingInit(Network parent) {
+        this.parent = parent;
         fanOut = new HashMap<Neuron, Synapse>();
         fanIn = new ArrayList<Synapse>();
         if (polarity == null) {

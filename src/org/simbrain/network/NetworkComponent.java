@@ -436,19 +436,33 @@ public final class NetworkComponent extends WorkspaceComponent {
         return null;
     }
 
-    
+
     public static NetworkComponent open(final InputStream input,
             final String name, final String format) {
-        Unmarshaller jaxbUnmarshaller;
+
+        Serializer serializer = new Persister();
+        //Serializer serializer = new Persister(new CycleStrategy());
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Network.class);
-            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            Network network = (Network) jaxbUnmarshaller.unmarshal(input);
-            //System.out.println(network);
+            Network network = (Network) serializer.read(Network.class, input);
+            System.out.println(network);
             return new NetworkComponent(name, network);
-        } catch (JAXBException e) {
-            e.printStackTrace();
+        } catch (Exception e1) {
+            //TODO: Better exception handling
+            e1.printStackTrace();
         }
+
+
+//        Unmarshaller jaxbUnmarshaller;
+//        try {
+//            JAXBContext jaxbContext = JAXBContext.newInstance(Network.class);
+//            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//            Network network = (Network) jaxbUnmarshaller.unmarshal(input);
+//            //System.out.println(network);
+//            return new NetworkComponent(name, network);
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
+
         return null;
     }
 
@@ -510,27 +524,29 @@ public final class NetworkComponent extends WorkspaceComponent {
     public void save(OutputStream output, String format) {
 
         // Test simple xml
-        Serializer serializer = new Persister(new CycleStrategy());
+        //Serializer serializer = new Persister();
+        Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
         try {
             this.getNetwork().preSaveInit();
             serializer.write(this.getNetwork(), System.out);
+            serializer.write(this.getNetwork(), output);
         } catch (Exception e1) {
             //TODO: Better exception handling
             e1.printStackTrace();
         }
 
         // Existing 3.1 jaxb implementation
-        JAXBContext jc;
-        try {
-            jc = JAXBContext.newInstance(Network.class);
-            Marshaller marshaller = jc.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            this.getNetwork().preSaveInit();
-            marshaller.marshal(this.getNetwork(), output);
-            //marshaller.marshal(this.getNetwork(), System.out);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+//        JAXBContext jc;
+//        try {
+//            jc = JAXBContext.newInstance(Network.class);
+//            Marshaller marshaller = jc.createMarshaller();
+//            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//            this.getNetwork().preSaveInit();
+//            marshaller.marshal(this.getNetwork(), output);
+//            //marshaller.marshal(this.getNetwork(), System.out);
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

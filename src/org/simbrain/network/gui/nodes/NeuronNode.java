@@ -308,6 +308,9 @@ public class NeuronNode extends ScreenElement implements PropertyChangeListener 
             return;
         }
         // Set label text
+        if (neuron.getLabel() == null) {
+            return;
+        }
         if ((!neuron.getLabel().equalsIgnoreCase(""))
                 || (!neuron.getLabel().equalsIgnoreCase(
                         SimbrainConstants.NULL_STRING))) {

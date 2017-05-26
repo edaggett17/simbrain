@@ -18,8 +18,23 @@
  */
 package org.simbrain.network.core;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
 import org.simbrain.network.connections.ConnectNeurons;
 import org.simbrain.network.connections.Sparse;
 import org.simbrain.network.groups.Group;
@@ -41,31 +56,13 @@ import org.simbrain.util.SimbrainPreferences.PropertyNotFoundException;
 import org.simbrain.util.SimpleId;
 import org.simbrain.util.math.SimbrainMath;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementArray;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementListUnion;
-import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Validate;
 
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * <b>Network</b> provides core neural network functionality and is the the main
@@ -73,7 +70,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * connecting them. Most update and learning logic occurs in the neurons and
  * weights themselves, as well as in special groups.
  */
-@Root // For SimpleXML
+// Strict = false allows for backwards compatibility
+@Root(strict=false)// For SimpleXML.  Can't use default because it conflicts with constructor injection.  So must manually annotate.
 @XmlRootElement // This and below is jaxb crapola
 @XmlAccessorType(XmlAccessType.FIELD)
 // Order matters in the xml, in order for @XmlID and @XmlIDREF
@@ -84,13 +82,12 @@ public class Network {
 
     /** Network id. */
     @XmlID
-    @Element
     private String id = "";
 
     // TODO: Rename to looseNeurons and looseSynapses
     /** Array list of neurons. */
-    @ElementList(name="neuronList")
-    private List<Neuron> neuronList = new ArrayList<Neuron>();
+    @ElementList
+    private final List<Neuron> neuronList;
 
     /** Array list of synapses. */
     private final Set<Synapse> synapseList = new LinkedHashSet<Synapse>();
@@ -108,8 +105,8 @@ public class Network {
     private List<NetworkTextObject> textList = new ArrayList<NetworkTextObject>();
 
     /** The update manager for this network. */
-    @Element
-    private NetworkUpdateManager updateManager;
+    //@Element
+    private final NetworkUpdateManager updateManager;
 
     /** The initial time-step for the network. */
     private static final double DEFAULT_TIME_STEP = .1;
@@ -118,11 +115,9 @@ public class Network {
     private static final double LOG_10 = Math.log(10);
 
     /** In iterations or msec. */
-    @Element
     private double time = 0;
 
     /** Time step. */
-    @Element
     private double timeStep = DEFAULT_TIME_STEP;
 
     /** Local thread flag for manually starting and stopping the network. */
@@ -230,11 +225,37 @@ public class Network {
      * Used to create an instance of network (Default constructor).
      */
     public Network() {
+        neuronList = new ArrayList<Neuron>();
         id = "Network_" + current_id;
         current_id++;
         updateManager = new NetworkUpdateManager(this);
         prioritySortedNeuronList = new ArrayList<Neuron>();
     }
+
+    /**
+     * For simplexml.
+     */
+//    public Network(@ElementList(name = "neuronList") List<Neuron> neurons,
+//            @Element(name = "updateManager") NetworkUpdateManager updateManager) {
+//        this.neuronList = neurons;
+//        this.updateManager = updateManager;
+//        // TODO: Refactor / below needed?
+////        id = "Network_" + current_id;
+////        current_id++;
+////        prioritySortedNeuronList = new ArrayList<Neuron>();
+//       }
+//
+
+    public Network(@ElementList(name = "neuronList") List<Neuron> neurons) {
+        this.neuronList = neurons;
+        updateManager = new NetworkUpdateManager(this);
+
+        // TODO: Refactor / below needed?
+//        id = "Network_" + current_id;
+//        current_id++;
+//        prioritySortedNeuronList = new ArrayList<Neuron>();
+       }
+
 
     /**
      * The core update function of the neural network. Calls the current update
@@ -1792,11 +1813,14 @@ public class Network {
         return retList;
     }
 
-    void beforeUnmarshal(Unmarshaller u, Object network) {
-        //System.out.println("Before");
+    @Validate
+    void beforeUnmarshal() {
+        System.out.println("Validate");
     }
 
-    void afterUnmarshal(Unmarshaller u, Object network) {
+    @Commit
+    void afterUnmarshal() {
+        System.out.println("Commit");
         fireUpdates = true;
 
         // Initialize listener lists
@@ -1807,11 +1831,11 @@ public class Network {
         groupListeners = new ArrayList<GroupListener>();
 
         // Initialize update manager
-        updateManager.postUnmarshallingInit();
+        updateManager.postUnmarshallingInit(); //TODO
 
         // Initialize neurons
         for (Neuron neuron : this.getFlatNeuronList()) {
-            neuron.postUnmarshallingInit();
+            neuron.postUnmarshallingInit(this);
         }
 
         // Uncompress compressed matrix rep if needed
