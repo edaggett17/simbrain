@@ -18,17 +18,6 @@
  */
 package org.simbrain.network.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlSeeAlso;
-
 import org.simbrain.network.groups.Group;
 import org.simbrain.network.listeners.GroupAdapter;
 import org.simbrain.network.listeners.NetworkEvent;
@@ -37,6 +26,17 @@ import org.simbrain.network.update_actions.ConcurrentBufferedUpdate;
 import org.simbrain.network.update_actions.CustomUpdate;
 import org.simbrain.network.update_actions.PriorityUpdate;
 import org.simbrain.network.update_actions.UpdateGroup;
+import org.simpleframework.xml.ElementList;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Manage network updates. Maintains a list of actions that are updated in the
@@ -54,7 +54,8 @@ public class NetworkUpdateManager {
      * actions constitutes a single "update" in the network.
      */
     @XmlAnyElement(lax=true)
-    private final List<NetworkUpdateAction> actionList =
+    @ElementList(name="actionList")
+    private List<NetworkUpdateAction> actionList =
             new ArrayList<NetworkUpdateAction>();
 
     /**

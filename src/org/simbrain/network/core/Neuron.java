@@ -18,21 +18,6 @@
  */
 package org.simbrain.network.core;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.groups.Group;
 import org.simbrain.network.neuron_update_rules.LinearRule;
@@ -41,6 +26,23 @@ import org.simbrain.network.neuron_update_rules.interfaces.BoundedUpdateRule;
 import org.simbrain.util.SimbrainConstants.Polarity;
 import org.simbrain.workspace.Consumible;
 import org.simbrain.workspace.Producible;
+import org.simpleframework.xml.Default;
+import org.simpleframework.xml.DefaultType;
+import org.simpleframework.xml.Transient;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlTransient;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <b>Neuron</b> represents a node in the neural network. Most of the "logic" of
@@ -107,11 +109,13 @@ public class Neuron {
 
     /** List of synapses this neuron attaches to. */
     @XmlTransient
+    @Transient
     private Map<Neuron, Synapse> fanOut = new HashMap<Neuron, Synapse>(
             PRE_ALLOCATED_NUM_SYNAPSES);
 
     /** List of synapses attaching to this neuron. */
     @XmlTransient
+    @Transient
     private ArrayList<Synapse> fanIn = new ArrayList<Synapse>(
             PRE_ALLOCATED_NUM_SYNAPSES);
 

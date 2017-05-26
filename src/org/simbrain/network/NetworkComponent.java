@@ -17,16 +17,6 @@
  */
 package org.simbrain.network;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
@@ -43,6 +33,16 @@ import org.simbrain.workspace.Producer2;
 import org.simbrain.workspace.WorkspaceComponent;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.CycleStrategy;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Network component.
@@ -510,7 +510,7 @@ public final class NetworkComponent extends WorkspaceComponent {
     public void save(OutputStream output, String format) {
 
         // Test simple xml
-        Serializer serializer = new Persister();
+        Serializer serializer = new Persister(new CycleStrategy());
         try {
             this.getNetwork().preSaveInit();
             serializer.write(this.getNetwork(), System.out);

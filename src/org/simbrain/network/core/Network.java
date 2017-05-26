@@ -18,24 +18,8 @@
  */
 package org.simbrain.network.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.simbrain.network.connections.ConnectNeurons;
 import org.simbrain.network.connections.Sparse;
 import org.simbrain.network.groups.Group;
@@ -56,10 +40,32 @@ import org.simbrain.util.SimbrainPreferences;
 import org.simbrain.util.SimbrainPreferences.PropertyNotFoundException;
 import org.simbrain.util.SimpleId;
 import org.simbrain.util.math.SimbrainMath;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementArray;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
+import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * <b>Network</b> provides core neural network functionality and is the the main
@@ -78,11 +84,13 @@ public class Network {
 
     /** Network id. */
     @XmlID
+    @Element
     private String id = "";
 
     // TODO: Rename to looseNeurons and looseSynapses
     /** Array list of neurons. */
-    private final List<Neuron> neuronList = new ArrayList<Neuron>();
+    @ElementList(name="neuronList")
+    private List<Neuron> neuronList = new ArrayList<Neuron>();
 
     /** Array list of synapses. */
     private final Set<Synapse> synapseList = new LinkedHashSet<Synapse>();
@@ -100,6 +108,7 @@ public class Network {
     private List<NetworkTextObject> textList = new ArrayList<NetworkTextObject>();
 
     /** The update manager for this network. */
+    @Element
     private NetworkUpdateManager updateManager;
 
     /** The initial time-step for the network. */
@@ -109,9 +118,11 @@ public class Network {
     private static final double LOG_10 = Math.log(10);
 
     /** In iterations or msec. */
+    @Element
     private double time = 0;
 
     /** Time step. */
+    @Element
     private double timeStep = DEFAULT_TIME_STEP;
 
     /** Local thread flag for manually starting and stopping the network. */
