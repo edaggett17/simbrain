@@ -41,6 +41,10 @@ import org.simbrain.workspace.updater.UpdateAllBuffered;
 import org.simbrain.workspace.updater.UpdateComponent;
 import org.simbrain.workspace.updater.UpdateCoupling;
 import org.simbrain.workspace.updater.WorkspaceUpdater;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.Transient;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.CycleStrategy;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -72,10 +76,12 @@ class ArchiveContents {
 
     /** The serializer for this archive. */
     @XmlTransient
+    @Transient
     private WorkspaceComponentSerializer serializer;
 
     // TODO: Below is saving currentFile and Directory, which it shouldn't
     /** Reference to workspace used to serialize parameters in workspace. */
+    @ Transient //TODO
     private Workspace workspaceParameters;
 
     // TODO
@@ -284,6 +290,7 @@ class ArchiveContents {
 
         /** Reference to the action itself. */
         @XmlAnyElement(lax=true)
+        @Transient // TODO!!
         private UpdateAction updateAction;
 
         /**
@@ -295,13 +302,6 @@ class ArchiveContents {
          * Reference to the coupling id for this action, or null if not needed.
          */
         private String couplingId;
-
-        // TODO
-        /**
-         * No-argument consructor for JAXB.
-         */
-        ArchivedUpdateAction() {
-        }
 
         /**
          * Construct the archived update action.
@@ -625,7 +625,16 @@ class ArchiveContents {
      * @param stream The stream to write to.
      */
     void toXml(final OutputStream stream) {
-        // xstream().toXML(this, stream);
+
+        //Serializer serializer = new Persister();
+        Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
+        try {
+            serializer.write(this, System.out);
+        } catch (Exception e1) {
+            //TODO: Better exception handling
+            e1.printStackTrace();
+        }
+
         JAXBContext jc;
         try {
             jc = JAXBContext.newInstance(ArchiveContents.class, UpdateAllBuffered.class);
