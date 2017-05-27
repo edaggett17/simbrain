@@ -2034,7 +2034,7 @@ public class SynapseGroup extends Group {
             compressedParams = null;
         } else {
             for (Synapse synapse : this.getAllSynapses()) {
-                synapse.postUnmarshallingInit();
+                synapse.postUnmarshallingInit(this.getParentNetwork());
             }
         }
 

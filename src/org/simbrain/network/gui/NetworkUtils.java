@@ -151,6 +151,13 @@ public class NetworkUtils {
     	Iterator<O> sourceIter = sources.iterator();
     	O sourceFirst = sourceIter.next();
     	V val = getter.getParameter(sourceFirst);
+    	
+    	// TODO
+    	if (val == null) {
+    	    System.err.println("Parameter is null in NetworkUtils.isConsistent");
+    	    return false;
+    	}
+
     	while (sourceIter.hasNext()) {
     		if (!val.equals(getter.getParameter(sourceIter.next()))) {
     			// Found an inconsistency

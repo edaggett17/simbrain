@@ -36,6 +36,8 @@ import org.simbrain.network.synapse_update_rules.spikeresponders.SpikeResponder;
 import org.simbrain.util.Utils;
 import org.simbrain.workspace.Consumible;
 import org.simbrain.workspace.Producible;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
  * <b>Synapse</b> objects represent "connections" between neurons, which learn
@@ -46,10 +48,12 @@ import org.simbrain.workspace.Producible;
  * @author Zach Tosi
  *
  */
+@Root
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Synapse {
 
     /** Synapse id. */
+    @Element
     private String id = "";
 
     /** A default update rule for the synapse. */
@@ -94,21 +98,27 @@ public class Synapse {
     private static final int MAX_DIGITS = 2;
 
     /** Strength of synapse. */
+    @Element
     private double strength = 0;
 
     /** Post-Synaptic Response */
+    @Element
     private double psr;
 
     /** Amount to increment the neuron. */
+    @Element
     private double increment = 1;
 
     /** Upper limit of synapse. */
+    @Element
     private double upperBound = DEFAULT_UPPER_BOUND;
 
     /** Lower limit of synapse. */
+    @Element
     private double lowerBound = DEFAULT_LOWER_BOUND;
 
     /** Time to delay sending activation to target neuron. */
+    @Element
     private int delay;
 
     /** Parent group, if any (null if none). */
@@ -119,21 +129,25 @@ public class Synapse {
      * Boolean flag, indicating whether this type of synapse participates in the
      * computation of weighted input. Set to a default value of true.
      */
+    @Element
     private boolean enabled = true;
 
     /**
      * Boolean flag, indicating whether or not this synapse's strength can be
      * changed by any means other than direct user intervention.
      */
+    @Element
     private boolean frozen;
 
     /** Manages synaptic delay */
+    //TODO
     private double[] delayManager;
 
     /**
      * Points to the location in the delay manager that corresponds to the
      * current time.
      */
+    //TODO
     private int dlyPtr = 0;
 
     /** The value {@link #dlyPtr} points to in the delay manager. */
@@ -148,7 +162,7 @@ public class Synapse {
      * NullPointerExceptions since some methods in synapse consult the source or
      * target neuron before allowing certain changes.
      */
-    private final boolean isTemplate;
+    private boolean isTemplate;  // TODO: Was final...
 
     /** Initialize properties */
     static {
@@ -1025,9 +1039,11 @@ public class Synapse {
     /**
      * Called after a synapse is de-serialized, to repopulate fan-in and fan-out
      * lists.
+     * @param network 
      * @param network parent network
      */
-    public void postUnmarshallingInit() {
+    public void postUnmarshallingInit(Network network) {
+        this.parentNetwork = network;
         if (getTarget() != null) {
             if (getTarget().getFanIn() != null) {
                 getTarget().addAfferent(this);

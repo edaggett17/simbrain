@@ -22,18 +22,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
 
 import org.simbrain.network.connections.ConnectNeurons;
 import org.simbrain.network.connections.Sparse;
@@ -78,12 +74,14 @@ public class Network {
     private String id;
 
     // TODO: Rename to looseNeurons and looseSynapses
-    /** Array list of neurons. */
+    /** Loose neurons. */
     @ElementList
     private final List<Neuron> neuronList;
 
-    /** Array list of synapses. */
-    private final Set<Synapse> synapseList = new LinkedHashSet<Synapse>();
+    //TODO: Check with Tosi.  Changed back to list from hashset
+    /** Loose synapses. */
+    @ElementList
+    private final List<Synapse> synapseList;
 
     /** List of neuron groups. */
     private final List<NeuronGroup> ngList = new ArrayList<>();
@@ -95,7 +93,8 @@ public class Network {
     private final List<Subnetwork> subnetList = new ArrayList<>();
 
     /** Text objects. */
-    private List<NetworkTextObject> textList = new ArrayList<NetworkTextObject>();
+    @ElementList
+    private final List<NetworkTextObject> textList;
 
     /** The update manager for this network. */
     @Element
@@ -214,11 +213,14 @@ public class Network {
         }
     }
 
+    //TODO: Still needed?
     /**
      * Used to create an instance of network (Default constructor).
      */
     public Network() {
         neuronList = new ArrayList<Neuron>();
+        synapseList = new ArrayList<Synapse>();
+        textList = new ArrayList<NetworkTextObject>();
         id = "Network_" + current_id;
         current_id++;
         updateManager = new NetworkUpdateManager(this);
@@ -228,8 +230,14 @@ public class Network {
     /**
      * For simplexml.
      */
-    public Network(@ElementList(name = "neuronList") List<Neuron> neurons) {
+    public Network(
+            @ElementList(name = "neuronList") List<Neuron> neurons,
+            @ElementList(name = "synapseList") List<Synapse> synapses,
+            @ElementList(name = "textList") List<NetworkTextObject> textObjects) {
+
         this.neuronList = neurons;
+        this.synapseList = synapses;
+        this.textList = textObjects;
         updateManager = new NetworkUpdateManager(this);
 
         // TODO: Refactor / below needed?
@@ -1632,9 +1640,6 @@ public class Network {
      * @return the textList
      */
     public List<NetworkTextObject> getTextList() {
-        if (textList == null) {
-            textList = new ArrayList<NetworkTextObject>();
-        }
         return textList;
     }
 
@@ -1827,7 +1832,7 @@ public class Network {
 
         // Re-populate fan-in / fan-out for loose synapses
         for (Synapse synapse : this.getLooseSynapses()) {
-            synapse.postUnmarshallingInit();
+            synapse.postUnmarshallingInit(this);
         }
 
         updateCompleted = new AtomicBoolean(false);
