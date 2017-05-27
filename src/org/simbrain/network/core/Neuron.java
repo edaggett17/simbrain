@@ -54,9 +54,7 @@ import org.simpleframework.xml.core.Validate;
  * @author Zach Tosi
  *
  */
-@Root(strict=false)
-//@Default
-@XmlAccessorType(XmlAccessType.FIELD)
+@Root
 public class Neuron {
 
     /**
@@ -74,7 +72,6 @@ public class Neuron {
             .ceil(500 / 0.75);
 
     /** A unique id for this neuron. */
-    @XmlID
     @Element
     private String id = "";
 

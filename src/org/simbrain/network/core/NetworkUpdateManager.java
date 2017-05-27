@@ -47,8 +47,6 @@ import org.simpleframework.xml.Root;
  *
  * @author Jeff Yoshimi
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({BufferedUpdate.class, UpdateGroup.class})
 @Root
 public class NetworkUpdateManager {
 
@@ -56,7 +54,6 @@ public class NetworkUpdateManager {
      * The list of update actions, in a specific order. One run through these
      * actions constitutes a single "update" in the network.
      */
-    @XmlAnyElement(lax=true)
     @ElementList
     private List<NetworkUpdateAction> actionList =
             new ArrayList<NetworkUpdateAction>();
@@ -64,12 +61,10 @@ public class NetworkUpdateManager {
     /**
      * List of listeners on this update manager.
      */
-    @XmlAnyElement(lax=true)
     private List<UpdateManagerListener> listeners =
             new ArrayList<UpdateManagerListener>();
 
     /** Reference to parent network. */
-    @XmlIDREF
     private Network network;
 
     // TODO

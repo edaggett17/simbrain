@@ -69,7 +69,6 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class Network {
 
     /** Network id. */
-    @XmlID
     @Element
     private String id;
 
@@ -113,7 +112,6 @@ public class Network {
     private double timeStep = DEFAULT_TIME_STEP;
 
     /** Local thread flag for manually starting and stopping the network. */
-    @XmlTransient
     private final AtomicBoolean isRunning = new AtomicBoolean();
 
     /**
@@ -136,38 +134,30 @@ public class Network {
     private TimeType timeType = TimeType.DISCRETE;
 
     /** List of objects registered to observe general network events. */
-    @XmlTransient
     private List<NetworkListener> networkListeners = new ArrayList<NetworkListener>();
 
     /** List of objects registered to observe neuron-related network events. */
-    @XmlTransient
     private List<NeuronListener> neuronListeners = new ArrayList<NeuronListener>();
 
     /** List of objects registered to observe synapse-related network events. */
-    @XmlTransient
     private List<SynapseListener> synapseListeners = new ArrayList<SynapseListener>();
 
     /** List of objects registered to observe group-related network events. */
-    @XmlTransient
     private List<GroupListener> groupListeners = new ArrayList<GroupListener>();
 
     /** List of objects registered to observe text-related network events. */
-    @XmlTransient
     private List<TextListener> textListeners = new ArrayList<TextListener>();
 
     /** Whether network has been updated yet; used by thread. */
-    @XmlTransient
     private AtomicBoolean updateCompleted = new AtomicBoolean(false);
 
     /**
      * List of neurons sorted by their update priority. Used in priority based
      * update.
      */
-    @XmlTransient
     private List<Neuron> prioritySortedNeuronList;
 
     /** Comparator used for sorting the priority sorted neuron list. */
-    @XmlTransient
     private PriorityComparator priorityComparator = new PriorityComparator();
 
     /** Neuron Id generator. */
@@ -194,7 +184,6 @@ public class Network {
      * update.
      */
     //TODO: Is this being used?
-    @XmlTransient
     private volatile boolean fireUpdates = true;
 
     /**
