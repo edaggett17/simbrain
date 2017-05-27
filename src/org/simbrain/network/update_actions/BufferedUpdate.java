@@ -20,10 +20,10 @@ package org.simbrain.network.update_actions;
 
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.NetworkUpdateAction;
+import org.simpleframework.xml.Root;
 
 /**
  * Buffered update of loose items (neurons and synapses), i.e. items not in
@@ -32,6 +32,7 @@ import org.simbrain.network.core.NetworkUpdateAction;
  * @author jyoshimi
  */
 @XmlRootElement
+@Root
 public class BufferedUpdate implements NetworkUpdateAction {
 
     /** Reference to network to update. */
@@ -63,6 +64,24 @@ public class BufferedUpdate implements NetworkUpdateAction {
     @Override
     public String getLongDescription() {
         return "Buffered update of loose items";
+    }
+
+
+
+    /**
+     * @return the network
+     */
+    public Network getNetwork() {
+        return network;
+    }
+
+
+
+    /**
+     * @param network the network to set
+     */
+    public void setNetwork(Network network) {
+        this.network = network;
     }
 
 }

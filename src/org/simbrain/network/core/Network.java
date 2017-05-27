@@ -58,8 +58,6 @@ import org.simbrain.util.math.SimbrainMath;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
-import org.simpleframework.xml.core.Validate;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -71,18 +69,13 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * weights themselves, as well as in special groups.
  */
 // Strict = false allows for backwards compatibility
-@Root(strict=false)// For SimpleXML.  Can't use default because it conflicts with constructor injection.  So must manually annotate.
-@XmlRootElement // This and below is jaxb crapola
-@XmlAccessorType(XmlAccessType.FIELD)
-// Order matters in the xml, in order for @XmlID and @XmlIDREF
-@XmlType(propOrder = { "id", "neuronList", "synapseList", "ngList", "sgList",
-        "subnetList", "textList", "updateManager", "time", "timeStep",
-        "timeType" })
+@Root
 public class Network {
 
     /** Network id. */
     @XmlID
-    private String id = "";
+    @Element
+    private String id;
 
     // TODO: Rename to looseNeurons and looseSynapses
     /** Array list of neurons. */
@@ -105,8 +98,8 @@ public class Network {
     private List<NetworkTextObject> textList = new ArrayList<NetworkTextObject>();
 
     /** The update manager for this network. */
-    //@Element
-    private final NetworkUpdateManager updateManager;
+    @Element
+    private NetworkUpdateManager updateManager;
 
     /** The initial time-step for the network. */
     private static final double DEFAULT_TIME_STEP = .1;
@@ -179,16 +172,16 @@ public class Network {
     private PriorityComparator priorityComparator = new PriorityComparator();
 
     /** Neuron Id generator. */
-    @XmlTransient
+    @Element
     private SimpleId neuronIdGenerator = new SimpleId("Neuron", 1);
 
     /** Synapse Id generator. */
-    @XmlTransient
+    @Element
     private SimpleId synapseIdGenerator = new SimpleId("Synapse", 1);
 
     // TOOD: Separate IDs for different lists
     /** Group Id generator. */
-    @XmlTransient
+    @Element
     private SimpleId groupIdGenerator = new SimpleId("Group", 1);
 
     /**
@@ -235,17 +228,6 @@ public class Network {
     /**
      * For simplexml.
      */
-//    public Network(@ElementList(name = "neuronList") List<Neuron> neurons,
-//            @Element(name = "updateManager") NetworkUpdateManager updateManager) {
-//        this.neuronList = neurons;
-//        this.updateManager = updateManager;
-//        // TODO: Refactor / below needed?
-////        id = "Network_" + current_id;
-////        current_id++;
-////        prioritySortedNeuronList = new ArrayList<Neuron>();
-//       }
-//
-
     public Network(@ElementList(name = "neuronList") List<Neuron> neurons) {
         this.neuronList = neurons;
         updateManager = new NetworkUpdateManager(this);
@@ -1813,25 +1795,24 @@ public class Network {
         return retList;
     }
 
-    @Validate
     void beforeUnmarshal() {
         System.out.println("Validate");
     }
 
-    @Commit
-    void afterUnmarshal() {
+    //@Commit
+    public void afterUnmarshal() {
         System.out.println("Commit");
         fireUpdates = true;
 
         // Initialize listener lists
-        networkListeners = new ArrayList<NetworkListener>();
-        neuronListeners = new ArrayList<NeuronListener>();
-        synapseListeners = new ArrayList<SynapseListener>();
-        textListeners = new ArrayList<TextListener>();
-        groupListeners = new ArrayList<GroupListener>();
+//        networkListeners = new ArrayList<NetworkListener>();
+//        neuronListeners = new ArrayList<NeuronListener>();
+//        synapseListeners = new ArrayList<SynapseListener>();
+//        textListeners = new ArrayList<TextListener>();
+//        groupListeners = new ArrayList<GroupListener>();
 
         // Initialize update manager
-        updateManager.postUnmarshallingInit(); //TODO
+        updateManager.postUnmarshallingInit(this);
 
         // Initialize neurons
         for (Neuron neuron : this.getFlatNeuronList()) {

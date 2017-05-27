@@ -18,6 +18,17 @@
  */
 package org.simbrain.network.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
 import org.simbrain.network.groups.Group;
 import org.simbrain.network.listeners.GroupAdapter;
 import org.simbrain.network.listeners.NetworkEvent;
@@ -27,16 +38,7 @@ import org.simbrain.network.update_actions.CustomUpdate;
 import org.simbrain.network.update_actions.PriorityUpdate;
 import org.simbrain.network.update_actions.UpdateGroup;
 import org.simpleframework.xml.ElementList;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import org.simpleframework.xml.Root;
 
 /**
  * Manage network updates. Maintains a list of actions that are updated in the
@@ -47,6 +49,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({BufferedUpdate.class, UpdateGroup.class})
+@Root
 public class NetworkUpdateManager {
 
     /**
@@ -54,7 +57,7 @@ public class NetworkUpdateManager {
      * actions constitutes a single "update" in the network.
      */
     @XmlAnyElement(lax=true)
-    @ElementList(name="actionList")
+    @ElementList
     private List<NetworkUpdateAction> actionList =
             new ArrayList<NetworkUpdateAction>();
 
@@ -62,14 +65,14 @@ public class NetworkUpdateManager {
      * List of listeners on this update manager.
      */
     @XmlAnyElement(lax=true)
-    private final List<UpdateManagerListener> listeners =
+    private List<UpdateManagerListener> listeners =
             new ArrayList<UpdateManagerListener>();
 
     /** Reference to parent network. */
     @XmlIDREF
     private Network network;
 
-    //TODO: For jaxb
+    // TODO
     public NetworkUpdateManager() {
     }
 
@@ -91,7 +94,9 @@ public class NetworkUpdateManager {
      * UpdateManager will have been created from a default no argument
      * constructor ands its fields populated using xstream.
      */
-    public void postUnmarshallingInit() {
+    public void postUnmarshallingInit(Network network) {
+        this.network = network;
+        // TODO: Parent ref stuff smelly. Can we do without them?
         addListeners();
         Iterator<NetworkUpdateAction> actions = actionList.iterator();
         // TODO: Hack-y solution. Revisit this.
@@ -102,6 +107,9 @@ public class NetworkUpdateManager {
                 actionList.add(ConcurrentBufferedUpdate
                         .createConcurrentBufferedUpdate(network));
                 break;
+            } else if (nua instanceof BufferedUpdate) {
+                // TODO: Refactor to not need these parent refs
+                ((BufferedUpdate)nua).setNetwork(network);
             }
         }
 

@@ -18,15 +18,21 @@
  */
 package org.simbrain.util;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 /**
  * <b>SimpleId</b> provides an id based on a base name and an integer index.
  */
+@Root
 public class SimpleId {
 
     /** The base name of the id. */
+    @Element
     private String rootName;
 
     /** The starting index. */
+    @Element
     private int index;
 
     /**
@@ -35,7 +41,8 @@ public class SimpleId {
      * @param rootName root name.
      * @param index beginning index.
      */
-    public SimpleId(final String rootName, final int index) {
+    public SimpleId(@Element(name = "rootName") final String rootName,
+            @Element(name = "index") final int index) {
         this.rootName = rootName;
         this.index = index;
     }

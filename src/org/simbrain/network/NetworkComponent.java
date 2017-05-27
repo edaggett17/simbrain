@@ -440,10 +440,12 @@ public final class NetworkComponent extends WorkspaceComponent {
     public static NetworkComponent open(final InputStream input,
             final String name, final String format) {
 
-        Serializer serializer = new Persister();
-        //Serializer serializer = new Persister(new CycleStrategy());
+        // Choice Has to Match save
+        //Serializer serializer = new Persister();
+        Serializer serializer = new Persister(new CycleStrategy());
         try {
             Network network = (Network) serializer.read(Network.class, input);
+            network.afterUnmarshal();
             System.out.println(network);
             return new NetworkComponent(name, network);
         } catch (Exception e1) {
@@ -523,9 +525,9 @@ public final class NetworkComponent extends WorkspaceComponent {
     @Override
     public void save(OutputStream output, String format) {
 
-        // Test simple xml
-        //Serializer serializer = new Persister();
-        Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
+        // Choice Has to Match save
+        Serializer serializer = new Persister();
+        //Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
         try {
             this.getNetwork().preSaveInit();
             serializer.write(this.getNetwork(), System.out);

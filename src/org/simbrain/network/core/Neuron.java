@@ -43,7 +43,7 @@ import org.simbrain.workspace.Consumible;
 import org.simbrain.workspace.Producible;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Transient;
+import org.simpleframework.xml.core.Validate;
 
 /**
  * <b>Neuron</b> represents a node in the neural network. Most of the "logic" of
@@ -76,7 +76,7 @@ public class Neuron {
     /** A unique id for this neuron. */
     @XmlID
     @Element
-    private String id;
+    private String id = "";
 
     /** An optional String description associated with this neuron. */
     @Element(required=false)
@@ -112,7 +112,7 @@ public class Neuron {
 
     /** Reference to network this neuron is part of. */
     @XmlIDREF
-    private Network parent; // TODO: Removed final. Think
+    private Network parent; // IF final, use constructor injection, and parent ref is hosed
 
     /** List of synapses this neuron attaches to. */
     @XmlTransient
@@ -180,7 +180,7 @@ public class Neuron {
      * The update method of this neuron, which corresponds to what kind of
      * neuron it is.
      */
-    //@Element
+    @Element
     private NeuronUpdateRule updateRule;
 
     /**
@@ -195,12 +195,10 @@ public class Neuron {
         setUpdateRule(DEFAULT_UPDATE_RULE.deepCopy());
     }
 
-    //TODO.  TEMP!
+    //TODO
     public Neuron() {
-        this.parent = null;
         setUpdateRule(DEFAULT_UPDATE_RULE.deepCopy());
     }
-//    public Neuron(@Element(name="parent") final Network parent) {
 
     /**
      * Construct a specific type of neuron from a string description.
@@ -263,6 +261,7 @@ public class Neuron {
      * parent network has been added.
      * @param network parent network
      */
+    //@Validate
     public void postUnmarshallingInit(Network parent) {
         this.parent = parent;
         fanOut = new HashMap<Neuron, Synapse>();
