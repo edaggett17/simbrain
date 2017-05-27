@@ -17,6 +17,11 @@
  */
 package org.simbrain.network;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.simbrain.network.core.Network;
 import org.simbrain.network.core.Neuron;
 import org.simbrain.network.core.NeuronUpdateRule;
@@ -34,15 +39,6 @@ import org.simbrain.workspace.WorkspaceComponent;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.CycleStrategy;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Network component.
@@ -444,27 +440,13 @@ public final class NetworkComponent extends WorkspaceComponent {
         //Serializer serializer = new Persister();
         Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
         try {
-            Network network = (Network) serializer.read(Network.class, input);
+            Network network = serializer.read(Network.class, input);
             network.afterUnmarshal();
             System.out.println(network);
             return new NetworkComponent(name, network);
         } catch (Exception e1) {
-            //TODO: Better exception handling
             e1.printStackTrace();
         }
-
-
-//        Unmarshaller jaxbUnmarshaller;
-//        try {
-//            JAXBContext jaxbContext = JAXBContext.newInstance(Network.class);
-//            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-//            Network network = (Network) jaxbUnmarshaller.unmarshal(input);
-//            //System.out.println(network);
-//            return new NetworkComponent(name, network);
-//        } catch (JAXBException e) {
-//            e.printStackTrace();
-//        }
-
         return null;
     }
 
@@ -537,18 +519,6 @@ public final class NetworkComponent extends WorkspaceComponent {
             e1.printStackTrace();
         }
 
-        // Existing 3.1 jaxb implementation
-//        JAXBContext jc;
-//        try {
-//            jc = JAXBContext.newInstance(Network.class);
-//            Marshaller marshaller = jc.createMarshaller();
-//            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//            this.getNetwork().preSaveInit();
-//            marshaller.marshal(this.getNetwork(), output);
-//            //marshaller.marshal(this.getNetwork(), System.out);
-//        } catch (JAXBException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override

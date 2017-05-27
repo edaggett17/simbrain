@@ -24,11 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.simbrain.network.groups.SynapseGroup;
 import org.simbrain.network.synapse_update_rules.StaticSynapseRule;
 import org.simbrain.network.synapse_update_rules.spikeresponders.JumpAndDecay;
@@ -49,7 +44,6 @@ import org.simpleframework.xml.Root;
  *
  */
 @Root
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Synapse {
 
     /** Synapse id. */
@@ -72,16 +66,14 @@ public class Synapse {
      * Parent network. Can't just use getSouce().getParent() because synapses
      * and their parents can occur at different levels of the network hierarchy.
      */
-    @XmlIDREF
+    //TODO: Set
     private Network parentNetwork;
 
     /** Neuron activation will come from. */
-    @XmlIDREF
     @Element
     private Neuron source;
 
     /** Neuron to which the synapse is attached. */
-    @XmlIDREF
     @Element
     private Neuron target;
 
@@ -89,11 +81,10 @@ public class Synapse {
      * The update method of this synapse, which corresponds to what kind of
      * synapse it is.
      */
-    @XmlTransient //TODO
+    @Element
     private SynapseUpdateRule learningRule = DEFAULT_LEARNING_RULE;
 
     /** Only used of source neuron is a spiking neuron. */
-    @XmlTransient //TODO
     private SpikeResponder spikeResponder = DEFAULT_SPIKE_RESPONDER;
 
     /** The maximum number of digits to display in the tool tip. */
@@ -124,7 +115,6 @@ public class Synapse {
     private int delay;
 
     /** Parent group, if any (null if none). */
-    @XmlTransient
     private SynapseGroup parentGroup;
 
     /**

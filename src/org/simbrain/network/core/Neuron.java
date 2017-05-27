@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.annotation.XmlIDREF;
-
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.groups.Group;
 import org.simbrain.network.neuron_update_rules.LinearRule;
@@ -147,7 +145,6 @@ public class Neuron {
     private double lastActivation;
 
     /** Parent group, if any (null if none). */
-    @XmlIDREF
     private Group parentGroup;
 
     /**
