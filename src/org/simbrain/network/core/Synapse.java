@@ -77,10 +77,12 @@ public class Synapse {
 
     /** Neuron activation will come from. */
     @XmlIDREF
+    @Element
     private Neuron source;
 
     /** Neuron to which the synapse is attached. */
     @XmlIDREF
+    @Element
     private Neuron target;
 
     /**

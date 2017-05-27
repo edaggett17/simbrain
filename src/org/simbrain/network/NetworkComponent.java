@@ -442,7 +442,7 @@ public final class NetworkComponent extends WorkspaceComponent {
 
         // Choice Has to Match save
         //Serializer serializer = new Persister();
-        Serializer serializer = new Persister(new CycleStrategy());
+        Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
         try {
             Network network = (Network) serializer.read(Network.class, input);
             network.afterUnmarshal();
@@ -526,8 +526,8 @@ public final class NetworkComponent extends WorkspaceComponent {
     public void save(OutputStream output, String format) {
 
         // Choice Has to Match save
-        Serializer serializer = new Persister();
-        //Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
+//        Serializer serializer = new Persister();
+        Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
         try {
             this.getNetwork().preSaveInit();
             serializer.write(this.getNetwork(), System.out);
