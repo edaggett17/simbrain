@@ -27,11 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.simbrain.network.core.Network.TimeType;
 import org.simbrain.network.groups.Group;
@@ -43,7 +39,6 @@ import org.simbrain.workspace.Consumible;
 import org.simbrain.workspace.Producible;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Validate;
 
 /**
  * <b>Neuron</b> represents a node in the neural network. Most of the "logic" of
@@ -108,16 +103,13 @@ public class Neuron {
     private double inputValue;
 
     /** Reference to network this neuron is part of. */
-    @XmlIDREF
     private Network parent; // IF final, use constructor injection, and parent ref is hosed
 
     /** List of synapses this neuron attaches to. */
-    @XmlTransient
     private Map<Neuron, Synapse> fanOut = new HashMap<Neuron, Synapse>(
             PRE_ALLOCATED_NUM_SYNAPSES);
 
     /** List of synapses attaching to this neuron. */
-    @XmlTransient
     private ArrayList<Synapse> fanIn = new ArrayList<Synapse>(
             PRE_ALLOCATED_NUM_SYNAPSES);
 
