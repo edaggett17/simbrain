@@ -290,7 +290,6 @@ class ArchiveContents {
 
         /** Reference to the action itself. */
         @XmlAnyElement(lax=true)
-        @Transient // TODO!!
         private UpdateAction updateAction;
 
         /**
@@ -302,6 +301,13 @@ class ArchiveContents {
          * Reference to the coupling id for this action, or null if not needed.
          */
         private String couplingId;
+
+        // TODO
+        /**
+         * No-argument constructor for JAXB.
+         */
+        public ArchivedUpdateAction() {
+        }
 
         /**
          * Construct the archived update action.
@@ -629,22 +635,23 @@ class ArchiveContents {
         //Serializer serializer = new Persister();
         Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
         try {
+            serializer.write(this, stream);
             serializer.write(this, System.out);
         } catch (Exception e1) {
             //TODO: Better exception handling
             e1.printStackTrace();
         }
 
-        JAXBContext jc;
-        try {
-            jc = JAXBContext.newInstance(ArchiveContents.class, UpdateAllBuffered.class);
-            Marshaller marshaller = jc.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(this, stream);
-            //marshaller.marshal(this, System.out);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+//        JAXBContext jc;
+//        try {
+//            jc = JAXBContext.newInstance(ArchiveContents.class, UpdateAllBuffered.class);
+//            Marshaller marshaller = jc.createMarshaller();
+//            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//            marshaller.marshal(this, stream);
+//            //marshaller.marshal(this, System.out);
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**

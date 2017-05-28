@@ -30,6 +30,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.log4j.Logger;
 import org.simbrain.workspace.WorkspaceComponent;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Transient;
 
 /**
  * This is the default action for all workspace updates.
@@ -50,17 +52,21 @@ import org.simbrain.workspace.WorkspaceComponent;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@Root
 public class UpdateAllBuffered implements UpdateAction {
 
     /** Provides access to workspace updater. */
     @XmlTransient
+    @Transient
     private WorkspaceUpdater updater;
 
     /** The static logger for the class. */
+    @Transient
     static Logger LOGGER = Logger.getLogger(UpdateAllBuffered.class);
 
     /** The executor service for doing the component updates. */
     @XmlTransient
+    @Transient
     private ExecutorService componentUpdateExecutor;
 
     //TODO

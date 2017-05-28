@@ -38,14 +38,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import org.simbrain.workspace.gui.GuiComponent;
 import org.simbrain.workspace.gui.SimbrainDesktop;
 import org.simbrain.workspace.updater.UpdateAction;
-import org.simbrain.workspace.updater.UpdateAllBuffered;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.CycleStrategy;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -225,16 +223,26 @@ public class WorkspaceSerializer {
         // Read contents.xml file and create a new archived contents file,
         // which will be used to recreate the workspace
         ArchiveContents contents = null;
-        Unmarshaller jaxbUnmarshaller;
+
+        Serializer serializer = new Persister(new CycleStrategy("xml_id","xml_ref"));
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(
-                    ArchiveContents.class, UpdateAllBuffered.class);
-            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            contents = (ArchiveContents) jaxbUnmarshaller.unmarshal(
+            contents = serializer.read(ArchiveContents.class,
                     new ByteArrayInputStream(entries.get("contents.xml")));
-        } catch (JAXBException e) {
-            e.printStackTrace();
+        } catch (Exception e1) {
+            //TODO: Better exception handling
+            e1.printStackTrace();
         }
+
+//        Unmarshaller jaxbUnmarshaller;
+//        try {
+//            JAXBContext jaxbContext = JAXBContext.newInstance(
+//                    ArchiveContents.class, UpdateAllBuffered.class);
+//            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//            contents = (ArchiveContents) jaxbUnmarshaller.unmarshal(
+//                    new ByteArrayInputStream(entries.get("contents.xml")));
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
 
         // Add Components
         WorkspaceComponentDeserializer componentDeserializer = new WorkspaceComponentDeserializer();
@@ -271,7 +279,7 @@ public class WorkspaceSerializer {
         if (contents.getArchivedCouplings() != null) {
             for (ArchiveContents.ArchivedCoupling couplingRef : contents
                     .getArchivedCouplings()) {
- 
+
                 // if (exclude.contains(couplingRef.getArchivedProducer()
                 // .getParentRef())
                 // || exclude.contains(couplingRef.getArchivedProducer()
